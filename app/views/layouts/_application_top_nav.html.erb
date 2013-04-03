@@ -1,0 +1,39 @@
+<%# Copyright 2011-2013 Rice University. Licensed under the Affero General Public 
+    License version 3 or later.  See the COPYRIGHT file for details. %>
+
+<div id="top-nav-frame" class="<%= yield :top_nav_class %>">
+  <div id="top-nav-content">
+
+    <div id="top-nav-logo">
+      <a href="<%= root_path %>" id="top-nav-logo-link"></a>
+    </div>
+
+    <div id="top-nav-links">
+      <ul>
+        <li>
+          <%= render "layouts/application_top_nav_link", 
+                     target_text:            "ABOUT",
+                     target_id:              "top-nav-about-link",
+                     target_path:            "#",
+                     target_current_symbol:  :top_nav_about_current %>
+        </li>
+        <li>
+          <%= render "layouts/application_top_nav_link", 
+                     target_text:            "API",
+                     target_id:              "top-nav-api-link",
+                     target_path:            "#",
+                     target_current_symbol:  :top_nav_api_current %>
+        </li>
+        <li>
+          <%= render "layouts/application_top_nav_link", 
+                     target_text:            "HELP",
+                     target_image:           image_tag('help_icon_v4.png', :class => "help-link-icon"),
+                     target_id:              "top-nav-help-link",
+                     target_path:            "#",
+                     target_current_symbol:  :top_nav_help_current %>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<%# Copyright 2011-2013 Rice University. Licensed under the Affero General Public 
+    License version 3 or later.  See the COPYRIGHT file for details. %>
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+    <% if @redirect_url %>
+      <meta http-equiv='refresh' content='<%= @redirect_delay -%>;url=<%= @redirect_url -%>'>
+    <% end %>
+
+    <%= stylesheet_link_tag     "application" %>
+    <%= javascript_include_tag  "application" %>
+
+    <title><%= @page_title + ' - ' if !@page_title.nil? %><%= SITE_NAME %></title>  
+
+  </head>
+
+  <body>
+
+    <%= render :partial => "layouts/application_js_hooks" %>
+
+    <div id="application-container">
+
+      <%= render :partial => "layouts/application_header" %>
+
+      <%= render :partial => "layouts/application_body" %>
+
+      <%= render :partial => "layouts/application_footer" %>
+
+    </div>
+
+  <%= yield :javascript %>
+
+  </body>
+
+</html>
+

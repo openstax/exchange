@@ -1,0 +1,12 @@
+<% title "Api Key" %>
+
+<p>
+  <strong>Access Token:</strong>
+  <%= @api_key.access_token %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_api_key_path(@api_key) %> |
+  <%= link_to "Destroy", @api_key, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", api_keys_path %>
+</p>

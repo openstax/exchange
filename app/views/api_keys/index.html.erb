@@ -1,0 +1,17 @@
+<% title "Api Keys" %>
+
+<table>
+  <tr>
+    <th>Access Token</th>
+  </tr>
+  <% for api_key in @api_keys %>
+    <tr>
+      <td><%= api_key.access_token %></td>
+      <td><%= link_to "Show", api_key %></td>
+      <td><%= link_to "Edit", edit_api_key_path(api_key) %></td>
+      <td><%= link_to "Destroy", api_key, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Api Key", new_api_key_path %></p>

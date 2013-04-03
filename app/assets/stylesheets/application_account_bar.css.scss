@@ -1,0 +1,87 @@
+// Copyright 2011-2013 Rice University. Licensed under the Affero General Public 
+// License version 3 or later.  See the COPYRIGHT file for details.
+
+@import "common";
+
+$account_bar_content_padding_tb: $application_top_nav_bottom_overhang;
+
+#account-bar-frame {
+
+  height:  $application_account_bar_height;
+
+  background-color: #ffffff; //$ost_light_beige;
+}
+
+#account-bar-frame.transparent {
+  background-color: transparent;
+}
+
+// padding-top 7px
+
+#account-bar-content {
+  padding-top:    $account_bar_content_padding_tb;
+  padding-bottom: $account_bar_content_padding_tb;
+  padding-left:   $application_edge_distance;
+  padding-right:  $application_edge_distance;
+}
+
+#account-bar-links {
+  $account_bar_links_height: $application_account_bar_height - 2*$account_bar_content_padding_tb;
+
+  float: right;
+
+  height: $account_bar_links_height;
+
+  @mixin account-bar-link-common {
+    font-size:   11px;
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-weight: normal;
+    line-height: $account_bar_links_height;
+
+    &:hover { 
+      color: $ost_hot_blue;
+      text-decoration:none;
+    }
+  }
+
+  a {
+    @include account-bar-link-common;
+    color: $ost_account_gray;
+  }
+  a.transparent {
+//    @include account-bar-link-common;
+  //  color: white;
+  }
+
+  #facebook-link {
+    margin-left: 16px;
+  }
+  #twitter-link {
+  }
+
+  #facebook-icon {
+    height: 24px;
+    width:  23px;
+  }
+
+  #twitter-icon {
+    height: 24px;
+    width:  23px;
+  }
+
+  img {
+    vertical-align: middle;
+    padding: 0px 3px 2px 3px;
+  }
+
+ .vertical-bar {
+    @include vertical-bar-common;
+    border-left-color: $ost_account_gray;
+    width:      1px; 
+    height:    11px;
+    font-size: 11px;
+  }
+  .vertical-bar.transparent {
+    border-left-color: white;
+  } 
+}
