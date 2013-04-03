@@ -1,4 +1,1 @@
-archive
-=======
-
-OpenStax Archive
+OpenStax Exchange

@@ -2,14 +2,10 @@
     License version 3 or later.  See the COPYRIGHT file for details. %>
 
 <% top_nav_home_page_background %>
-<% account_bar_transparent %>
 
 <% content_for :application_body do %>
 
-  <div id="application-home-page-background-image" %>
-    <%= render  :partial  => "layouts/application_account_bar", 
-                :locals   => { :icon_color => "gray" } %>
-
+  <div id="application-home-page-background-image">
     <%= image_tag 'tagline.png', 
                   :alt    => "Big Student Data.  Big Student Results.", 
                   :id     => "application-home-page-welcome-image" %>

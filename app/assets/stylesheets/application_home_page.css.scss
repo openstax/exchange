@@ -5,8 +5,8 @@
 
 #application-home-page-background-image {
   height:         558px;
-  margin-bottom:  -15px;
   padding:        0px 0px;
+  margin: -$application_body_topbottom_margin (-$application_body_leftright_margin) (-$application_body_topbottom_margin - 15px);
 
   background: image-url("peeps_in_brain_v3-01.png") no-repeat transparent;
 }
@@ -15,5 +15,5 @@
   clear:        both;
   float:        right; 
   margin-right: $application_edge_distance;
-  margin-top:   110px;
+  margin-top:   180px;
 }
