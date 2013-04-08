@@ -20,6 +20,8 @@ gem 'whenever', :require => false
 gem 'newrelic_rpm'
 gem 'squeel'
 gem 'yaml_db'
+gem 'openstax_utilities', :path => '/Users/jps/dev/openstax_utilities'
+
 
 # gem 'devise', '~> 2.1.0'
 # gem 'recaptcha', '~> 0.3.4', :require => 'recaptcha/rails'

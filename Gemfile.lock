@@ -1,3 +1,8 @@
+PATH
+  remote: /Users/jps/dev/openstax_utilities
+  specs:
+    openstax_utilities (0.0.1.alpha)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -247,6 +252,7 @@ DEPENDENCIES
   mysql2 (~> 0.3.11)
   newrelic_rpm
   nifty-generators
+  openstax_utilities!
   quiet_assets
   rack-ssl-enforcer (~> 0.2.5)
   railroady
