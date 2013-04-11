@@ -40,9 +40,12 @@ group :development, :test do
   gem 'nifty-generators'
 end
 
+group :development, :test do
+  gem 'rack-test', require: "rack/test"
+  gem 'factory_girl'
+end
+
 group :production do
   gem 'mysql2', '~> 0.3.11'
   gem 'rack-ssl-enforcer', '~> 0.2.5'
 end
-
-gem "mocha", :group => :test

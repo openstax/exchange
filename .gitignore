@@ -31,3 +31,5 @@ rspec.failures
 
 .vagrant
 brakeman.html
+
+notes

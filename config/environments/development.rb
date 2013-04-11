@@ -1,3 +1,5 @@
+require 'factory_girl'
+
 Exchange::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -34,4 +36,7 @@ Exchange::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # # Make factories available on the development console
+  # config.autoload_paths += %W(#{config.root}/factories)
 end
