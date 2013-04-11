@@ -5,6 +5,8 @@ class CreateIdentities < ActiveRecord::Migration
       t.integer :person_id
       t.timestamps
     end
+
+    add_index :identities, :value, :unique => true
   end
 
   def self.down

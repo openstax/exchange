@@ -2,11 +2,11 @@ Exchange::Application.routes.draw do
   
   namespace :api do
     namespace :v1 do
-      resources :identities, :except => [:new, :edit]
+      resources :identities, :only => [:create]
     end
   end
   
-  resources :api_keys, :except => [:new, :edit]
+  resources :api_keys, :except => [:new, :edit, :update]
 
   root :to => "static_page#home"
 

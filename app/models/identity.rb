@@ -1,10 +1,12 @@
 class Identity < ActiveRecord::Base
-  before_create :set_value
+  before_create :generate_value
 
 protected
 
-  def set_value
-
+  def generate_value
+    begin
+      self.value = SecureRandom.hex
+    end while self.class.exists?(value: value)
   end
 
 end
