@@ -1,5 +1,7 @@
 Exchange::Application.routes.draw do
   
+  apipie
+
   namespace :api do
     namespace :v1 do
       resources :identities, :only => [:create]
@@ -11,4 +13,5 @@ Exchange::Application.routes.draw do
   root :to => "static_page#home"
 
   match 'copyright', :to => 'static_page#copyright'
+  match 'api', :to => 'static_page#api'
 end

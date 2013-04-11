@@ -22,6 +22,10 @@ gem 'squeel'
 gem 'yaml_db'
 gem 'openstax_utilities', :path => '/Users/jps/dev/openstax_utilities'
 
+# API documentation
+gem 'apipie-rails'
+gem 'maruku'
+
 
 # gem 'devise', '~> 2.1.0'
 # gem 'recaptcha', '~> 0.3.4', :require => 'recaptcha/rails'
