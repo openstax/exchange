@@ -5,7 +5,7 @@ Apipie.configure do |config|
   # were is your API defined?
   config.api_controllers_matcher = "#{Rails.root}/app/controllers/api/**/*.rb"
   config.copyright               = Utilities::copyright_text
-  config.layout                  = 'application_body_only'
+  config.layout                  = 'application_body_api_docs'
   config.markup                  = Apipie::Markup::Markdown.new
   config.namespaced_resources    = false
 end
