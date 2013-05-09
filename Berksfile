@@ -7,12 +7,6 @@
 
 end
 
-
-#cookbook 'apache2', git: "https://github.com/aws/opsworks-cookbooks.git", rel: "apache2"
-#cookbook 'rails', git: "https://github.com/aws/opsworks-cookbooks.git", rel: "rails"
-#cookbook 'deploy', git: "https://github.com/aws/opsworks-cookbooks.git", rel: "deploy"
-
-
 # Note that OpenStax has its own copies of some AWS OpsWorks cookbooks because we had 
 # to fix issues with them, mostly the lack of appropriate metadata.rb files.  Once AWS 
 # fixes these problems these cookbooks should be pulled from the opsworks cookbook repository.
@@ -26,21 +20,26 @@ end
   cookbook cookbook_name, git: "https://github.com/openstax/opsworks-cookbooks.git", rel: cookbook_name
 end
 
-
 # Add OpenStax cookbooks.  
 
+local_openstax_cookbook_path = ENV['OPENSTAX_COOKBOOKS_PATH']
+
 %w(openstax_exchange aws).each do |cookbook_name|
-  cookbook cookbook_name, path: "../openstax_cookbooks/#{cookbook_name}"
+  if local_openstax_cookbook_path.blank?
+    cookbook cookbook_name, git: "https://github.com/openstax/openstax_cookbooks.git", rel: cookbook_name 
+  else
+    cookbook cookbook_name, path: "#{local_openstax_cookbook_path}/#{cookbook_name}"
+  end
 end
 
-# cookbook 'dependencies', path: '../openstax_cookbooks/dependencies'
-# cookbook 'openstax_exchange', path: '../openstax_cookbooks/openstax_exchange'
-# cookbook 'unicorn', path: '../openstax_cookbooks/unicorn'
+# Add OpsCode cookbooks
 
+cookbook 'apt',               git: 'https://github.com/opscode-cookbooks/apt.git',                ref: '1.9.2'
+cookbook 'build-essential',   git: 'https://github.com/opscode-cookbooks/build-essential.git',    ref: '1.4.0'
+cookbook 'firewall',          git: 'https://github.com/opscode-cookbooks/firewall.git',           ref: '0.10.2'
+cookbook 'emacs',             git: 'https://github.com/opscode-cookbooks/emacs.git',              ref: '0.9.0'
 
-cookbook 'apt', git: 'https://github.com/opscode-cookbooks/apt.git', ref: '1.9.2'
-cookbook 'build-essential', git: 'https://github.com/opscode-cookbooks/build-essential.git', ref: '1.4.0'
-cookbook 'firewall', git: 'https://github.com/opscode-cookbooks/firewall.git', ref: '0.10.2'
-cookbook 'emacs', git: 'https://github.com/opscode-cookbooks/emacs.git', ref: '0.9.0'
-cookbook 'ruby_build', git: 'https://github.com/fnichol/chef-ruby_build.git', ref: 'v0.7.2'
-cookbook 'rbenv', git: 'https://github.com/fnichol/chef-rbenv.git', ref: 'v0.7.2'
+# Add misc other cookbooks
+
+cookbook 'ruby_build',        git: 'https://github.com/fnichol/chef-ruby_build.git',              ref: 'v0.7.2'
+cookbook 'rbenv',             git: 'https://github.com/fnichol/chef-rbenv.git',                   ref: 'v0.7.2'
