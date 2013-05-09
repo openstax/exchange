@@ -24,7 +24,7 @@ end
 
 local_openstax_cookbook_path = ENV['OPENSTAX_COOKBOOKS_PATH']
 
-%w(openstax_common openstax_exchange aws).each do |cookbook_name|
+%w(openstax_common openstax_exchange aws apt build-essential firewall emacs ruby_build rbenv).each do |cookbook_name|
   if local_openstax_cookbook_path.blank?
     cookbook cookbook_name, git: "https://github.com/openstax/openstax_cookbooks.git", rel: cookbook_name 
   else
@@ -32,14 +32,18 @@ local_openstax_cookbook_path = ENV['OPENSTAX_COOKBOOKS_PATH']
   end
 end
 
-# Add OpsCode cookbooks
-
-cookbook 'apt',               git: 'https://github.com/opscode-cookbooks/apt.git',                ref: '1.9.2'
-cookbook 'build-essential',   git: 'https://github.com/opscode-cookbooks/build-essential.git',    ref: '1.4.0'
-cookbook 'firewall',          git: 'https://github.com/opscode-cookbooks/firewall.git',           ref: '0.10.2'
-cookbook 'emacs',             git: 'https://github.com/opscode-cookbooks/emacs.git',              ref: '0.9.0'
-
-# Add misc other cookbooks
-
-cookbook 'ruby_build',        git: 'https://github.com/fnichol/chef-ruby_build.git',              ref: 'v0.7.2'
-cookbook 'rbenv',             git: 'https://github.com/fnichol/chef-rbenv.git',                   ref: 'v0.7.2'
+# Note: we moved these cookbooks into the openstax cookbook repository because
+# AWS can only point to one other cookbook repo.  If that changes in the future
+# we can go back to using these.
+#
+# # Add OpsCode cookbooks
+#
+# cookbook 'apt',               git: 'https://github.com/opscode-cookbooks/apt.git',                ref: '1.9.2'
+# cookbook 'build-essential',   git: 'https://github.com/opscode-cookbooks/build-essential.git',    ref: '1.4.0'
+# cookbook 'firewall',          git: 'https://github.com/opscode-cookbooks/firewall.git',           ref: '0.10.2'
+# cookbook 'emacs',             git: 'https://github.com/opscode-cookbooks/emacs.git',              ref: '0.9.0'
+#
+# # Add misc other cookbooks
+#
+# cookbook 'ruby_build',        git: 'https://github.com/fnichol/chef-ruby_build.git',              ref: 'v0.7.2'
+# cookbook 'rbenv',             git: 'https://github.com/fnichol/chef-rbenv.git',                   ref: 'v0.7.2'
