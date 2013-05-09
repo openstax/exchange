@@ -20,7 +20,8 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, guest: 3000, host: 3000
 
   config.vm.provision :chef_solo do |chef|
-    chef.add_recipe('openstax_exchange::web_server')
+    chef.add_recipe('openstax_exchange::rails_web_server_setup')
     chef.log_level = :debug
+    chef.json["instance_role"] = "vagrant"
   end
 end
