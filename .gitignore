@@ -29,7 +29,9 @@ config/deploy_settings.yml
 cucumber_rerun.txt
 rspec.failures
 
-.vagrant
+.vagrant*
 brakeman.html
 
 notes
+
+Berksfile.lock

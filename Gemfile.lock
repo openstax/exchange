@@ -35,6 +35,7 @@ GEM
       multi_json (~> 1.0)
     apipie-rails (0.0.21)
       rails (>= 3.0.10)
+    archive-tar-minitar (0.5.2)
     arel (3.0.2)
     bootstrap-sass (2.3.1.0)
       sass (~> 3.2)
@@ -114,6 +115,7 @@ GEM
     json (1.7.7)
     kgio (2.8.0)
     libv8 (3.11.8.17)
+    log4r (1.1.10)
     mail (2.5.3)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -123,6 +125,9 @@ GEM
     mime-types (1.21)
     multi_json (1.7.2)
     mysql2 (0.3.11)
+    net-scp (1.0.4)
+      net-ssh (>= 1.99.1)
+    net-ssh (2.2.2)
     newrelic_rpm (3.6.0.78)
     nifty-generators (0.4.6)
     nokogiri (1.5.9)
@@ -230,6 +235,15 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    vagrant (1.0.7)
+      archive-tar-minitar (= 0.5.2)
+      childprocess (~> 0.3.1)
+      erubis (~> 2.7.0)
+      i18n (~> 0.6.0)
+      json (>= 1.5.1, < 1.8.0)
+      log4r (~> 1.1.9)
+      net-scp (~> 1.0.4)
+      net-ssh (~> 2.2.2)
     websocket (1.0.7)
     whenever (0.8.2)
       activesupport (>= 2.3.4)
@@ -271,5 +285,6 @@ DEPENDENCIES
   thin
   uglifier (>= 1.0.3)
   unicorn
+  vagrant
   whenever
   yaml_db
