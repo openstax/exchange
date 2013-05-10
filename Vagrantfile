@@ -6,7 +6,8 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
   # AWS uses an older version of Chef, and the nginx recipes in particular aren't updated
-  # so here we specify the latest version of Chef 10.
+  # so here we specify the latest version of Chef 10.  Actually, turns out AWS actually 
+  # uses 0.9.15.5 (yuck), but we couldn't find that in that in a repository
   #    http://stackoverflow.com/a/16401714/1664216
   #    http://stackoverflow.com/a/14782607/1664216
   config.vm.provision :shell, :inline => <<-cmds 
