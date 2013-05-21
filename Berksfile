@@ -1,7 +1,7 @@
 # Add AWS OpsWorks cookbooks
 
 %w(apache2 rails deploy packages gem_support opsworks_initial_setup 
-   ssh_users mysql ebs opsworks_ganglia scm_helper).each do |cookbook_name|
+   ssh_users mysql ebs opsworks_ganglia scm_helper nginx).each do |cookbook_name|
 
   cookbook cookbook_name, git: "https://github.com/aws/opsworks-cookbooks.git", rel: cookbook_name
 
