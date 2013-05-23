@@ -238,11 +238,11 @@ Vagrant.configure("2") do |config|
             :application_type => "rails", 
             :auto_bundle_on_deploy => true, 
             :database => {
-              :database => "exchange", 
-              :host => nil, 
-              :password => nil, 
+              :database => "dev_db", 
+              :host => 'localhost', 
+              :password => 'password', 
               :reconnect => true, 
-              :username => "root"
+              :username => "dev_db_user"
             }, 
             # :deploy_to => "/srv/www/exchange", 
             :document_root => "public", 
@@ -254,7 +254,7 @@ Vagrant.configure("2") do |config|
             #   :host => nil, 
             #   :port => 11211
             # }, 
-            :migrate => false, 
+            :migrate => true, 
             # :mounted_at => nil, 
             :rails_env => "production", 
             # :restart_command => nil, 
