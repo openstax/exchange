@@ -41,7 +41,6 @@ group :development, :test do
   gem 'rspec-rerun'
   gem 'cucumber-rails', :require => false
   gem 'nifty-generators'
-  gem 'vagrant'
 end
 
 group :development, :test do
