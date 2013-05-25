@@ -227,7 +227,7 @@ Vagrant.configure("2") do |config|
       end
       chef.log_level = :debug
 
-      chef.json.merge!({
+      json = {
         :instance_role => "vagrant",
         :deploy => {
           :exchange => {
@@ -261,7 +261,7 @@ Vagrant.configure("2") do |config|
             :delete_cached_copy => false,
             :scm => {
               :password => nil, 
-              :repository => "git://github.com/openstax/exchange.git",
+              :repository => ENV['USE_LOCAL_REPO'] == 'true' ? "/vagrant" : "git://github.com/openstax/exchange.git",
               :revision => nil, 
               :scm_type => "git", 
               :ssh_key => "", 
@@ -285,7 +285,11 @@ Vagrant.configure("2") do |config|
             :ignore_bundler_groups => ["development" ,"test"]
           },
         },
-      })
+      }
+
+      puts "repo: #{json[:deploy][:exchange][:scm][:repository]}"
+
+      chef.json.merge!(json)
     
     end
   end
