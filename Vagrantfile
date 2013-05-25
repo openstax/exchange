@@ -261,7 +261,7 @@ Vagrant.configure("2") do |config|
             :delete_cached_copy => false,
             :scm => {
               :password => nil, 
-              :repository => "git://github.com/openstax/exchange.git", 
+              :repository => "git://github.com/openstax/exchange.git",
               :revision => nil, 
               :scm_type => "git", 
               :ssh_key => "", 
