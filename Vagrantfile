@@ -212,6 +212,7 @@ Vagrant.configure("2") do |config|
   if ENV['provisioner_selection'] == 'setup'
     config.vm.provision :chef_solo do |chef|
       chef.add_recipe('openstax_exchange::rails_web_server_setup')
+      chef.add_recipe('openstax_exchange::rails_web_server_configure')
       chef.log_level = :debug
       chef.json["instance_role"] = "vagrant"
     end

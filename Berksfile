@@ -16,7 +16,7 @@ end
 #   https://github.com/aws/opsworks-cookbooks/pull/32
 #   https://github.com/aws/opsworks-cookbooks/pull/33
 
-%w(dependencies opsworks_commons ruby opsworks_rubygems opsworks_bundler ssh_host_keys).each do |cookbook_name|
+%w(dependencies opsworks_commons ruby opsworks_rubygems opsworks_bundler ssh_host_keys agent_version).each do |cookbook_name|
   cookbook cookbook_name, git: "https://github.com/openstax/opsworks-cookbooks.git", rel: cookbook_name
 end
 
