@@ -19,7 +19,7 @@ gem 'whenever', :require => false
 gem 'newrelic_rpm'
 gem 'squeel'
 gem 'yaml_db'
-gem 'openstax_utilities' #, :path => '/Users/jps/dev/openstax_utilities'
+gem 'openstax_utilities', '~> 0.0.4' #, :path => '/Users/jps/dev/openstax_utilities'
 
 # API documentation
 gem 'apipie-rails'

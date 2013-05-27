@@ -16,7 +16,7 @@ end
 #   https://github.com/aws/opsworks-cookbooks/pull/32
 #   https://github.com/aws/opsworks-cookbooks/pull/33
 
-%w(dependencies unicorn opsworks_commons ruby opsworks_rubygems opsworks_bundler ssh_host_keys).each do |cookbook_name|
+%w(dependencies opsworks_commons ruby opsworks_rubygems opsworks_bundler ssh_host_keys).each do |cookbook_name|
   cookbook cookbook_name, git: "https://github.com/openstax/opsworks-cookbooks.git", rel: cookbook_name
 end
 
@@ -25,7 +25,7 @@ end
 local_openstax_cookbook_path = ENV['OPENSTAX_COOKBOOKS_PATH']
 
 %w(openstax_common openstax_exchange aws apt build-essential firewall emacs ruby_build 
-   rbenv python mysql-opscode database).each do |cookbook_name|
+   rbenv python mysql-opscode database unicorn).each do |cookbook_name|
   if local_openstax_cookbook_path.blank?
     cookbook cookbook_name, git: "https://github.com/openstax/openstax_cookbooks.git", rel: cookbook_name 
   else

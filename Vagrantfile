@@ -191,6 +191,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.network :forwarded_port, guest: 3000, host: 3000
   config.vm.network :forwarded_port, guest: 80, host: 8080
+  config.vm.network :forwarded_port, guest: 443, host: 8081
 
   # AWS uses an older version of Chef, and the nginx recipes in particular aren't updated
   # so here we specify the latest version of Chef 10.  Actually, turns out AWS actually 
@@ -231,9 +232,6 @@ Vagrant.configure("2") do |config|
         :instance_role => "vagrant",
         :deploy => {
           :exchange => {
-            # :user => "deploy",
-            # :group => "www-data",
-            # :home => '/home/deploy',
             :application => "exchange", 
             :application_type => "rails", 
             :auto_bundle_on_deploy => true, 
@@ -244,35 +242,33 @@ Vagrant.configure("2") do |config|
               :reconnect => true, 
               :username => "dev_db_user"
             }, 
-            # :deploy_to => "/srv/www/exchange", 
             :document_root => "public", 
             :domains => [
               :"exchange.openstax.org", 
               :"exchange"
             ], 
-            # :memcached => {
-            #   :host => nil, 
-            #   :port => 11211
-            # }, 
             :migrate => true, 
-            # :mounted_at => nil, 
             :rails_env => "production", 
-            # :restart_command => nil, 
             :delete_cached_copy => false,
             :scm => {
               :password => nil, 
-              :repository => ENV['USE_LOCAL_REPO'] == 'true' ? "/vagrant" : "git://github.com/openstax/exchange.git",
+              :repository => "git://github.com/openstax/exchange.git",
               :revision => nil, 
               :scm_type => "git", 
               :ssh_key => "", 
               :user => "deploy",
               :group => 'www-data'
             }, 
+            :secret_settings => {
+              :beta_username => 'beta',
+              :beta_password => 'beta',
+            },
             :sleep_before_restart => 0, 
             :ssl_certificate => nil, 
             :ssl_certificate_ca => nil, 
             :ssl_certificate_key => nil, 
             :ssl_support => false, 
+            :ssl_support_with_generated_cert => true,
             :symlink_before_migrate => {
               :'config/database.yml' => "config/database.yml", 
               :'config/memcached.yml' => "config/memcached.yml"
