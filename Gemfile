@@ -19,7 +19,7 @@ gem 'whenever', :require => false
 gem 'newrelic_rpm'
 gem 'squeel'
 gem 'yaml_db'
-gem 'openstax_utilities', '~> 0.0.4' #, :path => '/Users/jps/dev/openstax_utilities'
+gem 'openstax_utilities', '~> 0.0.4'
 
 # API documentation
 gem 'apipie-rails'
@@ -51,7 +51,4 @@ end
 group :production do
   gem 'mysql2', '~> 0.3.11'
   gem 'unicorn'
-  # gonna try using config.force_ssl = true first, but then will likely have an issue re
-  # http://serverfault.com/questions/461333/running-rails3-with-force-ssl-true-with-nginx-on-aws-ec2-with-ssl-terminated
-  # gem 'rack-ssl-enforcer', '~> 0.2.5'
 end
