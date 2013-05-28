@@ -258,7 +258,8 @@ Vagrant.configure("2") do |config|
         :ssl_support_with_generated_cert => true,
         :symlink_before_migrate => {
           :'config/database.yml' => "config/database.yml", 
-          :'config/memcached.yml' => "config/memcached.yml"
+          :'config/memcached.yml' => "config/memcached.yml",
+          :'config/secret_settings.yml' => "config/secret_settings.yml"
         }, 
         :symlinks => {
           :log => "log", 
