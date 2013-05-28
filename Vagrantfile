@@ -1,6 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+#######################################################################################
+#
+# Utility code
+#
+
 require 'json'
 
 class Hash
@@ -16,79 +21,32 @@ class Hash
   end
 end
 
-class WrappedProvisionCommand
-  def self.with_provisioner_selection_of(provisioner_selection)
-    klass = Class.new(Vagrant.plugin(2, :command)) do
-      cattr_accessor :provisioner_selection
-      def execute
-        IO.popen("export provisioner_selection=#{provisioner_selection}; vagrant provision; unset provisioner_selection").each do |line|
-          puts line
-        end
-      end
-    end
-    klass.provisioner_selection = provisioner_selection
-    klass
-  end
-end
+#
+#######################################################################################
+#
+# In this section we construct bits of JSON that will be used by various 
+# provisioning steps.
+#
 
-class Deploy < Vagrant.plugin("2")
-  name "Deploy"
-  command "deploy" do; WrappedProvisionCommand.with_provisioner_selection_of('deploy'); end
-end
-
-class Undeploy < Vagrant.plugin("2")
-  name "Undeploy"
-  command "undeploy" do; WrappedProvisionCommand.with_provisioner_selection_of('undeploy'); end
-end
-
-# Setup some developer specific environment stuff.  Do using a dot file so that
-# the developer doesn't need to remember to set these in each terminal where vagrant
-# is run
-
-setup_file = ::File.join(::File.dirname(__FILE__), '.vagrant_setup.json')
-if ::File.exists?(setup_file)
-  json = JSON.parse(File.read(setup_file))
-  json["environment_variables"].each do |name, value|
-    ENV[name] = value
-  end
-end
-
-# Vagrant configuration
-
-Vagrant.configure("2") do |config|
-  config.vm.box = "precise64"
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
-
-  config.vm.network :forwarded_port, guest: 3000, host: 3000
-  config.vm.network :forwarded_port, guest: 80, host: 8080
-  config.vm.network :forwarded_port, guest: 443, host: 8081
-
-  # AWS uses an older version of Chef, and the nginx recipes in particular aren't updated
-  # so here we specify the latest version of Chef 10.  Actually, turns out AWS actually 
-  # uses 0.9.15.5 (yuck), but we couldn't find that in that in a repository
-  #    http://stackoverflow.com/a/16401714/1664216
-  #    http://stackoverflow.com/a/14782607/1664216
-  config.vm.provision :shell, :inline => <<-cmds 
-    gem install net-ssh -v 2.2.2 --no-ri --no-rdoc;
-    gem install net-ssh-gateway -v 1.1.0 --ignore-dependencies --no-ri --no-rdoc;
-    gem install net-ssh-multi -v 1.1.0 --ignore-dependencies --no-ri --no-rdoc;
-    gem install chef --version 10.18.2 --no-rdoc --no-ri --conservative;
-    gem install bundler --no-rdoc --no-ri --conservative;
-  cmds
-
-  ENV['provisioner_selection'] ||= 'setup'
-  puts "Provisioning selection is now '#{ENV['provisioner_selection']}'"
+class ConfigJson
 
   # The following JSON will be given to OpsWorks as the stack custom JSON; OpsWorks
   # will pass it to chef on each life cycle event, so below we make sure we do the
   # same for this block
-  opsworks_stack_custom_json = {
+
+  cattr_reader :opsworks_stack_custom_json
+  @@opsworks_stack_custom_json = {
     :opsworks => {  
       :rails_stack => {
         # Have to specify :name here so guaranteed set before deploy::rails_stack attrs
         :name => 'nginx_unicorn' 
       }
     },
+    # :ebs => {
+    #   :raids => {
+    #     "blank?" => true
+    #   }
+    # },
     :deploy => {
       :exchange => {
         :database => {
@@ -115,7 +73,9 @@ Vagrant.configure("2") do |config|
 
   # The following JSON is what comes from the GUI side of the OpsWorks configuration
   # which OpsWorks must merge in for the chef run on the deploy life cycle event.
-  opsworks_deploy_json = {
+
+  cattr_reader :opsworks_deploy_json
+  @@opsworks_deploy_json = {
     :deploy => {
       :exchange => {
         :application => "exchange", 
@@ -150,9 +110,98 @@ Vagrant.configure("2") do |config|
     }  
   }
 
-  vagrant_only_json = {
+  cattr_reader :vagrant_only_json
+  @@vagrant_only_json = {
     :instance_role => "vagrant"
   }
+
+end
+
+#
+#######################################################################################
+#
+# Custom commands and the code to support them
+#
+
+class WrappedProvisionCommand
+  def self.with_provisioner_selection_of(provisioner_selection)
+    klass = Class.new(Vagrant.plugin(2, :command)) do
+      cattr_accessor :provisioner_selection
+      def execute
+        IO.popen("export provisioner_selection=#{provisioner_selection}; vagrant provision; unset provisioner_selection").each do |line|
+          puts line
+        end
+      end
+    end
+    klass.provisioner_selection = provisioner_selection
+    klass
+  end
+end
+
+class Deploy < Vagrant.plugin("2")
+  name "Deploy"
+  command "deploy" do; WrappedProvisionCommand.with_provisioner_selection_of('deploy'); end
+end
+
+class Undeploy < Vagrant.plugin("2")
+  name "Undeploy"
+  command "undeploy" do; WrappedProvisionCommand.with_provisioner_selection_of('undeploy'); end
+end
+
+class ShowStackJson < Vagrant.plugin("2")
+  name "ShowStackJson"
+  command "show-stack-json" do; puts "Stack JSON:\n#{JSON.pretty_generate(ConfigJson.opsworks_stack_custom_json)}"; end
+end
+
+#
+#######################################################################################
+#
+# Setup some developer specific environment stuff.  Do using a dot file so that
+# the developer doesn't need to remember to set these in each terminal where vagrant
+# is run
+#
+
+setup_file = ::File.join(::File.dirname(__FILE__), '.vagrant_setup.json')
+if ::File.exists?(setup_file)
+  json = JSON.parse(File.read(setup_file))
+  json["environment_variables"].each do |name, value|
+    ENV[name] = value
+  end
+end
+
+#
+#######################################################################################
+#
+# The "normal" Vagrant configuration
+#
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "precise64"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+
+  config.vm.network :forwarded_port, guest: 3000, host: 3000
+  config.vm.network :forwarded_port, guest: 80, host: 8080
+  config.vm.network :forwarded_port, guest: 443, host: 8081
+
+  # AWS uses an older version of Chef, and the nginx recipes in particular aren't updated
+  # so here we specify the latest version of Chef 10.  Actually, turns out AWS actually 
+  # uses 0.9.15.5 (yuck), but we couldn't find that in that in a repository
+  #    http://stackoverflow.com/a/16401714/1664216
+  #    http://stackoverflow.com/a/14782607/1664216
+  # gem install chef --version 10.18.2 --no-rdoc --no-ri --conservative;
+  config.vm.provision :shell, :inline => <<-cmds 
+    apt-get install -y build-essential;
+    gem install net-ssh -v 2.2.2 --no-ri --no-rdoc;
+    gem install net-ssh-gateway -v 1.1.0 --ignore-dependencies --no-ri --no-rdoc;
+    gem install net-ssh-multi -v 1.1.0 --ignore-dependencies --no-ri --no-rdoc;
+    gem install chef -v 0.9.18 --no-rdoc --no-ri --conservative;
+    gem install bundler --no-rdoc --no-ri --conservative;
+  cmds
+
+  ENV['provisioner_selection'] ||= 'setup'
+  puts "Provisioning selection is now '#{ENV['provisioner_selection']}'"
+
+  
 
   
   if ENV['provisioner_selection'] == 'setup'
@@ -161,7 +210,7 @@ Vagrant.configure("2") do |config|
       chef.add_recipe('openstax_exchange::rails_web_server_configure')
       chef.log_level = :debug
 
-      chef.json.merge_and_log!(opsworks_stack_custom_json,vagrant_only_json)
+      chef.json.merge_and_log!(ConfigJson.opsworks_stack_custom_json,ConfigJson.vagrant_only_json)
       # json = opsworks_stack_custom_json.merge_recursively(vagrant_only_json)
       # chef.json.merge!(json)
     end
@@ -178,7 +227,7 @@ Vagrant.configure("2") do |config|
       end
       chef.log_level = :debug
 
-      chef.json.merge_and_log!(opsworks_stack_custom_json,opsworks_deploy_json,vagrant_only_json)
+      chef.json.merge_and_log!(ConfigJson.opsworks_stack_custom_json,ConfigJson.opsworks_deploy_json,ConfigJson.vagrant_only_json)
 
       # json = opsworks_stack_custom_json
       #         .merge_recursively(opsworks_deploy_json)
