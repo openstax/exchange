@@ -145,7 +145,7 @@ Vagrant.configure("2") do |config|
           },
         },
       }
-      
+
       chef.json.merge!(json)
     end
   end
