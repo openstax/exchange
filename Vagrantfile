@@ -42,11 +42,6 @@ class ConfigJson
         :name => 'nginx_unicorn' 
       }
     },
-    # :ebs => {
-    #   :raids => {
-    #     "blank?" => true
-    #   }
-    # },
     :deploy => {
       :exchange => {
         :database => {
