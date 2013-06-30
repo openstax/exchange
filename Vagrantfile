@@ -42,6 +42,17 @@ class ConfigJson
         :name => 'nginx_unicorn' 
       }
     },
+    # Used to put DB and other provider certificates on the server
+    :ssl_certificates => {
+      :db_provider => {
+        :key => "-----BEGIN CERTIFICATE-----
+blah
+blah2
+-----END CERTIFICATE-----",
+        :crt => "bar",
+        :ca => "blah"
+      }
+    },
     :deploy => {
       :exchange => {
         :database => {
@@ -49,7 +60,11 @@ class ConfigJson
           :host => 'localhost', 
           :password => 'password', 
           :reconnect => true, 
-          :username => "dev_db_user"
+          :username => "dev_db_user",
+          # Use the below params in production when have real values for ssl_certificates above
+          # :sslca => 'db_provider.ca',
+          # :sslcert => 'db_provider.crt',
+          # :sslkey => 'db_provider.key'
         }, 
         :delete_cached_copy => false,
         :secret_settings => {
@@ -58,7 +73,7 @@ class ConfigJson
         },
         :ssl_support_with_generated_cert => true,
         :symlink_before_migrate => {
-          :'config/database.yml' => "config/database.yml", 
+          :'config/database.yml' => "config/database_ssl.yml", 
           :'config/memcached.yml' => "config/memcached.yml",
           :'config/secret_settings.yml' => "config/secret_settings.yml"
         }
@@ -210,6 +225,7 @@ Vagrant.configure("2") do |config|
   if ENV['provisioner_selection'] == 'setup'
     config.vm.provision :chef_solo do |chef|
       chef.add_recipe('openstax_exchange::rails_web_server_setup')
+      chef.add_recipe('openstax_exchange::rails_web_server_deploy')
       chef.add_recipe('openstax_exchange::rails_web_server_configure')
       chef.log_level = :debug
 
