@@ -14,4 +14,5 @@ Exchange::Application.routes.draw do
 
   match 'copyright', :to => 'static_page#copyright'
   match 'api', :to => 'static_page#api'
+  match 'status', to: 'utility#status'
 end
