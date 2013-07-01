@@ -34,96 +34,102 @@ class ConfigJson
   # will pass it to chef on each life cycle event, so below we make sure we do the
   # same for this block
 
-  cattr_reader :opsworks_stack_custom_json
-  @@opsworks_stack_custom_json = {
-    :opsworks => {  
-      :rails_stack => {
-        # Have to specify :name here so guaranteed set before deploy::rails_stack attrs
-        :name => 'nginx_unicorn' 
-      }
-    },
-    # Used to put DB and other provider certificates on the server
-    :ssl_certificates => {
-      :db_provider => {
-        :key => "-----BEGIN CERTIFICATE-----
+  def self.opsworks_stack_custom_json
+    {
+      :opsworks => {  
+        :rails_stack => {
+          # Have to specify :name here so guaranteed set before deploy::rails_stack attrs
+          :name => 'nginx_unicorn' 
+        }
+      },
+      # Used to put DB and other provider certificates on the server
+      :ssl_certificates => {
+        :db_provider => {
+          :key => "-----BEGIN CERTIFICATE-----
 blah
 blah2
 -----END CERTIFICATE-----",
-        :crt => "bar",
-        :ca => "blah"
-      }
-    },
-    :deploy => {
-      :exchange => {
-        :database => {
-          :database => "dev_db", 
-          :host => 'localhost', 
-          :password => 'password', 
-          :reconnect => true, 
-          :username => "dev_db_user",
-          # Use the below params in production when have real values for ssl_certificates above
-          # :sslca => 'db_provider.ca',
-          # :sslcert => 'db_provider.crt',
-          # :sslkey => 'db_provider.key'
-        }, 
-        :delete_cached_copy => false,
-        :secret_settings => {
-          :beta_username => 'beta',
-          :beta_password => 'beta',
-        },
-        :ssl_support_with_generated_cert => true,
-        :symlink_before_migrate => {
-          :'config/database.yml' => "config/database_ssl.yml", 
-          :'config/memcached.yml' => "config/memcached.yml",
-          :'config/secret_settings.yml' => "config/secret_settings.yml"
+          :crt => "bar",
+          :ca => "blah"
         }
       },
+      :papertrail => {
+        :remote_port => ENV['PAPERTRAIL_PORT']
+      },
+      :deploy => {
+        :exchange => {
+          :database => {
+            :database => "dev_db", 
+            :host => 'localhost', 
+            :password => 'password', 
+            :reconnect => true, 
+            :username => "dev_db_user",
+            # Use the below params in production when have real values for ssl_certificates above
+            # :sslca => 'db_provider.ca',
+            # :sslcert => 'db_provider.crt',
+            # :sslkey => 'db_provider.key'
+          }, 
+          :delete_cached_copy => false,
+          :secret_settings => {
+            :beta_username => 'beta',
+            :beta_password => 'beta',
+          },
+          :ssl_support_with_generated_cert => true,
+          :symlink_before_migrate => {
+            :'config/database.yml' => "config/database_ssl.yml", 
+            :'config/memcached.yml' => "config/memcached.yml",
+            :'config/secret_settings.yml' => "config/secret_settings.yml"
+          }
+        },
+      }
     }
-  }
+  end
 
   # The following JSON is what comes from the GUI side of the OpsWorks configuration
   # which OpsWorks must merge in for the chef run on the deploy life cycle event.
 
-  cattr_reader :opsworks_deploy_json
-  @@opsworks_deploy_json = {
-    :deploy => {
-      :exchange => {
-        :application => "exchange", 
-        :application_type => "rails", 
-        :auto_bundle_on_deploy => true, 
-        :document_root => "public", 
-        :domains => [
-          :"exchange.openstax.org", 
-          :"exchange"
-        ], 
-        :migrate => true, 
-        :rails_env => "production", 
-        :scm => {
-          :password => nil, 
-          :repository => "git://github.com/openstax/exchange.git",
-          :revision => nil, 
-          :scm_type => "git", 
-          :ssh_key => ""#, 
-          # :user => "deploy",
-          # :group => 'www-data'
-        }, 
-        :ssl_certificate => nil, 
-        :ssl_certificate_ca => nil, 
-        :ssl_certificate_key => nil, 
-        :ssl_support => false, 
-        :symlinks => {
-          :log => "log", 
-          :pids => "tmp/pids", 
-          :system => "public/system"
-        }
-      },
-    }  
-  }
+  def self.opsworks_deploy_json
+    {
+      :deploy => {
+        :exchange => {
+          :application => "exchange", 
+          :application_type => "rails", 
+          :auto_bundle_on_deploy => true, 
+          :document_root => "public", 
+          :domains => [
+            :"exchange.openstax.org", 
+            :"exchange"
+          ], 
+          :migrate => true, 
+          :rails_env => "production", 
+          :scm => {
+            :password => nil, 
+            :repository => "git://github.com/openstax/exchange.git",
+            :revision => nil, 
+            :scm_type => "git", 
+            :ssh_key => ""#, 
+            # :user => "deploy",
+            # :group => 'www-data'
+          }, 
+          :ssl_certificate => nil, 
+          :ssl_certificate_ca => nil, 
+          :ssl_certificate_key => nil, 
+          :ssl_support => false, 
+          :symlinks => {
+            :log => "log", 
+            :pids => "tmp/pids", 
+            :system => "public/system"
+          }
+        },
+      }  
+    }
+  end
 
-  cattr_reader :vagrant_only_json
-  @@vagrant_only_json = {
-    :instance_role => "vagrant"
-  }
+  def self.vagrant_only_json
+    {
+      :instance_role => "vagrant"
+    }
+  end
 
 end
 
@@ -230,6 +236,7 @@ Vagrant.configure("2") do |config|
       chef.log_level = :debug
 
       chef.json.merge_and_log!(ConfigJson.opsworks_stack_custom_json,
+                               ConfigJson.opsworks_deploy_json,
                                ConfigJson.vagrant_only_json)
     end
   end
