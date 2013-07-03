@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:jpslav/lograge.git
+  remote: https://github.com/jpslav/lograge.git
   revision: f1b9eba4dc5ae76258e8335e61d6cac3ffda4843
   specs:
     lograge (0.2.0)

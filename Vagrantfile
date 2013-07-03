@@ -58,6 +58,7 @@ blah2
       },
       :deploy => {
         :exchange => {
+          :auto_bundle_on_deploy => true,
           :database => {
             :database => "dev_db", 
             :host => 'localhost', 
@@ -103,7 +104,8 @@ blah2
           :rails_env => "production", 
           :scm => {
             :password => nil, 
-            :repository => "git://github.com/openstax/exchange.git",
+            :repository => '/vagrant/.git', # use in development
+            # :repository => "git://github.com/openstax/exchange.git", # use to mimic production
             :revision => nil, 
             :scm_type => "git", 
             :ssh_key => ""#, 
