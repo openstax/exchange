@@ -94,7 +94,6 @@ blah2
         :exchange => {
           :application => "exchange", 
           :application_type => "rails", 
-          :auto_bundle_on_deploy => true, 
           :document_root => "public", 
           :domains => [
             :"exchange.openstax.org", 
