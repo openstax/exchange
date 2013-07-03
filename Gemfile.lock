@@ -1,3 +1,11 @@
+GIT
+  remote: git@github.com:jpslav/lograge.git
+  revision: f1b9eba4dc5ae76258e8335e61d6cac3ffda4843
+  specs:
+    lograge (0.2.0)
+      actionpack
+      activesupport
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -113,9 +121,6 @@ GEM
     json (1.7.7)
     kgio (2.8.0)
     libv8 (3.11.8.17)
-    lograge (0.2.0)
-      actionpack
-      activesupport
     mail (2.5.3)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -258,7 +263,7 @@ DEPENDENCIES
   faker
   jbuilder
   jquery-rails
-  lograge (~> 0.2.0)
+  lograge!
   maruku
   mysql2 (~> 0.3.11)
   newrelic_rpm

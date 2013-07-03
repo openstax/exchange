@@ -64,7 +64,7 @@ Exchange::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
-
+  
   config.lograge.enabled = true
   config.log_tags = [ :remote_ip ]
   config.lograge.custom_options = lambda do |event|
@@ -73,4 +73,6 @@ Exchange::Application.configure do
     end
     { "params" => params }
   end
+  config.lograge.ignore_actions = ["utility#status"]
+
 end

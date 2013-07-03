@@ -51,5 +51,7 @@ end
 group :production do
   gem 'mysql2', '~> 0.3.11'
   gem 'unicorn'
-  gem 'lograge', '~> 0.2.0'
+  gem 'lograge', git: 'git@github.com:jpslav/lograge.git'
 end
+
+
