@@ -25,7 +25,7 @@ end
 local_openstax_cookbook_path = ENV['OPENSTAX_COOKBOOKS_PATH']
 
 %w(openstax_common openstax_exchange aws apt build-essential firewall emacs ruby_build 
-   rbenv python mysql-opscode database unicorn ssl-certificates papertrail-cookbook rsyslog).each do |cookbook_name|
+   rbenv python mysql-opscode database unicorn ssl-certificates papertrail-cookbook rsyslog fail2ban).each do |cookbook_name|
   if local_openstax_cookbook_path.blank?
     cookbook cookbook_name, git: "https://github.com/openstax/openstax_cookbooks.git", rel: cookbook_name 
   else
