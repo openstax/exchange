@@ -56,6 +56,11 @@ blah2
       :papertrail => {
         :remote_port => ENV['PAPERTRAIL_PORT']
       },
+      :newrelic => {
+        :server_monitoring => {
+          :license => 'blah'
+        }
+      },
       :deploy => {
         :exchange => {
           :auto_bundle_on_deploy => true,
