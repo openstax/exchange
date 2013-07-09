@@ -56,11 +56,13 @@ blah2
       :papertrail => {
         :remote_port => ENV['PAPERTRAIL_PORT']
       },
-      :newrelic => {
-        :server_monitoring => {
-          :license => 'blah'
-        }
-      },
+      # To uncomment NR config you need to provide a real license key
+      # :newrelic => {
+      #   :server_monitoring => {
+      #     :license => 'blah',
+      #     :ssl => true
+      #   }
+      # },
       :deploy => {
         :exchange => {
           :auto_bundle_on_deploy => true,
