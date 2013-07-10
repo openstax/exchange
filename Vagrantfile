@@ -184,6 +184,15 @@ end
 # the developer doesn't need to remember to set these in each terminal where vagrant
 # is run
 #
+# Example .vagrant_setup.json:
+#
+#    {
+#      "environment_variables": {
+#        "OPENSTAX_COOKBOOKS_PATH": "~myHomeDir/repoDir",
+#        "PAPERTRAIL_PORT": "23xxx"
+#      }  
+#    }
+#
 
 setup_file = ::File.join(::File.dirname(__FILE__), '.vagrant_setup.json')
 if ::File.exists?(setup_file)
