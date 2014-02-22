@@ -47,6 +47,8 @@ Exchange::Application.routes.draw do
   get "terms/pose", to: "terms#pose", as: "pose_terms"
   post "terms/agree", to: "terms#agree", as: "agree_to_terms"
 
+  get "data", to: "data#index"
+
   namespace :api do
     namespace :v1 do
       resources :identities, :only => [:create]

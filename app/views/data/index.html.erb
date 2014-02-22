@@ -1,0 +1,7 @@
+<%= page_heading "Data Access" %>
+
+<p>TBD.  This page will have a search form, will display results, and will have a number of export options at the bottom (to Excel, Matlab, Stat programs, etc).  The output options should probably be versioned so that tools that depend on them can continue to work if we make changes.</p>
+
+<p>Generation of files for export should be done in a background job.  The user can be notified by email when they are available for pickup.  Or if they stay on the page, the page can be updated with a link via AJAX (a polling process from the page to the server, checking if the data is there).  The email notification should contain a link back to Exchange for them to pick up the file (so that we can make sure that only authorized users pick up the file -- we don't want to email a link that anyone can get, since email is not secure).</p>
+
+<p>The point of displaying results from the query is to give the user a preview of what the data looks like (so they can know if their content looks like what they expect).  For performance reasons, for the purposes of this display preview we should not actually retrieve all of the data queried -- instead we should show a small number of data records (using a LIMIT query) and then show counts of how much data will be in the eventually-exported-dataset.</p>
