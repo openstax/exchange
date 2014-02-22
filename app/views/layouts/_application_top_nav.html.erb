@@ -32,11 +32,19 @@
                      target_current_symbol:  :top_nav_api_current %>
         </li>
         <li>
-          <%= render "layouts/application_top_nav_link", 
-                     target_text:            "SIGN IN",
-                     target_id:              "top-nav-account-link",
-                     target_path:            openstax_connect.login_path,
-                     target_current_symbol:  :top_nav_account_current %>
+          <% if current_user.is_anonymous? %>
+            <%= render "layouts/application_top_nav_link", 
+                       target_text:            "SIGN IN",
+                       target_id:              "top-nav-account-link",
+                       target_path:            openstax_connect.login_path,
+                       target_current_symbol:  :top_nav_account_current %>
+          <% else %>
+            <%= link_to openstax_connect.logout_path, method: :delete do %>
+              <span id="top-nav-account-link" class="top-nav-link <%= yield :top_nav_account_current %>">
+                SIGN OUT
+              </span>
+            <% end %>
+          <% end %>
         </li>
       </ul>
     </div>

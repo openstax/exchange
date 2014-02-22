@@ -8,6 +8,6 @@ OpenStax::Connect.configure do |config|
 end
 
 class OpenStax::Connect::ApplicationController < ActionController::Base
-  helper ApplicationFooterHelper, ApplicationHelper, ApplicationTopNavHelper, OpenStax::Utilities::OsuHelper
+  helper ApplicationFooterHelper, ApplicationHelper, ApplicationTopNavHelper, AlertHelper, OpenStax::Utilities::OsuHelper
   layout "layouts/application_body_only"
 end
