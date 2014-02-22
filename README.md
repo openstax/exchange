@@ -1,7 +1,7 @@
 OpenStax Exchange
 =================
 
-More info coming soon.
+Exchange runs on port 3003 in development, i.e. http://localhost:3003
 
 Vagrant
 =======
