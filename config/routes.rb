@@ -1,6 +1,7 @@
 Exchange::Application.routes.draw do
   
   mount OpenStax::Connect::Engine, at: "/connect"
+  mount FinePrint::Engine, at: "/fine_print"
 
   use_doorkeeper
 
@@ -33,6 +34,18 @@ Exchange::Application.routes.draw do
       post 'search', on: :collection
     end
   end
+
+  get "users/registration" 
+  put "users/register"
+
+  resources :users, :only => [] do
+    post 'become', on: :member
+  end
+
+  get "terms", to: "terms#index"
+  get "terms/:id/show", to: "terms#show", as: "show_terms"
+  get "terms/pose", to: "terms#pose", as: "pose_terms"
+  post "terms/agree", to: "terms#agree", as: "agree_to_terms"
 
   namespace :api do
     namespace :v1 do

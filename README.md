@@ -1,10 +1,42 @@
 OpenStax Exchange
 =================
 
-Exchange runs on port 3003 in development, i.e. http://localhost:3003
+OpenStax Exchange stores and provides learner interaction "big data".
 
-Vagrant
-=======
+## Development Setup
+
+In development, Exchange can be run as a normal Rails app on your machine, or you can run it in a Vagrant virtual machine that mimics our production setup.
+
+### Running as a normal Rails app on your machine
+
+To start running Exchange in a development environment, clone the repository, then
+
+```
+bundle install --without production
+```
+
+Just like with any Rails app, you then need to migrate the database.  In our case, after the first migration we also need to load the database seeds (placeholder terms of use, etc, that the code relies on):
+
+```
+rake db:migrate
+rake db:seed
+```
+
+or in one step
+
+```
+rake db:setup
+```
+
+When you run
+
+```
+rails server
+```
+
+Exchange will start up on port 3003, i.e. http://localhost:3003.
+
+### Running in a Vagrant virtual machine
 
 OpenStax Exchange uses chef to configure its production environment, and this
 environment can also be replicated using Vagrant.
@@ -19,7 +51,7 @@ As you'll see in our ````Berksfile```` file, our Vagrant instance uses cookbooks
 Vagrant here has been extended with plugins to include commands that mirror server [life cycle events](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-events.html) triggered through Amazon's OpsWorks service.  The following commands are available:
 
 * ````vagrant up```` and ````vagrant provision```` run the OpsWorks ````setup```` and ````configure```` behavior.
-* ````vagrant deploy```` runs OpsWorks' ````deploy```` behavior.
+* ````vagrant deploy```` runs OpsWorks' ````deploy```` behavior.  *Note* the first time you do this you'll need to run ```rake db:seed``` to load the database seeds.
 * ````vagrant undeploy```` runs OpsWorks' ````undeploy```` behavior.
 * ````vagrant shutdown```` runs OpsWorks' ````shutdown```` behavior.
 

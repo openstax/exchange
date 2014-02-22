@@ -35,6 +35,8 @@ gem 'roar-rails'
 
 gem 'exception_notification'
 
+gem 'fine_print', '~> 1.3.0'
+
 gem 'lev', "~> 2.0.4"
 
 group :development, :test do
