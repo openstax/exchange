@@ -1,33 +1,39 @@
 module Api
   module V1
-    class ApiController < ApplicationController      
+    class ApiController < ApplicationController     
+      include Roar::Rails::ControllerAdditions
+
+      # This skips the normal user login we inherit from the application controller,
+      # not appropriate for API use
       skip_before_filter :authenticate_user!
-      before_filter :restrict_access
+
+      # For the moment, freak out if the user is anonymous (restrict access to
+      # known users that have signed API terms of use, etc)
+      before_filter :no_anonymous_users!
       
       respond_to :json
 
       rescue_from Exception, :with => :rescue_from_exception
+
+      # TODO need a separate mechanism to get users of the API (the people who manage
+      # applications that use the API) to sign API terms of use after a change.  For
+      # non-API users of the site, we require immediate agreement to terms changes, but
+      # that isn't reasonable for API users -- they will expect the API to continue
+      # working for their application and must be given a reasonable amount of time (at 
+      # least 30 days) to come to the site to agree to the updates.  And we should send
+      # email reminders to get them to come.
       
-    protected
-
-      attr_reader :current_exchanger
-
-      def restrict_access
-        authenticate_or_request_with_http_token do |token, options|
-          api_key = ApiKey.where{access_token == token}.first
-          @current_exchanger = api_key.try(:exchanger)
-          !api_key.nil?
-        end
+      def current_user
+        @current_user ||= doorkeeper_token ? 
+                          User.find(doorkeeper_token.resource_owner_id) : 
+                          super
       end
 
+    protected
 
-    private
-
-      # def current_user
-      #   @current_user ||= doorkeeper_token ? 
-      #                     User.find(doorkeeper_token.resource_owner_id) : 
-      #                     AnonymousUser.instance
-      # end
+      def no_anonymous_users!
+        raise SecurityTransgression if current_user.is_anonymous?
+      end
 
       def rescue_from_exception(exception)
         # See https://github.com/rack/rack/blob/master/lib/rack/utils.rb#L453 for error names/symbols
@@ -47,7 +53,14 @@ module Api
           send_email = false
         end
 
-        # DeveloperErrorNotifier.exception_email(exception, request, present_user) if send_email
+        ExceptionNotifier::Notifier.exception_notification(
+          request.env,
+          exception,
+          :data => {:message => "An exception occurred"}
+        ).deliver if send_email
+
+        Rails.logger.debug("An exception occurred: #{exception.inspect}") if Rails.env.development?
+
         head error
       end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130408190918) do
+ActiveRecord::Schema.define(:version => 20140222164617) do
 
   create_table "api_keys", :force => true do |t|
     t.string   "access_token"
@@ -40,6 +40,28 @@ ActiveRecord::Schema.define(:version => 20130408190918) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "fine_print_contracts", :force => true do |t|
+    t.string   "name",       :null => false
+    t.integer  "version"
+    t.string   "title",      :null => false
+    t.text     "content",    :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "fine_print_contracts", ["name", "version"], :name => "index_fine_print_contracts_on_name_and_version", :unique => true
+
+  create_table "fine_print_signatures", :force => true do |t|
+    t.integer  "contract_id", :null => false
+    t.integer  "user_id",     :null => false
+    t.string   "user_type",   :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "fine_print_signatures", ["contract_id"], :name => "index_fine_print_signatures_on_contract_id"
+  add_index "fine_print_signatures", ["user_id", "user_type", "contract_id"], :name => "index_fine_print_s_on_u_id_and_u_type_and_c_id", :unique => true
+
   create_table "identities", :force => true do |t|
     t.string   "value"
     t.integer  "person_id"
@@ -47,9 +69,73 @@ ActiveRecord::Schema.define(:version => 20130408190918) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "oauth_access_grants", :force => true do |t|
+    t.integer  "resource_owner_id", :null => false
+    t.integer  "application_id",    :null => false
+    t.string   "token",             :null => false
+    t.integer  "expires_in",        :null => false
+    t.text     "redirect_uri",      :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "revoked_at"
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_grants", ["token"], :name => "index_oauth_access_grants_on_token", :unique => true
+
+  create_table "oauth_access_tokens", :force => true do |t|
+    t.integer  "resource_owner_id"
+    t.integer  "application_id"
+    t.string   "token",             :null => false
+    t.string   "refresh_token"
+    t.integer  "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at",        :null => false
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_tokens", ["refresh_token"], :name => "index_oauth_access_tokens_on_refresh_token", :unique => true
+  add_index "oauth_access_tokens", ["resource_owner_id"], :name => "index_oauth_access_tokens_on_resource_owner_id"
+  add_index "oauth_access_tokens", ["token"], :name => "index_oauth_access_tokens_on_token", :unique => true
+
+  create_table "oauth_applications", :force => true do |t|
+    t.string   "name",         :null => false
+    t.string   "uid",          :null => false
+    t.string   "secret",       :null => false
+    t.text     "redirect_uri", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "oauth_applications", ["uid"], :name => "index_oauth_applications_on_uid", :unique => true
+
+  create_table "openstax_connect_users", :force => true do |t|
+    t.integer  "openstax_uid"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "username"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "openstax_connect_users", ["openstax_uid"], :name => "index_openstax_connect_users_on_openstax_uid", :unique => true
+  add_index "openstax_connect_users", ["username"], :name => "index_openstax_connect_users_on_username", :unique => true
+
   create_table "people", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "users", :force => true do |t|
+    t.boolean  "is_registered"
+    t.boolean  "is_admin"
+    t.datetime "disabled_at"
+    t.integer  "openstax_connect_user_id"
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+  end
+
+  add_index "users", ["is_admin"], :name => "index_users_on_is_admin"
+  add_index "users", ["is_registered"], :name => "index_users_on_is_registered"
+  add_index "users", ["openstax_connect_user_id"], :name => "index_users_on_openstax_connect_user_id"
 
 end

@@ -5,7 +5,7 @@
   <div id="top-nav-content">
 
     <div id="top-nav-logo">
-      <a href="<%= root_path %>" id="top-nav-logo-link"></a>
+      <a href="<%= main_app.root_path %>" id="top-nav-logo-link"></a>
     </div>
 
     <div id="top-nav-links">
@@ -14,21 +14,28 @@
           <%= render "layouts/application_top_nav_link", 
                      target_text:            "ABOUT",
                      target_id:              "top-nav-about-link",
-                     target_path:            "#",
+                     target_path:            main_app.about_path,
                      target_current_symbol:  :top_nav_about_current %>
         </li>
         <li>
           <%= render "layouts/application_top_nav_link", 
                      target_text:            "API",
                      target_id:              "top-nav-api-link",
-                     target_path:            api_path,
+                     target_path:            main_app.api_path,
+                     target_current_symbol:  :top_nav_api_current %>
+        </li>
+        <li>
+          <%= render "layouts/application_top_nav_link", 
+                     target_text:            "DATA",
+                     target_id:              "top-nav-api-link",
+                     target_path:            main_app.data_path,
                      target_current_symbol:  :top_nav_api_current %>
         </li>
         <li>
           <%= render "layouts/application_top_nav_link", 
                      target_text:            "SIGN IN",
                      target_id:              "top-nav-account-link",
-                     target_path:            "#",
+                     target_path:            openstax_connect.login_path,
                      target_current_symbol:  :top_nav_account_current %>
         </li>
       </ul>
