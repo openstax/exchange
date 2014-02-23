@@ -67,7 +67,7 @@ blah2
         :exchange => {
           :auto_bundle_on_deploy => true,
           :database => {
-            :adapter => "mysql2"
+            :adapter => "mysql2",
             :database => "dev_db", 
             :host => 'localhost', 
             :password => 'password', 
