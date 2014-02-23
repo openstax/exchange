@@ -67,6 +67,7 @@ blah2
         :exchange => {
           :auto_bundle_on_deploy => true,
           :database => {
+            :adapter => "mysql2"
             :database => "dev_db", 
             :host => 'localhost', 
             :password => 'password', 
@@ -84,7 +85,7 @@ blah2
           },
           :ssl_support_with_generated_cert => true,
           :symlink_before_migrate => {
-            :'config/database.yml' => "config/database_ssl.yml", 
+            :'config/database.yml' => "config/database.yml", 
             :'config/memcached.yml' => "config/memcached.yml",
             :'config/secret_settings.yml' => "config/secret_settings.yml"
           }

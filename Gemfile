@@ -13,7 +13,6 @@ group :assets do
   gem 'compass-rails'
 end
 
-gem 'sqlite3'
 gem 'jquery-rails'
 gem 'jbuilder'
 gem 'whenever', :require => false
@@ -40,6 +39,7 @@ gem 'fine_print', '~> 1.3.0'
 gem 'lev', "~> 2.0.4"
 
 group :development, :test do
+  gem 'sqlite3'
   gem 'debugger'
   gem 'faker'
   gem 'thin'
