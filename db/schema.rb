@@ -13,18 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20140530155711) do
 
-  create_table "exchanger_identities", :force => true do |t|
-    t.integer  "exchanger_id"
-    t.integer  "identity_id"
-    t.boolean  "can_read"
-    t.boolean  "can_write"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
-  add_index "exchanger_identities", ["exchanger_id"], :name => "index_exchanger_identities_on_exchanger_id"
-  add_index "exchanger_identities", ["identity_id"], :name => "index_exchanger_identities_on_identity_id"
-
   create_table "fine_print_contracts", :force => true do |t|
     t.string   "name",       :null => false
     t.integer  "version"
@@ -46,15 +34,6 @@ ActiveRecord::Schema.define(:version => 20140530155711) do
 
   add_index "fine_print_signatures", ["contract_id"], :name => "index_fine_print_signatures_on_contract_id"
   add_index "fine_print_signatures", ["user_id", "user_type", "contract_id"], :name => "index_fine_print_s_on_u_id_and_u_type_and_c_id", :unique => true
-
-  create_table "identities", :force => true do |t|
-    t.string   "value"
-    t.integer  "person_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "identities", ["value"], :name => "index_identities_on_value", :unique => true
 
   create_table "oauth_access_grants", :force => true do |t|
     t.integer  "resource_owner_id", :null => false
@@ -109,11 +88,6 @@ ActiveRecord::Schema.define(:version => 20140530155711) do
 
   add_index "openstax_accounts_users", ["openstax_uid"], :name => "index_openstax_accounts_users_on_openstax_uid", :unique => true
   add_index "openstax_accounts_users", ["username"], :name => "index_openstax_accounts_users_on_username", :unique => true
-
-  create_table "people", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "users", :force => true do |t|
     t.boolean  "is_registered"
