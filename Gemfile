@@ -50,10 +50,10 @@ group :development, :test do
   gem 'brakeman'
   gem 'railroady'
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
   gem 'rspec-rerun'
   gem 'cucumber-rails', :require => false
   gem 'nifty-generators'
+  gem 'factory_girl_rails'
   gem 'rack-test', require: 'rack/test'
 end
 
@@ -62,5 +62,3 @@ group :production do
   gem 'unicorn'
   gem 'lograge', '~> 0.3.0'
 end
-
-
