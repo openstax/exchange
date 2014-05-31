@@ -1,1 +1,0 @@
-json.identity @identity.value

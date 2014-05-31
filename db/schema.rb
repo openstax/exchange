@@ -11,17 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140222164617) do
-
-  create_table "api_keys", :force => true do |t|
-    t.string   "access_token"
-    t.integer  "exchanger_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
-  add_index "api_keys", ["access_token"], :name => "index_api_keys_on_access_token", :unique => true
-  add_index "api_keys", ["exchanger_id"], :name => "index_api_keys_on_exchanger_id"
+ActiveRecord::Schema.define(:version => 20140530155711) do
 
   create_table "exchanger_identities", :force => true do |t|
     t.integer  "exchanger_id"
@@ -34,11 +24,6 @@ ActiveRecord::Schema.define(:version => 20140222164617) do
 
   add_index "exchanger_identities", ["exchanger_id"], :name => "index_exchanger_identities_on_exchanger_id"
   add_index "exchanger_identities", ["identity_id"], :name => "index_exchanger_identities_on_identity_id"
-
-  create_table "exchangers", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "fine_print_contracts", :force => true do |t|
     t.string   "name",       :null => false
@@ -68,6 +53,8 @@ ActiveRecord::Schema.define(:version => 20140222164617) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "identities", ["value"], :name => "index_identities_on_value", :unique => true
 
   create_table "oauth_access_grants", :force => true do |t|
     t.integer  "resource_owner_id", :null => false
@@ -108,17 +95,20 @@ ActiveRecord::Schema.define(:version => 20140222164617) do
 
   add_index "oauth_applications", ["uid"], :name => "index_oauth_applications_on_uid", :unique => true
 
-  create_table "openstax_connect_users", :force => true do |t|
+  create_table "openstax_accounts_users", :force => true do |t|
     t.integer  "openstax_uid"
+    t.string   "username"
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "username"
+    t.string   "full_name"
+    t.string   "title"
+    t.string   "access_token"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
 
-  add_index "openstax_connect_users", ["openstax_uid"], :name => "index_openstax_connect_users_on_openstax_uid", :unique => true
-  add_index "openstax_connect_users", ["username"], :name => "index_openstax_connect_users_on_username", :unique => true
+  add_index "openstax_accounts_users", ["openstax_uid"], :name => "index_openstax_accounts_users_on_openstax_uid", :unique => true
+  add_index "openstax_accounts_users", ["username"], :name => "index_openstax_accounts_users_on_username", :unique => true
 
   create_table "people", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -129,13 +119,13 @@ ActiveRecord::Schema.define(:version => 20140222164617) do
     t.boolean  "is_registered"
     t.boolean  "is_admin"
     t.datetime "disabled_at"
-    t.integer  "openstax_connect_user_id"
-    t.datetime "created_at",               :null => false
-    t.datetime "updated_at",               :null => false
+    t.integer  "openstax_accounts_user_id"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   add_index "users", ["is_admin"], :name => "index_users_on_is_admin"
   add_index "users", ["is_registered"], :name => "index_users_on_is_registered"
-  add_index "users", ["openstax_connect_user_id"], :name => "index_users_on_openstax_connect_user_id"
+  add_index "users", ["openstax_accounts_user_id"], :name => "index_users_on_openstax_accounts_user_id"
 
 end

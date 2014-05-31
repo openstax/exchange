@@ -4,5 +4,9 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Exchange::Application.config.secret_token = 
-  SECRET_SETTINGS[:secret_token] || 'ed7592e5ab5aec106af2aee88b5466f1df3a625d6aaad7b83f4b28b5a098b796580e967ad4277dca6738a46436546f7c90b391ebd24b820c3224e589698954b8'
+
+raise ArgumentError, 'Secret token not set' if Rails.env.production? && \
+                                               !SECRET_SETTINGS[:secret_token]
+
+Accounts::Application.config.secret_token = SECRET_SETTINGS[:secret_token] || \
+  Digest::SHA1.hexdigest('not so secret token for development and testing only')

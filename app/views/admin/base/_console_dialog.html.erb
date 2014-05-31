@@ -9,6 +9,11 @@
     <ul class="nav nav-tabs tight-bottom">
       <li class="active"><a href="#misc-tab" data-toggle="tab">Misc</a></li>
       <li><a href="#users-tab" data-toggle="tab">Users</a></li>
+      <% unless Rails.env.production? %>
+        <li class="dev">
+          <a href="#dev-tab" data-toggle="tab">Dev</a>
+        </li>
+      <% end %>
     </ul>
   </div>
 
@@ -22,8 +27,16 @@
       </div>
 
       <div class="tab-pane" id="users-tab">
-        <%= render 'users' %>
+        <%= render :partial => 'openstax/accounts/shared/users/index',
+                   :locals => { :search_action_path => admin_users_path,
+                                :remote => true } %>
       </div>
+
+      <% unless Rails.env.production? %>
+        <div class="tab-pane" id="dev-tab">
+          <%= render 'dev/base/index' %>
+        </div>
+      <% end %>
     </div>
     
   </div>

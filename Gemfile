@@ -14,29 +14,31 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 gem 'jbuilder'
 gem 'whenever', :require => false
 gem 'newrelic_rpm'
 gem 'squeel'
 gem 'yaml_db'
-gem 'openstax_utilities', '~> 1.2.0'
-gem 'openstax_connect', '~> 0.0.8'
+
+gem 'openstax_utilities', '~> 2.2.1'
+gem 'openstax_accounts', '~> 1.0.0'
+gem 'openstax_api', '~> 2.1.0'
 
 gem 'apipie-rails'
 gem 'maruku'
 
 gem 'doorkeeper'
 
-# see https://groups.google.com/d/msg/roar-talk/KI-a5t02huc/RKwkcZ5SzOEJ
-# gem 'roar', git: 'git://github.com/andresf/roar.git', ref: '0698cb17515ae229bd10580a95062530aba4f583'
-gem 'representable', git: 'git://github.com/jpslav/representable.git', ref: '0b8ba7a2e7a6ce0bc404fe5af9ead26295db1457'
+gem 'representable', '~> 1.8.3'
 gem 'roar-rails'
 
 gem 'exception_notification'
 
-gem 'fine_print', '~> 1.3.0'
+gem 'action_interceptor', '~> 0.1.2'
+gem 'fine_print', '~> 1.4.1'
 
-gem 'lev', "~> 2.0.4"
+gem 'lev', '~> 2.1.0'
 
 group :development, :test do
   gem 'sqlite3'
@@ -51,17 +53,12 @@ group :development, :test do
   gem 'rspec-rerun'
   gem 'cucumber-rails', :require => false
   gem 'nifty-generators'
-end
-
-group :development, :test do
-  gem 'rack-test', require: "rack/test"
-  gem 'factory_girl'
+  gem 'factory_girl_rails'
+  gem 'rack-test', require: 'rack/test'
 end
 
 group :production do
   gem 'mysql2', '~> 0.3.11'
   gem 'unicorn'
-  gem 'lograge', git: 'https://github.com/jpslav/lograge.git' # 'git@github.com:jpslav/lograge.git'
+  gem 'lograge', '~> 0.3.0'
 end
-
-
