@@ -7,7 +7,7 @@
                 FinePrint.get_contract(:privacy_policy)]
 
    contract_links = contracts.collect do |contract|
-     link_to contract.title, show_terms_path(contract), remote: true
+     link_to contract.title, terms_path(contract), remote: true
    end %>
 
   <ul class="normal" style="margin-top:20px; margin-bottom: 20px">
@@ -16,7 +16,7 @@
     <% end %>
   </ul>
 
-  <%= lev_form_for :register, url: users_register_path, method: :put do |f| %>
+  <%= lev_form_for :register, url: register_path, method: :put do |f| %>
     <div class="checkbox">
       <label>
         <%= f.check_box :i_agree %> I have read the terms listed above and I agree to be bound by their terms

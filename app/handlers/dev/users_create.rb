@@ -12,6 +12,7 @@ module Dev
     end
 
     uses_routine Dev::CreateUser,
+                 as: :create_user,
                  translations: { inputs: { scope: :create },
                                  outputs: { type: :verbatim } }
 
@@ -22,7 +23,7 @@ module Dev
     end
 
     def handle
-      run(Dev::CreateUser, create_params.as_hash(:first_name, :last_name, :username))
+      run(:create_user, create_params.as_hash(:first_name, :last_name, :username))
       outputs[:user].update_attribute(:is_admin, create_params.is_admin)
     end
 

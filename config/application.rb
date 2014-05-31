@@ -16,10 +16,7 @@ module Exchange
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    config.autoload_paths += %W(#{config.root}/app/handlers
-                                #{config.root}/app/routines
-                                #{config.root}/app/representers
-                                #{config.root}/app/features)
+    # config.autoload_paths += %W()
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -61,5 +58,12 @@ module Exchange
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    config.generators do |g|
+      g.test_framework :rspec, :view_specs => false, :fixture => false
+      g.fixture_replacement :factory_girl, :dir => 'spec/factories'
+      g.assets false
+      g.helper false
+    end
   end
 end
