@@ -8,5 +8,5 @@
 raise ArgumentError, 'Secret token not set' if Rails.env.production? && \
                                                !SECRET_SETTINGS[:secret_token]
 
-Accounts::Application.config.secret_token = SECRET_SETTINGS[:secret_token] || \
+Exchange::Application.config.secret_token = SECRET_SETTINGS[:secret_token] || \
   Digest::SHA1.hexdigest('not so secret token for development and testing only')

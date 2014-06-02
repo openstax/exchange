@@ -52,8 +52,6 @@ Exchange::Application.routes.draw do
 
   # Resources
 
-  resources :data, only: [:index]
-
   resources :terms, only: [:index, :show] do
     collection do
       get 'pose'
