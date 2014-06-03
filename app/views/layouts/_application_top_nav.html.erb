@@ -25,13 +25,6 @@
                      target_current_symbol:  :top_nav_api_current %>
         </li>
         <li>
-          <%= render "layouts/application_top_nav_link", 
-                     target_text:            "DATA",
-                     target_id:              "top-nav-api-link",
-                     target_path:            main_app.data_path,
-                     target_current_symbol:  :top_nav_api_current %>
-        </li>
-        <li>
           <% if current_user.is_anonymous? %>
             <%= render "layouts/application_top_nav_link", 
                        target_text:            "SIGN IN",
