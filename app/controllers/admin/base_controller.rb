@@ -7,14 +7,14 @@ module Admin
     if Rails.env.production?
       before_filter :authenticate_admin!
     else
-      skip_before_filter :authenticate_user!
-      skip_before_filter :require_registration!
+      skip_interceptor :authenticate_user!, :registration
 
       fine_print_skip_signatures :general_terms_of_use,
                                  :privacy_policy
     end
     
     def cron
+      raise NotYetImplemented
       Ost::Cron::execute_cron_jobs
       flash[:notice] = "Ran cron tasks"
       redirect_to admin_path  

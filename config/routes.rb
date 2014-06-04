@@ -4,6 +4,10 @@ Exchange::Application.routes.draw do
 
   root :to => "static_pages#home"
 
+  # Status
+
+  get :status, to: lambda { head :ok }
+
   # Gems
 
   use_doorkeeper
@@ -34,7 +38,9 @@ Exchange::Application.routes.draw do
     get 'raise_not_yet_implemented',    to: 'base#raise_not_yet_implemented'
     get 'raise_illegal_argument',       to: 'base#raise_illegal_argument'
 
-    resources :users, only: [:index, :show, :update, :edit] do
+    resources :users, only: [:show, :edit, :update, :destroy]
+
+    resources :accounts, only: [:index] do
       post 'become', on: :member
       post 'index', on: :collection
     end
@@ -70,7 +76,6 @@ Exchange::Application.routes.draw do
   resource :static_page, only: [], path: '', as: '' do
     get 'api'
     get 'copyright'
-    get 'status'
     get 'about'
   end
 

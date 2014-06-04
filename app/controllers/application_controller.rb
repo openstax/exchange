@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   layout :layout
 
-  before_filter :authenticate_user!
+  interceptor :authenticate_user!
 
 protected
 

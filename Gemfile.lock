@@ -1,7 +1,26 @@
+GIT
+  remote: https://github.com/Dantemss/accounts-rails.git
+  revision: 3fc1b4a5a6dc05166ce2df5650613fb41d371e39
+  ref: 3fc1b4a5a6dc05166ce2df5650613fb41d371e39
+  specs:
+    openstax_accounts (0.3.1.alpha)
+      action_interceptor (>= 0.1)
+      keyword_search (>= 1.0.0)
+      lev (>= 2.0)
+      oauth2 (>= 0.5.0)
+      omniauth (>= 1.1)
+      omniauth-oauth2 (>= 1.1)
+      openstax_utilities (>= 2.2.2)
+      rails (>= 3.2)
+      roar (>= 0.8)
+      sass-rails (>= 3.1)
+      squeel (>= 0.5.0)
+      uglifier (>= 1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    action_interceptor (0.1.2)
+    action_interceptor (0.2.3)
       rails (>= 3.1)
     actionmailer (3.2.17)
       actionpack (= 3.2.17)
@@ -54,7 +73,7 @@ GEM
       slim (>= 1.3.6, < 3.0)
       terminal-table (~> 1.4)
     builder (3.0.4)
-    capybara (2.2.1)
+    capybara (2.3.0)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
@@ -185,18 +204,6 @@ GEM
       multi_json (~> 1.3)
       oauth2 (~> 0.9.3)
       omniauth (~> 1.2)
-    openstax_accounts (1.0.0)
-      keyword_search (>= 1.0.0)
-      lev (>= 2.0)
-      oauth2 (>= 0.5.0)
-      omniauth (>= 1.1)
-      omniauth-oauth2 (>= 1.1)
-      openstax_utilities (>= 1.2)
-      rails (>= 3.2)
-      roar (>= 0.8)
-      sass-rails (>= 3.1)
-      squeel (>= 0.5.0)
-      uglifier (>= 1.0)
     openstax_api (2.1.0)
       doorkeeper (>= 0.5)
       exception_notification (>= 4.0)
@@ -205,7 +212,7 @@ GEM
       representable (>= 1.8)
       roar (>= 0.12.1)
       roar-rails (>= 0.1.2)
-    openstax_utilities (2.2.1)
+    openstax_utilities (2.2.2)
       attribeautiful (>= 0.0.7)
       rails (>= 3.1)
     pager (1.0.1)
@@ -248,30 +255,28 @@ GEM
       uber
     roar (0.12.7)
       representable (>= 1.6.0)
-    roar-rails (0.1.5)
+    roar-rails (0.1.6)
       actionpack
       railties (>= 3.0.0)
       roar (>= 0.11.13)
       test_xml (>= 0.1.6)
       uber
-    rspec (2.14.1)
-      rspec-core (~> 2.14.0)
-      rspec-expectations (~> 2.14.0)
-      rspec-mocks (~> 2.14.0)
-    rspec-core (2.14.8)
-    rspec-expectations (2.14.5)
-      diff-lcs (>= 1.1.3, < 2.0)
-    rspec-mocks (2.14.6)
-    rspec-rails (2.14.2)
+    rspec-core (3.0.0)
+      rspec-support (~> 3.0.0)
+    rspec-expectations (3.0.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.0.0)
+    rspec-mocks (3.0.0)
+      rspec-support (~> 3.0.0)
+    rspec-rails (3.0.1)
       actionpack (>= 3.0)
-      activemodel (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
-      rspec-core (~> 2.14.0)
-      rspec-expectations (~> 2.14.0)
-      rspec-mocks (~> 2.14.0)
-    rspec-rerun (0.1.3)
-      rspec (>= 2.11.0)
+      rspec-core (~> 3.0.0)
+      rspec-expectations (~> 3.0.0)
+      rspec-mocks (~> 3.0.0)
+      rspec-support (~> 3.0.0)
+    rspec-support (3.0.0)
     ruby2ruby (2.0.8)
       ruby_parser (~> 3.1)
       sexp_processor (~> 4.0)
@@ -337,7 +342,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  action_interceptor (~> 0.1.2)
+  action_interceptor (~> 0.2.3)
   apipie-rails
   bootstrap-sass (~> 3.1.1)
   brakeman
@@ -360,9 +365,9 @@ DEPENDENCIES
   mysql2 (~> 0.3.11)
   newrelic_rpm
   nifty-generators
-  openstax_accounts (~> 1.0.0)
+  openstax_accounts!
   openstax_api (~> 2.1.0)
-  openstax_utilities (~> 2.2.1)
+  openstax_utilities (~> 2.2.2)
   quiet_assets
   rack-test
   railroady
@@ -370,7 +375,6 @@ DEPENDENCIES
   representable (~> 1.8.3)
   roar-rails
   rspec-rails
-  rspec-rerun
   sass-rails (~> 3.2.3)
   sqlite3
   squeel

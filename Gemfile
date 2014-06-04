@@ -21,8 +21,9 @@ gem 'newrelic_rpm'
 gem 'squeel'
 gem 'yaml_db'
 
-gem 'openstax_utilities', '~> 2.2.1'
-gem 'openstax_accounts', '~> 1.0.0'
+gem 'openstax_utilities', '~> 2.2.2'
+gem 'openstax_accounts', :git => 'https://github.com/Dantemss/accounts-rails.git',
+                         :ref => '3fc1b4a5a6dc05166ce2df5650613fb41d371e39'
 gem 'openstax_api', '~> 2.1.0'
 
 gem 'apipie-rails'
@@ -35,7 +36,7 @@ gem 'roar-rails'
 
 gem 'exception_notification'
 
-gem 'action_interceptor', '~> 0.1.2'
+gem 'action_interceptor', '~> 0.2.3'
 gem 'fine_print', '~> 1.4.1'
 
 gem 'lev', '~> 2.1.0'
@@ -50,7 +51,6 @@ group :development, :test do
   gem 'brakeman'
   gem 'railroady'
   gem 'rspec-rails'
-  gem 'rspec-rerun'
   gem 'cucumber-rails', :require => false
   gem 'nifty-generators'
   gem 'factory_girl_rails'

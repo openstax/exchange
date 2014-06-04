@@ -1,11 +1,12 @@
 module Admin
   class UsersController < BaseController
 
-    before_filter :get_user, only: [:show, :edit, :update, :destroy, :become]
+    before_filter :get_user, only: [:show, :edit, :update, :destroy]
 
-    def index
-      handle_with(Admin::UsersIndex,
-                  complete: lambda { render 'index' })
+    def show
+    end
+
+    def edit
     end
 
     def update
@@ -21,11 +22,6 @@ module Admin
     def destroy      
       @user.destroy
       redirect_to users_url
-    end
-
-    def become
-      sign_in(@user)
-      redirect_to request.referrer
     end
 
   protected

@@ -8,8 +8,7 @@ module Dev
       raise SecurityTransgression if Rails.env.production?
     }
 
-    skip_before_filter :authenticate_user!
-    skip_before_filter :require_registration!
+    skip_interceptor :authenticate_user!, :registration
 
     fine_print_skip_signatures :general_terms_of_use,
                                :privacy_policy

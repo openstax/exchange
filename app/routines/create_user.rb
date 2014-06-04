@@ -3,12 +3,12 @@ class CreateUser
 
 protected
 
-  def exec(accounts_user, options={})
+  def exec(account, options={})
     
     # Create the user
 
     outputs[:user] = User.create do |user|
-      user.openstax_accounts_user_id = accounts_user.id
+      user.openstax_accounts_account_id = account.id
       user.is_registered = false
     end
 

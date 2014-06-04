@@ -1,20 +1,20 @@
 <%= unless_errors alerts_html_id: 'dialog-local-alerts' do %>
   <% 
-  users = @handler_result.outputs[:users]
+  accounts = @handler_result.outputs[:accounts]
 
   contents = osu.action_list(             
-    records: users,
+    records: accounts,
     list: {
       headings: ['Username', 'First Name', 'Last Name', ''],
       widths: ['25%', '25%', '25%', '25%'],
       data_procs:
         [
-          Proc.new { |user| user.username },
-          Proc.new { |user| user.first_name || '---' },
-          Proc.new { |user| user.last_name || '---' },
-          Proc.new { |user| 
+          Proc.new { |account| account.username },
+          Proc.new { |account| account.first_name || '---' },
+          Proc.new { |account| account.last_name || '---' },
+          Proc.new { |account| 
             link_to 'Sign in as', 
-                    become_admin_user_path(user),
+                    become_admin_account_path(account),
                     method: :post 
           }
         ]
@@ -23,5 +23,5 @@
 
   
   $("#search-results-list").html("<%= j(contents) %>");  
-  $('#search-results-list').prepend("<%= j(render 'admin/users/search_pagination') %>");
+  $('#search-results-list').prepend("<%= j(render 'admin/accounts/search_pagination') %>");
 <% end %>

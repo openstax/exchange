@@ -1,10 +1,10 @@
 class User < ActiveRecord::Base
-  belongs_to :openstax_accounts_user, 
-             class_name: "OpenStax::Accounts::User",
+  belongs_to :openstax_accounts_account, 
+             class_name: "OpenStax::Accounts::Account",
              dependent: :destroy
 
-  delegate :username, :first_name, :last_name, :name, :casual_name,
-           to: :openstax_accounts_user
+  delegate :username, :first_name, :last_name, :full_name, :title,
+           :name, :casual_name, to: :openstax_accounts_account
 
   before_save :force_active_admin
 
@@ -35,12 +35,13 @@ class User < ActiveRecord::Base
   # OpenStax Accounts "user_provider" methods
   #
 
-  def self.accounts_user_to_app_user(accounts_user)
-    GetOrCreateUserFromAccountsUser.call(accounts_user).outputs.user
+  def self.account_to_user(account)
+    GetOrCreateUserFromAccount.call(account).outputs.user
   end
 
-  def self.app_user_to_accounts_user(app_user)
-    app_user.openstax_accounts_user
+  def self.user_to_account(user)
+    user.openstax_accounts_account || \
+    OpenStax::Account::AnonymousAccount.instance
   end
 
   ##################

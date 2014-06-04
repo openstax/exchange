@@ -2,5 +2,4 @@
 # License version 3 or later.  See the COPYRIGHT file for details.
 
 SECRET_SETTINGS = OpenStax::Utilities::Settings.load_settings(
-                    __FILE__, '..', 'secret_settings.yml')
-
+                    __FILE__, '../config', 'secret_settings.yml')

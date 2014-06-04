@@ -3,18 +3,16 @@ module Dev
   class CreateUser
     lev_routine
 
-    uses_routine OpenStax::Accounts::Dev::CreateUser,
-                 translations: { outputs: {scope: :accounts} }
-    uses_routine GetOrCreateUserFromAccountsUser,
+    uses_routine GetOrCreateUserFromAccount,
                  translations: { outputs: {type: :verbatim} }
 
   protected
 
     def exec(options={})
-      run(OpenStax::Accounts::Dev::CreateUser,
-          options.slice(:first_name, :last_name, :username, :ensure_no_errors))
+      account = FactoryGirl.create(:openstax_accounts_account,
+        options.slice(:first_name, :last_name, :username))
 
-      run(GetOrCreateUserFromAccountsUser, outputs[[:accounts, :user]])
+      run(GetOrCreateUserFromAccount, account)
     end
   end
 

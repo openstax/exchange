@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140530155711) do
+ActiveRecord::Schema.define(:version => 20140604153813) do
 
   create_table "fine_print_contracts", :force => true do |t|
     t.string   "name",       :null => false
@@ -74,9 +74,9 @@ ActiveRecord::Schema.define(:version => 20140530155711) do
 
   add_index "oauth_applications", ["uid"], :name => "index_oauth_applications_on_uid", :unique => true
 
-  create_table "openstax_accounts_users", :force => true do |t|
-    t.integer  "openstax_uid"
-    t.string   "username"
+  create_table "openstax_accounts_accounts", :force => true do |t|
+    t.integer  "openstax_uid", :null => false
+    t.string   "username",     :null => false
     t.string   "first_name"
     t.string   "last_name"
     t.string   "full_name"
@@ -86,20 +86,24 @@ ActiveRecord::Schema.define(:version => 20140530155711) do
     t.datetime "updated_at",   :null => false
   end
 
-  add_index "openstax_accounts_users", ["openstax_uid"], :name => "index_openstax_accounts_users_on_openstax_uid", :unique => true
-  add_index "openstax_accounts_users", ["username"], :name => "index_openstax_accounts_users_on_username", :unique => true
+  add_index "openstax_accounts_accounts", ["access_token"], :name => "index_openstax_accounts_accounts_on_access_token", :unique => true
+  add_index "openstax_accounts_accounts", ["first_name"], :name => "index_openstax_accounts_accounts_on_first_name"
+  add_index "openstax_accounts_accounts", ["full_name"], :name => "index_openstax_accounts_accounts_on_full_name"
+  add_index "openstax_accounts_accounts", ["last_name"], :name => "index_openstax_accounts_accounts_on_last_name"
+  add_index "openstax_accounts_accounts", ["openstax_uid"], :name => "index_openstax_accounts_accounts_on_openstax_uid", :unique => true
+  add_index "openstax_accounts_accounts", ["username"], :name => "index_openstax_accounts_accounts_on_username", :unique => true
 
   create_table "users", :force => true do |t|
     t.boolean  "is_registered"
     t.boolean  "is_admin"
     t.datetime "disabled_at"
-    t.integer  "openstax_accounts_user_id"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.integer  "openstax_accounts_account_id"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
   end
 
   add_index "users", ["is_admin"], :name => "index_users_on_is_admin"
   add_index "users", ["is_registered"], :name => "index_users_on_is_registered"
-  add_index "users", ["openstax_accounts_user_id"], :name => "index_users_on_openstax_accounts_user_id"
+  add_index "users", ["openstax_accounts_account_id"], :name => "index_users_on_openstax_accounts_account_id"
 
 end
