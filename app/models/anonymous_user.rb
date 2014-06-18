@@ -23,14 +23,6 @@ class AnonymousUser
     nil
   end
 
-  def authentications 
-    []
-  end
-
-  def identity
-    nil
-  end
-
   # Necessary if an anonymous user ever runs into an Exception
   # or else the developer email doesn't work
   def username

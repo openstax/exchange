@@ -6,7 +6,7 @@ COPYRIGHT_HOLDER = "Rice University"
 COPYRIGHT_START_YEAR = 2013
 
 require 'secret_settings'
-require 'extend_builtins'
+require 'controller_extensions'
 require 'utilities'
 
 # Initialize the rails application
