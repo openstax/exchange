@@ -11,6 +11,18 @@ class User < ActiveRecord::Base
   scope :registered, where(is_registered: true)
   scope :unregistered, where{is_registered != true}
 
+  def is_admin?
+    role == 'admin'
+  end
+
+  def is_agent?
+    role == 'agent'
+  end
+
+  def is_researcher?
+    role == 'researcher'
+  end
+
   def is_disabled?
     !disabled_at.nil?
   end
@@ -92,7 +104,7 @@ protected
 
   def force_active_admin
     if self == User.first
-      self.is_admin = true
+      self.role = 'admin'
       self.disabled_at = nil
     end
   end

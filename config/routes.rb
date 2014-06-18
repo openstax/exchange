@@ -51,7 +51,6 @@ Exchange::Application.routes.draw do
   apipie
 
   api :v1, :default => true do
-      resources :identities, :only => [:create]
   end
 
   # HTML Pages
