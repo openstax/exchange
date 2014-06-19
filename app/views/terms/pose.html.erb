@@ -1,32 +1,45 @@
-<%= page_heading @contract.title %>
+<% signed_before = @contracts.any? do |c|
+     FinePrint.signed_any_contract_version?(current_account, c)
+   end %>
+
+<%= page_heading "Welcome to #{SITE_NAME}" %>
 
 <div class="not-full-width">
-
-  <% if FinePrint.signed_any_contract_version?(current_user, @contract) %>
-    <p>There have been changes to the <%= @contract.title %>.  Please review them and then click "I agree" at the bottom of this page to continue.</p>
+  <% if signed_before %>
+    <p>There have been changes to the site terms. Please review them and then click "I agree" at the bottom of this page to continue.</p>
   <% else %>
-    <p>To continue, please review and agree to the following site terms by clicking "I agree" at the bottom of this page.</p>
+    <p>To activate your account on <%= SITE_NAME %>, please review and accept the following site terms by checking the box below and then clicking "Register".</p>
   <% end %>
 
-  <div class="well">
-    <%= simple_format(@contract.content) %>
-  </div>
 
-  <%= lev_form_for :agreement, url: agree_to_terms_path, method: :post do |f| %>
+  <% contract_links = @contracts.collect do |contract|
+    link_to contract.title, term_path(contract), remote: true
+  end %>
+
+  <ul class="normal" style="margin-top:20px; margin-bottom: 20px">
+    <% contract_links.each do |contract_link| %>
+      <li><%= contract_link %></li>
+    <% end %>
+  </ul>
+
+  <%= lev_form_for :agreement, url: agree_terms_path, method: :post do |f| %>
     <div class="checkbox">
       <label>
         <%= f.check_box :i_agree %> I have read the terms listed above and I agree to be bound by their terms
       </label>
     </div>
-    
-    <%= f.hidden_field :contract_id, value: @contract.id %>
-    <%= f.submit "Agree", id: "agreement_submit" %>
+
+    <% @contracts.each do |c| %>
+      <%= hidden_field_tag 'agreement[term_ids][]', c.id %>
+    <% end %>
+
+    <%= f.submit (signed_before ? "I Agree" : "Register"), id: "agreement_submit" %>
+  <% end %>
+
+  <% content_for :javascript do %>
+    <script type="text/javascript">
+      Exchange.Ui.enableOnChecked('#agreement_submit', '#agreement_i_agree');
+    </script>
   <% end %>
 
 </div>
-
-<% content_for :javascript do %>
-  <script type="text/javascript">
-    Exchange.Ui.enableOnChecked('#agreement_submit', '#agreement_i_agree');
-  </script>
-<% end %>

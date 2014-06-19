@@ -6,10 +6,11 @@ ActionController::Base.class_exec do
   protect_beta username: SECRET_SETTINGS[:beta_username], 
                password: SECRET_SETTINGS[:beta_password]
 
-  interceptor :registration
   fine_print_get_signatures :general_terms_of_use, :privacy_policy
 
   rescue_from Exception, :with => :rescue_from_exception
+
+  helper_method :current_account
 
   protected
 

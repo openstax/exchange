@@ -15,17 +15,9 @@ Exchange::Application.routes.draw do
   mount OpenStax::Accounts::Engine, at: "/accounts"
   mount FinePrint::Engine, at: "/fine_print"
 
-  # Developer
+  # Administrator
 
-  namespace 'dev' do
-    resources :users, only: [:create] do
-      post 'generate', on: :collection
-    end
-  end
-
-  # Admin
-
-  namespace 'admin' do
+  namespace 'administrator' do
     get '/', to: 'base#index'
 
     put 'cron',                         to: 'base#cron', :as => 'cron'
@@ -46,6 +38,16 @@ Exchange::Application.routes.draw do
     end
   end
 
+  # Agent
+
+  namespace 'agent' do
+  end
+
+  # Researcher
+
+  namespace 'researcher' do
+  end
+
   # JSON API
 
   apipie
@@ -53,24 +55,19 @@ Exchange::Application.routes.draw do
   api :v1, :default => true do
   end
 
-  # HTML Pages
+  # Shared Pages
 
   # Resources
 
   resources :terms, only: [:index, :show] do
     collection do
       get 'pose'
-      post 'agree', as: 'agree_to'
+      post 'agree'
     end
   end
 
   # Singular routes
   # Only for routes with unique names
-
-  resource :user, only: [], path: '', as: '' do
-    get 'registration'
-    put 'register'
-  end
 
   resource :static_page, only: [], path: '', as: '' do
     get 'api'

@@ -1,3 +1,3 @@
 class Administrator < ActiveRecord::Base
-  include User
+  acts_as_user
 end

@@ -5,13 +5,9 @@ class ApplicationController < ActionController::Base
 
   layout :layout
 
-  interceptor :authenticate_user!
+  undef_method :current_user
 
-protected
-
-  def authenticate_admin!
-    raise SecurityTransgression unless current_user.is_admin?
-  end
+  protected
 
   def layout
     "application_body_only"

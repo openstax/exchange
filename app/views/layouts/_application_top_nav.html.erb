@@ -25,7 +25,7 @@
                      target_current_symbol:  :top_nav_api_current %>
         </li>
         <li>
-          <% if current_user.is_anonymous? %>
+          <% if current_account.is_anonymous? %>
             <%= render "layouts/application_top_nav_link", 
                        target_text:            "SIGN IN",
                        target_id:              "top-nav-account-link",
