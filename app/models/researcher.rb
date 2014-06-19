@@ -1,3 +1,3 @@
 class Researcher < ActiveRecord::Base
-  attr_accessible :account_id
+  include User
 end

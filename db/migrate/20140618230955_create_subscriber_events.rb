@@ -3,6 +3,7 @@ class CreateSubscriberEvents < ActiveRecord::Migration
     create_table :subscriber_events do |t|
       t.integer :subscriber_id
       t.integer :event_id
+      t.boolean :read
 
       t.timestamps
     end

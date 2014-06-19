@@ -11,7 +11,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140604153813) do
+ActiveRecord::Schema.define(:version => 20140618230955) do
+
+  create_table "administrators", :force => true do |t|
+    t.integer  "account_id",    :null => false
+    t.datetime "registered_at"
+    t.datetime "disabled_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  create_table "agents", :force => true do |t|
+    t.integer  "account_id",     :null => false
+    t.datetime "registered_at"
+    t.datetime "disabled_at"
+    t.integer  "application_id"
+    t.boolean  "is_manager"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
 
   create_table "fine_print_contracts", :force => true do |t|
     t.string   "name",       :null => false
@@ -34,6 +52,14 @@ ActiveRecord::Schema.define(:version => 20140604153813) do
 
   add_index "fine_print_signatures", ["contract_id"], :name => "index_fine_print_signatures_on_contract_id"
   add_index "fine_print_signatures", ["user_id", "user_type", "contract_id"], :name => "index_fine_print_s_on_u_id_and_u_type_and_c_id", :unique => true
+
+  create_table "identifiers", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "platform_id"
+    t.string   "value"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "oauth_access_grants", :force => true do |t|
     t.integer  "resource_owner_id", :null => false
@@ -93,15 +119,46 @@ ActiveRecord::Schema.define(:version => 20140604153813) do
   add_index "openstax_accounts_accounts", ["openstax_uid"], :name => "index_openstax_accounts_accounts_on_openstax_uid", :unique => true
   add_index "openstax_accounts_accounts", ["username"], :name => "index_openstax_accounts_accounts_on_username", :unique => true
 
-  create_table "users", :force => true do |t|
-    t.integer  "openstax_accounts_account_id", :null => false
-    t.string   "role",                         :null => false
-    t.datetime "disabled_at"
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+  create_table "people", :force => true do |t|
+    t.string   "label"
+    t.text     "superseded_labels"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
-  add_index "users", ["openstax_accounts_account_id"], :name => "index_users_on_openstax_accounts_account_id", :unique => true
-  add_index "users", ["role"], :name => "index_users_on_role"
+  create_table "platforms", :force => true do |t|
+    t.integer  "application_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "researchers", :force => true do |t|
+    t.integer  "account_id",    :null => false
+    t.datetime "registered_at"
+    t.datetime "disabled_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  create_table "resources", :force => true do |t|
+    t.integer  "platform_id"
+    t.string   "reference"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "subscriber_events", :force => true do |t|
+    t.integer  "subscriber_id"
+    t.integer  "event_id"
+    t.boolean  "read"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  create_table "subscribers", :force => true do |t|
+    t.integer  "application_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
 
 end

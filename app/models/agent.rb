@@ -1,3 +1,5 @@
 class Agent < ActiveRecord::Base
-  attr_accessible :account_id, :application_id, :is_manager
+  include User
+
+  attr_accessible :is_manager
 end

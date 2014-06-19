@@ -1,3 +1,3 @@
 class SubscriberEvent < ActiveRecord::Base
-  attr_accessible :event_id, :subscriber_id
+  attr_accessible :read
 end

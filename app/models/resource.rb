@@ -1,3 +1,3 @@
 class Resource < ActiveRecord::Base
-  attr_accessible :platform_id, :reference
+  attr_accessible :reference
 end

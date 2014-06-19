@@ -8,6 +8,7 @@ COPYRIGHT_START_YEAR = 2013
 require 'secret_settings'
 require 'controller_extensions'
 require 'utilities'
+require 'user'
 
 # Initialize the rails application
 Exchange::Application.initialize!
