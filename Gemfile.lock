@@ -185,7 +185,6 @@ GEM
     multi_test (0.1.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mysql2 (0.3.16)
     newrelic_rpm (3.8.1.221)
     nifty-generators (0.4.6)
     nokogiri (1.6.2.1)
@@ -216,6 +215,7 @@ GEM
       attribeautiful (>= 0.0.7)
       rails (>= 3.1)
     pager (1.0.1)
+    pg (0.17.1)
     polyamorous (0.6.4)
       activerecord (>= 3.0)
     polyglot (0.3.5)
@@ -362,12 +362,12 @@ DEPENDENCIES
   lev (~> 2.1.0)
   lograge (~> 0.3.0)
   maruku
-  mysql2 (~> 0.3.11)
   newrelic_rpm
   nifty-generators
   openstax_accounts!
   openstax_api (~> 2.1.0)
   openstax_utilities (~> 2.2.2)
+  pg
   quiet_assets
   rack-test
   railroady

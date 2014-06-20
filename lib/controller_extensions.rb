@@ -14,10 +14,34 @@ ActionController::Base.class_exec do
 
   protected
 
+  def current_administrator
+    Administrator.where(:account_id => current_account.id).first
+  end
+
+  def current_agent
+    Agent.where(:account_id => current_account.id).first
+  end
+
+  def current_researcher
+    Agent.where(:account_id => current_account.id).first
+  end
+
+  def authenticate_administrator!
+    current_administrator || raise(OSU::SecurityTransgression)
+  end
+
+  def authenticate_agent!
+    current_agent || raise(OSU::SecurityTransgression)
+  end
+
+  def authenticate_researcher!
+    current_researcher || raise(OSU::SecurityTransgression)
+  end
+
   def rescue_from_exception(exception)
     # See https://github.com/rack/rack/blob/master/lib/rack/utils.rb#L453 for error names/symbols
     error, notify = case exception
-    when SecurityTransgression
+    when OSU::SecurityTransgression
       [:forbidden, false]
     when ActiveRecord::RecordNotFound, 
          ActionController::RoutingError,

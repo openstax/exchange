@@ -58,7 +58,7 @@ group :development, :test do
 end
 
 group :production do
-  gem 'mysql2', '~> 0.3.11'
+  gem 'pg'
   gem 'unicorn'
   gem 'lograge', '~> 0.3.0'
 end

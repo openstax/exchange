@@ -5,5 +5,7 @@ class CreateAdministrators < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_user_index :administrators
   end
 end

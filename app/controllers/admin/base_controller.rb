@@ -4,14 +4,7 @@
 module Admin
   class BaseController < ApplicationController
 
-    if Rails.env.production?
-      before_filter :authenticate_admin!
-    else
-      skip_interceptor :authenticate_user!, :registration
-
-      fine_print_skip_signatures :general_terms_of_use,
-                                 :privacy_policy
-    end
+    before_filter :authenticate_administrator!
     
     def cron
       raise NotYetImplemented

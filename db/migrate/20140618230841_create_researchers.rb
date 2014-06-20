@@ -5,5 +5,7 @@ class CreateResearchers < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_user_index :researchers
   end
 end

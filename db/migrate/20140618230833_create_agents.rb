@@ -7,5 +7,8 @@ class CreateAgents < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_user_index :agents
+    add_index :agents, [:application_id, :is_manager]
   end
 end

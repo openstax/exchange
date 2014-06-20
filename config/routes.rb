@@ -10,14 +10,16 @@ Exchange::Application.routes.draw do
 
   # Gems
 
-  use_doorkeeper
+  use_doorkeeper do
+    skip_controllers :applications
+  end
 
   mount OpenStax::Accounts::Engine, at: "/accounts"
   mount FinePrint::Engine, at: "/fine_print"
 
   # Administrator
 
-  namespace 'administrator' do
+  namespace 'admin' do
     get '/', to: 'base#index'
 
     put 'cron',                         to: 'base#cron', :as => 'cron'
@@ -30,22 +32,29 @@ Exchange::Application.routes.draw do
     get 'raise_not_yet_implemented',    to: 'base#raise_not_yet_implemented'
     get 'raise_illegal_argument',       to: 'base#raise_illegal_argument'
 
-    resources :users, only: [:show, :edit, :update, :destroy]
+    user_crud :administrators
+    user_crud :agents
+    user_crud :researchers
 
     resources :accounts, only: [:index] do
       post 'become', on: :member
       post 'index', on: :collection
     end
+
+    resources :platforms
+
+    resources :subscribers
   end
 
   # Agent
 
-  namespace 'agent' do
+  namespace 'manage' do
+    user_crud :agents
   end
 
   # Researcher
 
-  namespace 'researcher' do
+  namespace 'research' do
   end
 
   # JSON API
