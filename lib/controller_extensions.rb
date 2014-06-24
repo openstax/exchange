@@ -27,21 +27,21 @@ ActionController::Base.class_exec do
   end
 
   def authenticate_administrator!
-    current_administrator || raise(OSU::SecurityTransgression)
+    current_administrator || raise(SecurityTransgression)
   end
 
   def authenticate_agent!
-    current_agent || raise(OSU::SecurityTransgression)
+    current_agent || raise(SecurityTransgression)
   end
 
   def authenticate_researcher!
-    current_researcher || raise(OSU::SecurityTransgression)
+    current_researcher || raise(SecurityTransgression)
   end
 
   def rescue_from_exception(exception)
     # See https://github.com/rack/rack/blob/master/lib/rack/utils.rb#L453 for error names/symbols
     error, notify = case exception
-    when OSU::SecurityTransgression
+    when SecurityTransgression
       [:forbidden, false]
     when ActiveRecord::RecordNotFound, 
          ActionController::RoutingError,

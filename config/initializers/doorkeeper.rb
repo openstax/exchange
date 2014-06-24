@@ -5,13 +5,12 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    current_user || warden.authenticate!(:scope => :user)
+    raise SecurityTransgression # Client credentials flow only
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
   admin_authenticator do
-    current_user || warden.authenticate!(:scope => :user)
-    raise SecurityTransgression unless current_user && current_user.is_admin?
+    authenticate_administrator!
   end
 
   # Authorization Code expiration time (default 10 minutes).

@@ -2,6 +2,7 @@
 
   <% if !Rails.env.production? %>
     Current user: <%= current_account.username %><br/>
+    <%= link_to 'Dev Console', :admin %><br/>
   <% end %>
 
   <% clock_is_normally_enabled = @clock_enabled && signed_in? %>

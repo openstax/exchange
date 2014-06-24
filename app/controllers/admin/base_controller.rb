@@ -4,7 +4,12 @@
 module Admin
   class BaseController < ApplicationController
 
-    before_filter :authenticate_administrator!
+    layout 'application_body_nav'
+
+    before_filter :authenticate_administrator! if Rails.env.production?
+
+    def index
+    end
     
     def cron
       raise NotYetImplemented

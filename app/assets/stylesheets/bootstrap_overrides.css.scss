@@ -42,3 +42,15 @@ button.standard, input[type='submit'].standard {
     color: white;
   } 
 }
+
+#application-body-nav-nav {
+  width: 150px !important;
+}
+
+.console .pane {
+  display: none;
+}
+
+.console .active {
+  display: block;
+}

@@ -32,14 +32,14 @@ module User
   end
 
   module Migration
-    module Column
+    module Columns
       def user
         integer :account_id, null: false
         datetime :disabled_at
       end
     end
 
-    module Index
+    module Indices
       def add_user_index(table_name)
         add_index table_name, :account_id, unique: true
         add_index table_name, :disabled_at
@@ -47,7 +47,7 @@ module User
     end
   end
 
-  module Routes
+  module Routing
     def user_crud(klass)
       resources klass, only: [:index, :create, :update, :destroy]
     end
@@ -56,7 +56,7 @@ end
 
 ActiveRecord::Base.send :include, User::ActiveRecord
 ActiveRecord::ConnectionAdapters::TableDefinition.send :include,
-                                                       User::Migration::Column
-ActiveRecord::Migration.send :include, User::Migration::Index
+                                                       User::Migration::Columns
+ActiveRecord::Migration.send :include, User::Migration::Indices
 ActionDispatch::Routing::Mapper.send :include,
-                                     User::Routes
+                                     User::Routing

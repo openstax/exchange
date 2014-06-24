@@ -1,0 +1,26 @@
+<% content_for :nav do %>
+  <ul class="console-nav nav nav-pills nav-stacked">
+    <li data-pane="users" class="active"><a href="#users">Users</a></li>
+    <li data-pane="misc"><a href="#misc" data-pane="misc">Misc</a></li>
+  </ul>
+<% end %>
+
+<div class="console">
+  <div class="header" style="border-bottom: none">
+    
+  </div>
+
+  <div class="body">
+    <div id="alerts"></div>
+
+    <div id="pane-users" class="pane active">
+      <%= render :partial => 'openstax/accounts/shared/accounts/index',
+                 :locals => { :search_action_path => admin_accounts_path,
+                              :remote => true } %>
+    </div>
+
+    <div id="pane-misc" class="pane">
+      <%= render 'misc' %>
+    </div>
+  </div>
+</div>
