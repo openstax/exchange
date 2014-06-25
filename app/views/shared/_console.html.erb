@@ -1,0 +1,31 @@
+<% # Clients of this partial must supply the following variables:
+   # panes - a hash in the format :pane_name => pane_block
+%>
+
+<% panes.stringify_keys! %>
+
+<% content_for :nav do %>
+  <ul id="console-nav" class="nav nav-pills nav-stacked">
+    <% first_pane = true %>
+    <% panes.keys.each do |name| %>
+    <li data-pane="<%= name.downcase %>" <% if first_pane %>class="active"<% end %>><a href="#<%= name.downcase %>"><%= name.capitalize %></a></li>
+    <% first_pane = false %>
+    <% end %>
+  </ul>
+<% end %>
+
+<div id="console" class="console">
+  <div id="console-header" class="header"></div>
+
+  <div id="console-body" class="body">
+    <div id="local-alerts"></div>
+
+    <% first_pane = true %>
+    <% panes.each do |name, block| %>
+    <div id="console-pane-<%= name %>" class="pane<% if first_pane %> active<% end %>">
+      <%= block.call %>
+    </div>
+    <% first_pane = false %>
+    <% end %>
+  </div>
+</div>

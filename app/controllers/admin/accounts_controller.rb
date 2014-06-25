@@ -4,7 +4,7 @@ module Admin
     before_filter :get_account, only: [:become]
 
     def index
-      handle_with(Admin::AccountsIndex)
+      handle_with(Admin::AccountsIndex, caller: current_account)
     end
 
     def become

@@ -49,12 +49,15 @@ Exchange::Application.routes.draw do
   # Agent
 
   namespace 'manage' do
+    get '/', to: 'base#index'
+
     user_crud :agents
   end
 
   # Researcher
 
   namespace 'research' do
+    get '/', to: 'base#index'
   end
 
   # JSON API
