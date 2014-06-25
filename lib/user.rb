@@ -8,8 +8,10 @@ module User
       def acts_as_user
         class_exec do
           belongs_to :account, 
-                     class_name: "OpenStax::Accounts::Account",
-                     dependent: :destroy
+                     class_name: "OpenStax::Accounts::Account"
+
+          validates_presence_of :account
+          validates_uniqueness_of :account_id
 
           delegate :username, :first_name, :last_name, :full_name,
                    :title, :name, :casual_name, to: :account
@@ -49,7 +51,8 @@ module User
 
   module Routing
     def user_crud(klass)
-      resources klass, only: [:index, :create, :update, :destroy]
+      # No update for now, as user classes currently have no fields
+      resources klass, only: [:index, :create, :destroy]
     end
   end
 end

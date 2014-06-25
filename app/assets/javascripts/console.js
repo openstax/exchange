@@ -4,5 +4,5 @@ $(function() {
     $('.console .pane').removeClass('active');
     $(this).addClass('active');
     $('#console-pane-' + $(this).attr('data-pane')).addClass('active');
-  })
+  });
 });

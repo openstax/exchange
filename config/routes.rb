@@ -38,7 +38,6 @@ Exchange::Application.routes.draw do
 
     resources :accounts, only: [:index] do
       post 'become', on: :member
-      post 'index', on: :collection
     end
 
     resources :platforms

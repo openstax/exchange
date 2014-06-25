@@ -1,0 +1,9 @@
+<% # Clients of this partial must supply the following variables:
+   # user_type - the type of user to search for
+%>
+
+<%= render :partial => 'openstax/accounts/shared/accounts/index',
+           :locals => { :search_action_path => polymorphic_path([:admin, user_type.tableize]),
+                        :results_list_id => "#{user_type.downcase.pluralize}-results-list",
+                        :method => :get,
+                        :remote => true } %>

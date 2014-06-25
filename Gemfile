@@ -22,8 +22,7 @@ gem 'squeel'
 gem 'yaml_db'
 
 gem 'openstax_utilities', '~> 2.2.2'
-gem 'openstax_accounts', :git => 'https://github.com/Dantemss/accounts-rails.git',
-                         :ref => '55691b395c03e972ecd7aa93e525d12346465c6c'
+gem 'openstax_accounts', :path => '../accounts-rails'
 gem 'openstax_api', '~> 2.1.0'
 
 gem 'apipie-rails'

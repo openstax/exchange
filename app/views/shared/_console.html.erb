@@ -1,5 +1,5 @@
 <% # Clients of this partial must supply the following variables:
-   # panes - a hash in the format :pane_name => pane_block
+   # panes - a hash in the format :pane_name => render_hash
 %>
 
 <% panes.stringify_keys! %>
@@ -8,7 +8,7 @@
   <ul id="console-nav" class="nav nav-pills nav-stacked">
     <% first_pane = true %>
     <% panes.keys.each do |name| %>
-    <li data-pane="<%= name.downcase %>" <% if first_pane %>class="active"<% end %>><a href="#<%= name.downcase %>"><%= name.capitalize %></a></li>
+    <li data-pane="<%= name.underscore %>" <% if first_pane %>class="active"<% end %>><a href="#<%= name.underscore %>"><%= name.humanize %></a></li>
     <% first_pane = false %>
     <% end %>
   </ul>
@@ -18,12 +18,14 @@
   <div id="console-header" class="header"></div>
 
   <div id="console-body" class="body">
-    <div id="local-alerts"></div>
+    <div id="local-alerts">
+      <%= render :partial => 'shared/local_alerts' %>
+    </div>
 
     <% first_pane = true %>
-    <% panes.each do |name, block| %>
-    <div id="console-pane-<%= name %>" class="pane<% if first_pane %> active<% end %>">
-      <%= block.call %>
+    <% panes.each do |name, render_hash| %>
+    <div id="console-pane-<%= name.underscore %>" class="pane<% if first_pane %> active<% end %>">
+      <%= render render_hash %>
     </div>
     <% first_pane = false %>
     <% end %>
