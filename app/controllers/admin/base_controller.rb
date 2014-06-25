@@ -9,6 +9,7 @@ module Admin
     before_filter :authenticate_administrator! if Rails.env.production?
 
     def index
+      @applications = Doorkeeper::Application.all
     end
     
     def cron

@@ -33,16 +33,19 @@ Exchange::Application.routes.draw do
     get 'raise_illegal_argument',       to: 'base#raise_illegal_argument'
 
     user_crud :administrators
-    user_crud :agents
     user_crud :researchers
 
     resources :accounts, only: [:index] do
       post 'become', on: :member
     end
 
-    resources :platforms
+    resources :platforms do
+      user_crud :agents
+    end
 
-    resources :subscribers
+    resources :subscribers do
+      user_crud :agents
+    end
   end
 
   # Agent

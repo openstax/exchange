@@ -23,7 +23,7 @@ ActionController::Base.class_exec do
   end
 
   def current_researcher
-    Agent.where(:account_id => current_account.id).first
+    Researcher.where(:account_id => current_account.id).first
   end
 
   def authenticate_administrator!
