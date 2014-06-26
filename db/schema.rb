@@ -61,14 +61,13 @@ ActiveRecord::Schema.define(:version => 20140618230955) do
   create_table "identifiers", :force => true do |t|
     t.integer  "person_id",   :null => false
     t.integer  "platform_id", :null => false
-    t.string   "value",       :null => false
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
 
-  add_index "identifiers", ["person_id"], :name => "index_identifiers_on_person_id"
+  add_index "identifiers", ["id"], :name => "sqlite_autoindex_identifiers_1", :unique => true
+  add_index "identifiers", ["person_id", "platform_id"], :name => "index_identifiers_on_person_id_and_platform_id", :unique => true
   add_index "identifiers", ["platform_id"], :name => "index_identifiers_on_platform_id"
-  add_index "identifiers", ["value"], :name => "index_identifiers_on_value", :unique => true
 
   create_table "oauth_access_grants", :force => true do |t|
     t.integer  "resource_owner_id", :null => false

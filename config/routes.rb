@@ -59,8 +59,8 @@ Exchange::Application.routes.draw do
   namespace 'research' do
     get '/', to: 'base#index'
 
-    event_routes
-    activity_routes
+    resources :events, only: :index
+    resources :activities, only: :index
   end
 
   # JSON API
@@ -68,8 +68,11 @@ Exchange::Application.routes.draw do
   apipie
 
   api :v1, :default => true do
-    event_routes
-    activity_routes
+    resources :events, only: :index
+    resources :activities, only: :index
+
+    #event_routes
+    #activity_routes
   end
 
   # Shared Pages

@@ -1,6 +1,10 @@
 module Admin
   class SubscribersController < ApplicationsController
 
+    layout 'application_body_nav'
+
+    before_filter :authenticate_administrator! if Rails.env.production?
+
     def index
       @subscribers = Subscriber.all
     end

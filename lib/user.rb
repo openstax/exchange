@@ -10,9 +10,6 @@ module User
           belongs_to :account, 
                      class_name: "OpenStax::Accounts::Account"
 
-          validates_presence_of :account
-          validates_uniqueness_of :account_id
-
           delegate :username, :first_name, :last_name, :full_name,
                    :title, :name, :casual_name, to: :account
 
