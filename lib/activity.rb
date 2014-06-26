@@ -19,9 +19,9 @@ module Activity
         uuid :identifier_id, null: false
         string :resource, null: false
         string :resource_instance
-        datetime :start_time, null: false
-        datetime :stop_time, null: false
-        datetime :active_time, null: false
+        datetime :first_activity_at, null: false
+        datetime :last_activity_at, null: false
+        integer :seconds_active, null: false
       end
     end
 
@@ -30,8 +30,9 @@ module Activity
         add_index table_name, :identifier_id
         add_index table_name, :resource
         add_index table_name, :resource_instance
-        add_index table_name, :start_time
-        add_index table_name, :stop_time
+        add_index table_name, :first_activity_at
+        add_index table_name, :last_activity_at
+        add_index table_name, :seconds_active
       end
     end
   end

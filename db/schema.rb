@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140626200455) do
+ActiveRecord::Schema.define(:version => 20140626204447) do
 
   create_table "administrators", :force => true do |t|
     t.integer  "account_id",  :null => false
@@ -42,6 +42,22 @@ ActiveRecord::Schema.define(:version => 20140626200455) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "communication_activities", :force => true do |t|
+    t.uuid     "identifier_id",     :null => false
+    t.string   "resource",          :null => false
+    t.string   "resource_instance"
+    t.datetime "first_activity_at", :null => false
+    t.datetime "last_activity_at",  :null => false
+    t.integer  "seconds_active",    :null => false
+    t.text     "to"
+    t.text     "cc"
+    t.text     "bcc"
+    t.text     "subject"
+    t.text     "body"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
   create_table "cursor_events", :force => true do |t|
     t.uuid     "identifier_id",                     :null => false
     t.string   "resource",                          :null => false
@@ -65,6 +81,34 @@ ActiveRecord::Schema.define(:version => 20140626200455) do
 
   add_index "event_subscribers", ["event_id", "subscriber_id"], :name => "index_event_subscribers_on_event_id_and_subscriber_id", :unique => true
   add_index "event_subscribers", ["subscriber_id", "read"], :name => "index_event_subscribers_on_subscriber_id_and_read"
+
+  create_table "exercise_activities", :force => true do |t|
+    t.uuid     "identifier_id",     :null => false
+    t.string   "resource",          :null => false
+    t.string   "resource_instance"
+    t.datetime "first_activity_at", :null => false
+    t.datetime "last_activity_at",  :null => false
+    t.integer  "seconds_active",    :null => false
+    t.string   "answer"
+    t.boolean  "correct"
+    t.text     "free_response"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  create_table "feedback_activities", :force => true do |t|
+    t.uuid     "identifier_id",     :null => false
+    t.string   "resource",          :null => false
+    t.string   "resource_instance"
+    t.datetime "first_activity_at", :null => false
+    t.datetime "last_activity_at",  :null => false
+    t.integer  "seconds_active",    :null => false
+    t.boolean  "correct"
+    t.string   "grade"
+    t.text     "feedback"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
 
   create_table "fine_print_contracts", :force => true do |t|
     t.string   "name",       :null => false
@@ -136,6 +180,18 @@ ActiveRecord::Schema.define(:version => 20140626200455) do
     t.datetime "updated_at",                        :null => false
   end
 
+  create_table "interactive_activities", :force => true do |t|
+    t.uuid     "identifier_id",     :null => false
+    t.string   "resource",          :null => false
+    t.string   "resource_instance"
+    t.datetime "first_activity_at", :null => false
+    t.datetime "last_activity_at",  :null => false
+    t.integer  "seconds_active",    :null => false
+    t.text     "progress"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
   create_table "oauth_access_grants", :force => true do |t|
     t.integer  "resource_owner_id", :null => false
     t.integer  "application_id",    :null => false
@@ -194,6 +250,20 @@ ActiveRecord::Schema.define(:version => 20140626200455) do
   add_index "openstax_accounts_accounts", ["openstax_uid"], :name => "index_openstax_accounts_accounts_on_openstax_uid", :unique => true
   add_index "openstax_accounts_accounts", ["username"], :name => "index_openstax_accounts_accounts_on_username", :unique => true
 
+  create_table "peer_grading_activities", :force => true do |t|
+    t.uuid     "identifier_id",     :null => false
+    t.string   "resource",          :null => false
+    t.string   "resource_instance"
+    t.datetime "first_activity_at", :null => false
+    t.datetime "last_activity_at",  :null => false
+    t.integer  "seconds_active",    :null => false
+    t.uuid     "gradee_id"
+    t.string   "grade"
+    t.text     "feedback"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
   create_table "people", :force => true do |t|
     t.string   "label",                             :null => false
     t.text     "superseded_labels", :default => "", :null => false
@@ -210,6 +280,17 @@ ActiveRecord::Schema.define(:version => 20140626200455) do
   end
 
   add_index "platforms", ["application_id"], :name => "index_platforms_on_application_id", :unique => true
+
+  create_table "reading_activities", :force => true do |t|
+    t.uuid     "identifier_id",     :null => false
+    t.string   "resource",          :null => false
+    t.string   "resource_instance"
+    t.datetime "first_activity_at", :null => false
+    t.datetime "last_activity_at",  :null => false
+    t.integer  "seconds_active",    :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
 
   create_table "researchers", :force => true do |t|
     t.integer  "account_id",  :null => false
