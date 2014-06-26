@@ -17,16 +17,16 @@ module Event
   module Migration
     module Columns
       def event
-        t.string :identifier, null: false
-        t.string :resource, null: false
-        t.string :resource_instance, null: false, default: ''
-        t.text :metadata, null: false, default: ''
+        uuid :identifier_id, null: false
+        string :resource, null: false
+        string :resource_instance, null: false, default: ''
+        text :metadata, null: false, default: ''
       end
     end
 
     module Indices
       def add_event_index(table_name)
-        add_index table_name, :identifier
+        add_index table_name, :identifier_id
         add_index table_name, :resource
         add_index table_name, :resource_instance
       end

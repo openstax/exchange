@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140618230955) do
+ActiveRecord::Schema.define(:version => 20140626200455) do
 
   create_table "administrators", :force => true do |t|
     t.integer  "account_id",  :null => false
@@ -36,6 +36,36 @@ ActiveRecord::Schema.define(:version => 20140618230955) do
   add_index "agents", ["application_id", "is_manager"], :name => "index_agents_on_application_id_and_is_manager"
   add_index "agents", ["disabled_at"], :name => "index_agents_on_disabled_at"
 
+  create_table "browsing_events", :force => true do |t|
+    t.string   "referer"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "cursor_events", :force => true do |t|
+    t.uuid     "identifier_id",                     :null => false
+    t.string   "resource",                          :null => false
+    t.string   "resource_instance", :default => "", :null => false
+    t.text     "metadata",          :default => "", :null => false
+    t.string   "object"
+    t.integer  "x_position"
+    t.integer  "y_position"
+    t.boolean  "clicked"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
+  create_table "event_subscribers", :force => true do |t|
+    t.integer  "event_id"
+    t.integer  "subscriber_id"
+    t.boolean  "read"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "event_subscribers", ["event_id", "subscriber_id"], :name => "index_event_subscribers_on_event_id_and_subscriber_id", :unique => true
+  add_index "event_subscribers", ["subscriber_id", "read"], :name => "index_event_subscribers_on_subscriber_id_and_read"
+
   create_table "fine_print_contracts", :force => true do |t|
     t.string   "name",       :null => false
     t.integer  "version"
@@ -58,6 +88,29 @@ ActiveRecord::Schema.define(:version => 20140618230955) do
   add_index "fine_print_signatures", ["contract_id"], :name => "index_fine_print_signatures_on_contract_id"
   add_index "fine_print_signatures", ["user_id", "user_type", "contract_id"], :name => "index_fine_print_s_on_u_id_and_u_type_and_c_id", :unique => true
 
+  create_table "grading_events", :force => true do |t|
+    t.uuid     "identifier_id",                     :null => false
+    t.string   "resource",                          :null => false
+    t.string   "resource_instance", :default => "", :null => false
+    t.text     "metadata",          :default => "", :null => false
+    t.uuid     "grader_id"
+    t.string   "grader_type"
+    t.string   "grade"
+    t.text     "feedback"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
+  create_table "heartbeat_events", :force => true do |t|
+    t.uuid     "identifier_id",                     :null => false
+    t.string   "resource",                          :null => false
+    t.string   "resource_instance", :default => "", :null => false
+    t.text     "metadata",          :default => "", :null => false
+    t.integer  "scroll_position"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
   create_table "identifiers", :force => true do |t|
     t.integer  "person_id",   :null => false
     t.integer  "platform_id", :null => false
@@ -68,6 +121,20 @@ ActiveRecord::Schema.define(:version => 20140618230955) do
   add_index "identifiers", ["id"], :name => "sqlite_autoindex_identifiers_1", :unique => true
   add_index "identifiers", ["person_id", "platform_id"], :name => "index_identifiers_on_person_id_and_platform_id", :unique => true
   add_index "identifiers", ["platform_id"], :name => "index_identifiers_on_platform_id"
+
+  create_table "input_events", :force => true do |t|
+    t.uuid     "identifier_id",                     :null => false
+    t.string   "resource",                          :null => false
+    t.string   "resource_instance", :default => "", :null => false
+    t.text     "metadata",          :default => "", :null => false
+    t.string   "object"
+    t.string   "input_type"
+    t.string   "data_type"
+    t.text     "data"
+    t.string   "filename"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
 
   create_table "oauth_access_grants", :force => true do |t|
     t.integer  "resource_owner_id", :null => false
@@ -164,17 +231,6 @@ ActiveRecord::Schema.define(:version => 20140618230955) do
   add_index "resources", ["platform_id"], :name => "index_resources_on_platform_id"
   add_index "resources", ["reference", "platform_id"], :name => "index_resources_on_reference_and_platform_id", :unique => true
 
-  create_table "subscriber_events", :force => true do |t|
-    t.integer  "subscriber_id"
-    t.integer  "event_id"
-    t.boolean  "read"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-  end
-
-  add_index "subscriber_events", ["event_id", "subscriber_id"], :name => "index_subscriber_events_on_event_id_and_subscriber_id", :unique => true
-  add_index "subscriber_events", ["subscriber_id", "read"], :name => "index_subscriber_events_on_subscriber_id_and_read"
-
   create_table "subscribers", :force => true do |t|
     t.integer  "application_id", :null => false
     t.datetime "created_at",     :null => false
@@ -182,5 +238,19 @@ ActiveRecord::Schema.define(:version => 20140618230955) do
   end
 
   add_index "subscribers", ["application_id"], :name => "index_subscribers_on_application_id", :unique => true
+
+  create_table "task_events", :force => true do |t|
+    t.uuid     "identifier_id",                     :null => false
+    t.string   "resource",                          :null => false
+    t.string   "resource_instance", :default => "", :null => false
+    t.text     "metadata",          :default => "", :null => false
+    t.integer  "number"
+    t.uuid     "assigner_id"
+    t.string   "assigner_type"
+    t.datetime "due_date"
+    t.boolean  "is_complete"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
 
 end

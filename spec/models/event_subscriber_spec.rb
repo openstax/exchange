@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-RSpec.describe SubscriberEvent, :type => :model do
+RSpec.describe EventSubscriber, :type => :model do
   pending "add some examples to (or delete) #{__FILE__}"
 end
