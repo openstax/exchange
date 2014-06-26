@@ -8,9 +8,9 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
       The token is obtained by the platform by creating an Identifier object.
 
       All events have the following fields in common:
-      identifier (uid), resource (uid), occurred_at (datetime) and metadata (text).
+      identifier (uuid), resource (string), occurred_at (datetime) and metadata (text).
 
-      Additionally, InputEvents have the object (uid), input_type (string), data_type (string), data (text) and file_name(string) fields.
+      Additionally, InputEvents have the object (string), input_type (string), data_type (string), data (text) and file_name(string) fields.
     EOS
   end
 
@@ -27,9 +27,8 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::InputEventRepresenter, include: :writable)}
   EOS
   def create
-    OSU::AccessPolicy.require_action_allowed!(:create, current_api_user, InputEvent)
-    @event = standard_create(InputEvent) do |input_event|
-      input_event.identifier = doorkeeper_token.token
+    @event = standard_create(InputEvent) do |event|
+      event.identifier = doorkeeper_token.token
     end
     respond_with @event
   end

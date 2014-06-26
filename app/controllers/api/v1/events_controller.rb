@@ -12,7 +12,7 @@ class Api::V1::EventsController < OpenStax::Api::V1::ApiController
       of inputs).
 
       All events have the following fields in common:
-      identifier (user uid), resource (what page), occurred_at (datetime) and metadata.
+      identifier (uuid), resource (string), occurred_at (datetime) and metadata.
 
       Each type of event has additional fields depending on its type. Consult their
       schemas for more information.

@@ -8,7 +8,7 @@ class Api::V1::BrowsingEventsController < OpenStax::Api::V1::ApiController
       The token is obtained by the platform by creating an Identifier object.
 
       All events have the following fields in common:
-      identifier (uid), resource (uid), occurred_at (datetime) and metadata (text).
+      identifier (uuid), resource (string), occurred_at (datetime) and metadata (text).
 
       Additionally, BrowsingEvents have the referer (string) field.
     EOS
@@ -27,9 +27,8 @@ class Api::V1::BrowsingEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::BrowsingEventRepresenter, include: :writable)}
   EOS
   def create
-    OSU::AccessPolicy.require_action_allowed!(:create, current_api_user, BrowsingEvent)
-    @event = standard_create(BrowsingEvent) do |browsing_event|
-      browsing_event.identifier = doorkeeper_token.token
+    @event = standard_create(BrowsingEvent) do |event|
+      event.identifier = doorkeeper_token.token
     end
     respond_with @event
   end
