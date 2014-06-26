@@ -48,13 +48,19 @@ Exchange::Application.routes.draw do
   namespace 'manage' do
     get '/', to: 'base#index'
 
-    user_crud :agents
+    user_routes :agents
+
+    application_routes :platforms
+    application_routes :subscribers
   end
 
   # Researcher
 
   namespace 'research' do
     get '/', to: 'base#index'
+
+    event_routes
+    activity_routes
   end
 
   # JSON API
