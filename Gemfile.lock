@@ -365,7 +365,7 @@ DEPENDENCIES
   nifty-generators
   openstax_accounts!
   openstax_api (~> 2.1.0)
-  openstax_utilities (~> 2.2.2)
+  openstax_utilities (~> 2.2.3)
   pg
   quiet_assets
   rack-test

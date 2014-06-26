@@ -1,10 +1,10 @@
 # Register access policies, e.g.:
 #
 # OSU::AccessPolicy.register(Model, ModelAccessPolicy)
-OSU::AcessPolicy.register(Event, EventAccessPolicy)
-OSU::AcessPolicy.register(BrowsingEvent, UserEventAccessPolicy)
-OSU::AcessPolicy.register(HeartbeatEvent, UserEventAccessPolicy)
-OSU::AcessPolicy.register(CursorEvent, UserEventAccessPolicy)
-OSU::AcessPolicy.register(InputEvent, UserEventAccessPolicy)
-OSU::AcessPolicy.register(TaskEvent, ApplicationEventAccessPolicy)
-OSU::AcessPolicy.register(GradingEvent, ApplicationEventAccessPolicy)
+OSU::AccessPolicy.register(Event, EventAccessPolicy)
+OSU::AccessPolicy.register(BrowsingEvent, UserEventAccessPolicy)
+OSU::AccessPolicy.register(HeartbeatEvent, UserEventAccessPolicy)
+OSU::AccessPolicy.register(CursorEvent, UserEventAccessPolicy)
+OSU::AccessPolicy.register(InputEvent, UserEventAccessPolicy)
+OSU::AccessPolicy.register(TaskEvent, ApplicationEventAccessPolicy)
+OSU::AccessPolicy.register(GradingEvent, ApplicationEventAccessPolicy)

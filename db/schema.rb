@@ -178,7 +178,6 @@ ActiveRecord::Schema.define(:version => 20140618230955) do
 
   create_table "subscribers", :force => true do |t|
     t.integer  "application_id", :null => false
-    t.text     "base_api_uri",   :null => false
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end

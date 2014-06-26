@@ -1,11 +1,11 @@
 class CreatePlatforms < ActiveRecord::Migration
   def change
     create_table :platforms do |t|
-      t.integer :application_id, null: false
+      t.application
 
       t.timestamps
     end
 
-    add_index :platforms, :application_id, :unique => true
+    add_application_index :platforms
   end
 end
