@@ -1,9 +1,9 @@
 class CreateEventSubscribers < ActiveRecord::Migration
   def change
     create_table :event_subscribers do |t|
-      t.integer :event_id
-      t.integer :subscriber_id
-      t.boolean :read
+      t.integer :event_id, null: false
+      t.integer :subscriber_id, null: false
+      t.boolean :read, null: false, default: false
 
       t.timestamps
     end

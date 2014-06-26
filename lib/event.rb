@@ -7,8 +7,7 @@ module Event
     module ClassMethods
       def acts_as_event
         class_exec do
-          validates_presence_of :identifier
-          validates_presence_of :resource
+          validates_presence_of :identifier, :resource
         end
       end
     end
@@ -17,9 +16,9 @@ module Event
   module Migration
     module Columns
       def event
-        uuid :identifier_id, null: false
-        string :resource, null: false
-        string :resource_instance, null: false, default: ''
+        binary :identifier_id, limit: 16, null: false
+        integer :resource_id, null: false
+        integer :attempt_id, null: false, default: ''
         text :metadata, null: false, default: ''
       end
     end
@@ -27,8 +26,8 @@ module Event
     module Indices
       def add_event_index(table_name)
         add_index table_name, :identifier_id
-        add_index table_name, :resource
-        add_index table_name, :resource_instance
+        add_index table_name, :resource_id
+        add_index table_name, :attempt_id
       end
     end
   end

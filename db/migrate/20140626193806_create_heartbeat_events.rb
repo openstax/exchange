@@ -6,5 +6,8 @@ class CreateHeartbeatEvents < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_event_index :heartbeat_events
+    add_index :heartbeat_events, :scroll_position
   end
 end

@@ -10,5 +10,11 @@ class CreateInputEvents < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_event_index :input_events
+    add_index :input_events, :object
+    add_index :input_events, :input_type
+    add_index :input_events, :data_type
+    add_index :input_events, :filename
   end
 end

@@ -5,5 +5,7 @@ class CreateReadingActivities < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_activity_index :reading_activities
   end
 end

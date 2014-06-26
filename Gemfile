@@ -20,7 +20,6 @@ gem 'whenever', :require => false
 gem 'newrelic_rpm'
 gem 'squeel'
 gem 'yaml_db'
-gem 'activeuuid'
 
 gem 'openstax_utilities', '~> 2.2.3'
 gem 'openstax_accounts', :path => '../accounts-rails'

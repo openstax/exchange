@@ -9,5 +9,10 @@ class CreateCursorEvents < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_event_index :cursor_events
+    add_index :cursor_events, :object
+    add_index :cursor_events, :x_position
+    add_index :cursor_events, :y_position
   end
 end

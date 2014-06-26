@@ -5,5 +5,7 @@ class CreateBrowsingEvents < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :browsing_events, :referer
   end
 end

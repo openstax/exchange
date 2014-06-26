@@ -9,6 +9,6 @@ class CreateAgents < ActiveRecord::Migration
     end
 
     add_user_index :agents
-    add_index :agents, [:application_id, :is_manager]
+    add_index :agents, :application_id
   end
 end

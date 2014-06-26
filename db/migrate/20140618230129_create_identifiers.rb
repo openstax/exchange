@@ -1,7 +1,7 @@
 class CreateIdentifiers < ActiveRecord::Migration
   def change
     create_table :identifiers, id: false do |t|
-      t.uuid :id, primary_key: true
+      t.binary :id, limit: 16, primary_key: true
       t.integer :person_id, null: false
       t.integer :platform_id, null: false
 
