@@ -32,20 +32,15 @@ Exchange::Application.routes.draw do
     get 'raise_not_yet_implemented',    to: 'base#raise_not_yet_implemented'
     get 'raise_illegal_argument',       to: 'base#raise_illegal_argument'
 
-    user_crud :administrators
-    user_crud :researchers
-
     resources :accounts, only: [:index] do
       post 'become', on: :member
     end
 
-    resources :platforms do
-      user_crud :agents
-    end
+    user_routes :administrators
+    user_routes :researchers
 
-    resources :subscribers do
-      user_crud :agents
-    end
+    application_routes :platforms
+    application_routes :subscribers
   end
 
   # Agent
@@ -67,6 +62,8 @@ Exchange::Application.routes.draw do
   apipie
 
   api :v1, :default => true do
+    event_routes
+    activity_routes
   end
 
   # Shared Pages

@@ -12,7 +12,6 @@ module App
 
           validates_presence_of :application
           validates_uniqueness_of :application_id
-
         end
       end
     end
@@ -33,8 +32,11 @@ module App
   end
 
   module Routing
-    def application_crud(klass)
-      resources klass, only: [:index, :show, :create, :update, :destroy]
+    def application_routes(klass)
+      resources klass, only: [:index, :show, :create, :update, :destroy],
+                       shallow: true do
+        user_routes :agents
+      end
     end
   end
 end

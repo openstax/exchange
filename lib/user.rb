@@ -50,8 +50,7 @@ module User
   end
 
   module Routing
-    def user_crud(klass)
-      # No update for now, as user classes currently have no fields
+    def user_routes(klass)
       resources klass, only: [:index, :create, :destroy]
     end
   end

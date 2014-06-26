@@ -10,6 +10,8 @@ require 'controller_extensions'
 require 'utilities'
 require 'user'
 require 'app'
+require 'event'
+require 'activity'
 
 # Initialize the rails application
 Exchange::Application.initialize!
