@@ -1,6 +1,7 @@
 # Register access policies, e.g.:
 #
 # OSU::AccessPolicy.register(Model, ModelAccessPolicy)
+OSU::AccessPolicy.register(Identifier, IdentifierAccessPolicy)
 OSU::AccessPolicy.register(Event, EventAccessPolicy)
 OSU::AccessPolicy.register(BrowsingEvent, UserEventAccessPolicy)
 OSU::AccessPolicy.register(HeartbeatEvent, UserEventAccessPolicy)
