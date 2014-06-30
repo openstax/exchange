@@ -1,5 +1,5 @@
 module Api::V1
-  class BrowsingEventRepresenter < EventRepresenter
+  class HeartbeatEventRepresenter < EventRepresenter
 
       property :scroll_position,
                class: Integer,

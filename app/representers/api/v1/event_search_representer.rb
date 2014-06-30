@@ -36,21 +36,22 @@ module Api::V1
     property :events,
              class: Array,
              schema_info: {
-               definitions: {
+               definitions: ::Hash[
                  [BrowsingEventRepresenter, HeartbeatEventRepresenter,
-                  CursorEventRepresenter, InputEventRepresenter].collect do |r|
-                   r.name.to_sym => RepresentableSchemaPrinter.json_schema(r)
-                 end
-               },
+                  CursorEventRepresenter, InputEventRepresenter].collect { |r|
+                   [r.name.to_sym, OpenStax::Api::RepresentableSchemaPrinter.json_schema(
+                                   r, include: :readable)]
+                 }
+               ],
                items: {
-                 anyOf: [
-                   { $ref: '#/definitions/BrowsingEventRepresenter' },
-                   { $ref: '#/definitions/HeartbeatEventRepresenter' },
-                   { $ref: '#/definitions/CursorEventRepresenter' },
-                   { $ref: '#/definitions/InputEventRepresenter' }
+                 'anyOf' => [
+                   { '$ref' => '#/definitions/BrowsingEventRepresenter' },
+                   { '$ref' => '#/definitions/HeartbeatEventRepresenter' },
+                   { '$ref' => '#/definitions/CursorEventRepresenter' },
+                   { '$ref' => '#/definitions/InputEventRepresenter' }
                  ]
                },
-               description: "The Events matching the query or a subset thereof when paginating"
+               description: 'The Events matching the query or a subset thereof when paginating'
              }
 
   end

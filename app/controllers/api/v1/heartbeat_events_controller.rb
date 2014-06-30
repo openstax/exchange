@@ -24,7 +24,7 @@ class Api::V1::HeartbeatEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records the user remaining in a Resource page in their browser.
 
-    #{json_schema(Api::V1::HeartbeatEventRepresenter, include: :writable)}
+    #{json_schema(Api::V1::HeartbeatEventRepresenter, include: :writeable)}
   EOS
   def create
     @event = standard_create(HeartbeatEvent) do |event|

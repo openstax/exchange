@@ -24,7 +24,7 @@ class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records a user's work being graded.
 
-    #{json_schema(Api::V1::GradingEventRepresenter, include: :writable)}
+    #{json_schema(Api::V1::GradingEventRepresenter, include: :writeable)}
   EOS
   def create
     @event = standard_create(GradingEvent) do |event|

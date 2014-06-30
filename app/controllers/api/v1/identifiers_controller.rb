@@ -23,7 +23,7 @@ class Api::V1::IdentifiersController < OpenStax::Api::V1::ApiController
 
     Creates a new Identifier to represent an anonymous user of the platform.
 
-    #{json_schema(Api::V1::IdentifierRepresenter, include: :writable)}
+    #{json_schema(Api::V1::IdentifierRepresenter, include: :readable)}
   EOS
   def create
     @identifier = standard_create(Identifier) do |i|

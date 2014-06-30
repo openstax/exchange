@@ -24,7 +24,7 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records the user inputting some information into a form or similar.
 
-    #{json_schema(Api::V1::InputEventRepresenter, include: :writable)}
+    #{json_schema(Api::V1::InputEventRepresenter, include: :writeable)}
   EOS
   def create
     @event = standard_create(InputEvent) do |event|

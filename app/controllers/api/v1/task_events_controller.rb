@@ -25,7 +25,7 @@ class Api::V1::TaskEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records or updates a task assignment.
 
-    #{json_schema(Api::V1::TaskEventRepresenter, include: :writable)}
+    #{json_schema(Api::V1::TaskEventRepresenter, include: :writeable)}
   EOS
   def create
     @event = standard_create(TaskEvent) do |event|

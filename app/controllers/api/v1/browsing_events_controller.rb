@@ -24,7 +24,7 @@ class Api::V1::BrowsingEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records the user opening a Resource page in their browser.
 
-    #{json_schema(Api::V1::BrowsingEventRepresenter, include: :writable)}
+    #{json_schema(Api::V1::BrowsingEventRepresenter, include: :writeable)}
   EOS
   def create
     @event = standard_create(BrowsingEvent) do |event|
