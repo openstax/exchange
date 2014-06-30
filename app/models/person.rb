@@ -3,6 +3,8 @@ class Person < ActiveRecord::Base
 
   has_many :succeeded, class_name: 'Person', inverse_of: :successor
 
+  has_one :identifier, inverse_of: :resource_owner
+
   validates :label, presence: true, uniqueness: true
 
   before_validation :generate_label, on: :create

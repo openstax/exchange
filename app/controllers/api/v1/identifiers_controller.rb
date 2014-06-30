@@ -1,4 +1,5 @@
 class Api::V1::IdentifiersController < OpenStax::Api::V1::ApiController
+  include Doorkeeper::Helpers::Controller
 
   resource_description do
     api_versions "v1"
@@ -22,10 +23,13 @@ class Api::V1::IdentifiersController < OpenStax::Api::V1::ApiController
 
     Creates a new Identifier to represent an anonymous user of the platform.
 
-    #{json_schema(Api::V1::IdentifiertRepresenter, include: :writable)}
+    #{json_schema(Api::V1::IdentifierRepresenter, include: :writable)}
   EOS
   def create
-    @identifier = standard_create(Identifier)
+    @identifier = standard_create(Identifier) do |i|
+      i.application_id = current_application.id
+      i.resource_owner = Person.new
+    end
     respond_with @identifier
   end
 

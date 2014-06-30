@@ -1,13 +1,16 @@
-class Identifier < ActiveRecord::Base
-  belongs_to :person, inverse_of: :identifier
+Identifier = Doorkeeper::AccessToken
 
-  validates :value, presence: true, uniqueness: true
+Identifier.class_exec do
+  belongs_to :resource_owner, class_name: 'Person', inverse_of: :identifier
 
-  before_validation :generate_value, on: :create
+  validate :client_credentials_or_platform
 
   protected
 
-  def generate_value
-    self.value = SecureRandom.hex(16)
+  def client_credentials_or_platform
+    return if resource_owner_id.nil? || \
+              Platform.where(:application_id => application_id).first
+    errors.add(:application, 'Only Platforms can obtain Identifiers')
+    false
   end
 end
