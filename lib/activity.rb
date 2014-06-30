@@ -17,7 +17,7 @@ module Activity
   module Migration
     module Columns
       def activity
-        binary :identifier_id, limit: 16, null: false
+        integer :identifier_id, null: false
         integer :resource_id, null: false
         integer :attempt_id
         datetime :first_activity_at, null: false

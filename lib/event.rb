@@ -16,10 +16,11 @@ module Event
   module Migration
     module Columns
       def event
-        binary :identifier_id, limit: 16, null: false
+        integer :identifier_id, null: false
         integer :resource_id, null: false
         integer :attempt_id, null: false, default: ''
         text :metadata, null: false, default: ''
+        datetime :occurred_at, null: false
       end
     end
 
@@ -28,6 +29,7 @@ module Event
         add_index table_name, :identifier_id
         add_index table_name, :resource_id
         add_index table_name, :attempt_id
+        add_index table_name, :occurred_at
       end
     end
   end

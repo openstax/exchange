@@ -23,7 +23,7 @@ gem 'yaml_db'
 
 gem 'openstax_utilities', '~> 2.2.3'
 gem 'openstax_accounts', :path => '../accounts-rails'
-gem 'openstax_api', '~> 2.1.0'
+gem 'openstax_api', :path => '../openstax_api'
 
 gem 'apipie-rails'
 gem 'maruku'
@@ -57,7 +57,7 @@ group :development, :test do
 end
 
 group :production do
-  gem 'pg'
+  gem 'mysql2'
   gem 'unicorn'
   gem 'lograge', '~> 0.3.0'
 end
