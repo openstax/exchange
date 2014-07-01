@@ -2,14 +2,14 @@ module Api::V1
   class MessageInputEventRepresenter < EventRepresenter
 
       property :uid,
-               class: String,
+               type: String,
                writeable: true,
                schema_info: {
                  description: 'A unique identifier for this message'
                }
 
       property :to,
-               class: String,
+               type: String,
                writeable: true,
                schema_info: {
                  required: true,
@@ -17,21 +17,21 @@ module Api::V1
                }
 
       property :cc,
-               class: String,
+               type: String,
                writeable: true,
                schema_info: {
                  description: 'The message\'s cc field'
                }
 
       property :bcc,
-               class: String,
+               type: String,
                writeable: true,
                schema_info: {
                  description: 'The message\'s bcc field'
                }
 
       property :subject,
-               class: String,
+               type: String,
                writeable: true,
                schema_info: {
                  required: true,
@@ -39,7 +39,7 @@ module Api::V1
                }
 
       property :body,
-               class: String,
+               type: String,
                writeable: true,
                schema_info: {
                  required: true,

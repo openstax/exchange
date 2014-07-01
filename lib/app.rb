@@ -10,6 +10,8 @@ module App
           belongs_to :application, 
                      class_name: "Doorkeeper::Application"
 
+          has_many :agents, through: :application
+
           validates_presence_of :application
           validates_uniqueness_of :application_id
         end

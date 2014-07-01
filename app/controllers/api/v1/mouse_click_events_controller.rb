@@ -1,5 +1,7 @@
 class Api::V1::MouseClickEventsController < OpenStax::Api::V1::ApiController
 
+  include EventRest
+
   resource_description do
     api_versions "v1"
     short_description 'Represents the user moving the mouse over a tracked UI object'
@@ -28,10 +30,7 @@ class Api::V1::MouseClickEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::CursorEventRepresenter, include: :writeable)}
   EOS
   def create
-    @event = standard_create(MouseClickEvent) do |event|
-      event.identifier = doorkeeper_token.token
-    end
-    respond_with @event, represent_with: Api::V1::CursorEventRepresenter
+    event_create(CursorEvent)
   end
 
 end

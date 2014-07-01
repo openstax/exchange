@@ -7,7 +7,7 @@ module Activity
     module ClassMethods
       def acts_as_activity
         class_exec do
-          validates_presence_of :identifier, :resource, :first_activity_at,
+          validates_presence_of :person, :resource, :first_activity_at,
                                 :last_activity_at, :seconds_active
         end
       end
@@ -17,7 +17,7 @@ module Activity
   module Migration
     module Columns
       def activity
-        integer :identifier_id, null: false
+        integer :person_id, null: false
         integer :resource_id, null: false
         integer :attempt_id
         datetime :first_activity_at, null: false
@@ -28,7 +28,7 @@ module Activity
 
     module Indices
       def add_activity_index(table_name)
-        add_index table_name, :identifier_id
+        add_index table_name, :person_id
         add_index table_name, :resource_id
         add_index table_name, :attempt_id
         add_index table_name, :first_activity_at

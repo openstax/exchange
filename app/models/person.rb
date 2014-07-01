@@ -1,11 +1,14 @@
 class Person < ActiveRecord::Base
+  has_one :identifier, class_name: 'Doorkeeper::AccessToken',
+                       foreign_key: :resource_owner_id,
+                       inverse_of: :resource_owner
+
   belongs_to :successor, class_name: 'Person', inverse_of: :succeeded
 
   has_many :succeeded, class_name: 'Person', inverse_of: :successor
 
-  has_one :identifier, inverse_of: :resource_owner
-
   validates :label, presence: true, uniqueness: true
+  validates_presence_of :identifier
 
   before_validation :generate_label, on: :create
 

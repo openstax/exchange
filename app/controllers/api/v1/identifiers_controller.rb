@@ -1,4 +1,5 @@
 class Api::V1::IdentifiersController < OpenStax::Api::V1::ApiController
+
   include Doorkeeper::Helpers::Controller
 
   resource_description do
@@ -8,8 +9,6 @@ class Api::V1::IdentifiersController < OpenStax::Api::V1::ApiController
       This controller uses the Client Credentials flow.
 
       Identifiers represent an anonymous student, grader, TA or instructor.
-
-      They only have a unique, random id made of 64 hex chars, and a person_id field.
     EOS
   end
 
@@ -23,14 +22,20 @@ class Api::V1::IdentifiersController < OpenStax::Api::V1::ApiController
 
     Creates a new Identifier to represent an anonymous user of the platform.
 
+    Callers are only given a 64 hex char access token which
+    they can use to create events by that person.
+
     #{json_schema(Api::V1::IdentifierRepresenter, include: :readable)}
   EOS
   def create
-    @identifier = standard_create(Identifier) do |i|
-      i.application_id = current_application.id
-      i.resource_owner = Person.new
-    end
-    respond_with @identifier
+    @identifier = Identifier.new
+    @identifier.resource_owner = Person.new
+    @identifier.application = current_application
+
+    OSU::AccessPolicy.require_action_allowed!(:create, current_api_user, @identifier)
+    @identifier.save! # This save should have no reason to fail
+
+    respond_with @identifier, represent_with: Api::V1::IdentifierRepresenter, status: :created
   end
 
 end

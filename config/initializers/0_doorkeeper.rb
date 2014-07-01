@@ -27,7 +27,7 @@ Doorkeeper.configure do
   # Optional parameter :confirmation => true (default false) if you want to enforce ownership of
   # a registered application
   # Note: you must also run the rails g doorkeeper:application_owner generator to provide the necessary support
-  enable_application_owner :confirmation => true
+  # enable_application_owner :confirmation => true
 
   # Define access token scopes for your provider
   # For more information go to https://github.com/applicake/doorkeeper/wiki/Using-Scopes
@@ -62,4 +62,8 @@ Doorkeeper.configure do
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   # realm "Doorkeeper"
+end
+
+Doorkeeper::Application.class_exec do
+  has_many :agents, inverse_of: :application
 end

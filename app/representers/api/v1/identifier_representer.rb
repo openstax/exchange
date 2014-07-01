@@ -2,7 +2,8 @@ module Api::V1
   class IdentifierRepresenter < Roar::Decorator
     include Roar::Representer::JSON
 
-    property :access_token, 
+    property :token,
+             as: :access_token,
              type: String,
              writeable: false,
              schema_info: {

@@ -68,10 +68,22 @@ Exchange::Application.routes.draw do
   apipie
 
   api :v1, :default => true do
+    resources :identifiers, only: :create
+
     resources :events, only: :index
     resources :activities, only: :index
 
-    #event_routes
+    event_routes :browsing_events
+    event_routes :heartbeat_events
+    event_routes :mouse_movement_events
+    event_routes :mouse_click_events
+    event_routes :multiple_choice_events
+    event_routes :free_response_events
+    event_routes :interactive_events
+    event_routes :message_events
+    event_routes :grading_events
+    event_routes :task_events
+
     #activity_routes
   end
 

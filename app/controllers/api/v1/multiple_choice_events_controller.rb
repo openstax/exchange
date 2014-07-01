@@ -1,4 +1,6 @@
-class Api::V1::MultipleChoiceInputEventsController < OpenStax::Api::V1::ApiController
+class Api::V1::MultipleChoiceEventsController < OpenStax::Api::V1::ApiController
+
+  include EventRest
 
   resource_description do
     api_versions "v1"
@@ -27,10 +29,7 @@ class Api::V1::MultipleChoiceInputEventsController < OpenStax::Api::V1::ApiContr
     #{json_schema(Api::V1::InputEventRepresenter, include: :writeable)}
   EOS
   def create
-    @event = standard_create(MultipleChoiceInputEvent) do |event|
-      event.identifier = doorkeeper_token.token
-    end
-    respond_with @event, represent_with: Api::V1::InputEventRepresenter
+    event_create(InputEvent)
   end
 
 end

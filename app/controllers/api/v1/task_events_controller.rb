@@ -1,5 +1,7 @@
 class Api::V1::TaskEventsController < OpenStax::Api::V1::ApiController
 
+  include EventRest
+
   resource_description do
     api_versions "v1"
     short_description 'Represents a task being assigned to a user'
@@ -28,10 +30,7 @@ class Api::V1::TaskEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::TaskEventRepresenter, include: :writeable)}
   EOS
   def create
-    @event = standard_create(TaskEvent) do |event|
-      event.identifier = doorkeeper_token.token
-    end
-    respond_with @event
+    event_create(TaskEvent)
   end
 
 end

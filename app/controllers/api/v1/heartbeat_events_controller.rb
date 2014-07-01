@@ -1,5 +1,7 @@
 class Api::V1::HeartbeatEventsController < OpenStax::Api::V1::ApiController
 
+  include EventRest
+
   resource_description do
     api_versions "v1"
     short_description 'Represents the user remaining on a resource page'
@@ -27,10 +29,7 @@ class Api::V1::HeartbeatEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::HeartbeatEventRepresenter, include: :writeable)}
   EOS
   def create
-    @event = standard_create(HeartbeatEvent) do |event|
-      event.identifier = doorkeeper_token.token
-    end
-    respond_with @event
+    event_create(HeartbeatEvent)
   end
 
 end

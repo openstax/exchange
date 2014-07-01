@@ -1,5 +1,7 @@
 class Api::V1::BrowsingEventsController < OpenStax::Api::V1::ApiController
 
+  include EventRest
+
   resource_description do
     api_versions "v1"
     short_description 'Represents the user visiting a resource'
@@ -27,10 +29,7 @@ class Api::V1::BrowsingEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::BrowsingEventRepresenter, include: :writeable)}
   EOS
   def create
-    @event = standard_create(BrowsingEvent) do |event|
-      event.identifier = doorkeeper_token.token
-    end
-    respond_with @event
+    event_create(BrowsingEvent)
   end
 
 end

@@ -7,7 +7,13 @@ module Event
     module ClassMethods
       def acts_as_event
         class_exec do
-          validates_presence_of :identifier, :resource
+          belongs_to :person
+          belongs_to :resource
+          belongs_to :attempt
+
+          has_one :identifier, through: :person
+
+          validates_presence_of :person, :resource, :occurred_at
         end
       end
     end
@@ -16,17 +22,17 @@ module Event
   module Migration
     module Columns
       def event
-        integer :identifier_id, null: false
+        integer :person_id, null: false
         integer :resource_id, null: false
         integer :attempt_id, null: false, default: ''
-        text :metadata, null: false, default: ''
         datetime :occurred_at, null: false
+        text :metadata, null: false, default: ''
       end
     end
 
     module Indices
       def add_event_index(table_name)
-        add_index table_name, :identifier_id
+        add_index table_name, :person_id
         add_index table_name, :resource_id
         add_index table_name, :attempt_id
         add_index table_name, :occurred_at
@@ -35,8 +41,8 @@ module Event
   end
 
   module Routing
-    def event_routes(klass)
-      resources klass, only: :create
+    def event_routes(res)
+      resources res, only: :create
     end
   end
 end

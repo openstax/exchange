@@ -5,7 +5,9 @@ class ApplicationController < ActionController::Base
 
   layout :layout
 
-  undef_method :current_user
+  def current_user
+    current_account
+  end
 
   protected
 

@@ -1,5 +1,7 @@
 class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
 
+  include EventRest
+
   resource_description do
     api_versions "v1"
     short_description 'Represents a user\'s work being graded'
@@ -27,10 +29,7 @@ class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::GradingEventRepresenter, include: :writeable)}
   EOS
   def create
-    @event = standard_create(GradingEvent) do |event|
-      event.identifier = doorkeeper_token.token
-    end
-    respond_with @event
+    event_create(GradingEvent)
   end
 
 end
