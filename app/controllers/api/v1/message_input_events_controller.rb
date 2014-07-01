@@ -1,4 +1,4 @@
-class Api::V1::MessageEventsController < OpenStax::Api::V1::ApiController
+class Api::V1::MessageInputEventsController < OpenStax::Api::V1::ApiController
 
   resource_description do
     api_versions "v1"
@@ -10,7 +10,7 @@ class Api::V1::MessageEventsController < OpenStax::Api::V1::ApiController
       All events have the following fields in common: identifier (string),
       resource (string), attempt (string), occurred_at (datetime) and metadata (text).
 
-      Additionally, MessageEvents have the to (string), cc (string),
+      Additionally, MessageInputEvents have the to (string), cc (string),
       bcc (string) and subject (string) fields.
     EOS
   end
@@ -19,16 +19,16 @@ class Api::V1::MessageEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/message_events', 'Creates a new MessageEvent.'
+  api :POST, '/message_input_events', 'Creates a new MessageInputEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 
     Creates an Event that records the user sending a message to other users.
 
-    #{json_schema(Api::V1::MessageEventRepresenter, include: :writeable)}
+    #{json_schema(Api::V1::MessageInputEventRepresenter, include: :writeable)}
   EOS
   def create
-    @event = standard_create(MessageEvent) do |event|
+    @event = standard_create(MessageInputEvent) do |event|
       event.identifier = doorkeeper_token.token
     end
     respond_with @event

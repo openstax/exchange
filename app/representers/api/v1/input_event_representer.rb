@@ -9,13 +9,13 @@ module Api::V1
                }
 
       property :action,
-               class: String
+               class: String,
                schema_info: {
                  description: 'The action performed by the user during this InputEvent'
                }
 
       property :data_type,
-               class: String
+               class: String,
                schema_info: {
                  description: 'The type of data in the "data" field'
                }

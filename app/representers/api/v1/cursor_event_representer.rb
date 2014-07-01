@@ -9,7 +9,7 @@ module Api::V1
                }
 
       property :action,
-               class: String
+               class: String,
                schema_info: {
                  description: 'The action performed by the user during this CursorEvent'
                }
