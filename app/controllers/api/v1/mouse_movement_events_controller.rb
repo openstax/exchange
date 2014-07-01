@@ -25,13 +25,13 @@ class Api::V1::MouseMovementEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records the user moving the mouse over a tracked UI object.
 
-    #{json_schema(Api::V1::MouseMovementEventRepresenter, include: :writeable)}
+    #{json_schema(Api::V1::CursorEventRepresenter, include: :writeable)}
   EOS
   def create
     @event = standard_create(MouseMovementEvent) do |event|
       event.identifier = doorkeeper_token.token
     end
-    respond_with @event
+    respond_with @event, represent_with: Api::V1::CursorEventRepresenter
   end
 
 end
