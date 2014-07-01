@@ -1,8 +1,8 @@
-class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
+class Api::V1::MouseMovementEventsController < OpenStax::Api::V1::ApiController
 
   resource_description do
     api_versions "v1"
-    short_description 'Represents the user moving the mouse over or clicking on a tracked UI object'
+    short_description 'Represents the user moving the mouse over a tracked UI object'
     description <<-EOS
       This controller uses the Implicit flow.
       The token is obtained by the platform by creating an Identifier object.
@@ -10,7 +10,7 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
       All events have the following fields in common: identifier (string),
       resource (string), attempt (string), occurred_at (datetime) and metadata (text).
 
-      Additionally, CursorEvents have the object (string), action (string),
+      Additionally, MouseMovementEvents have the object (string),
       x_position (integer) and y_position (integer) fields.
     EOS
   end
@@ -19,16 +19,16 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/cursor_events', 'Creates a new CursorEvent.'
+  api :POST, '/mouse_movement_events', 'Creates a new MouseMovementEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 
-    Creates an Event that records the user moving the mouse over or clicking on a tracked UI object.
+    Creates an Event that records the user moving the mouse over a tracked UI object.
 
-    #{json_schema(Api::V1::CursorEventRepresenter, include: :writeable)}
+    #{json_schema(Api::V1::MouseMovementEventRepresenter, include: :writeable)}
   EOS
   def create
-    @event = standard_create(CursorEvent) do |event|
+    @event = standard_create(MouseMovementEvent) do |event|
       event.identifier = doorkeeper_token.token
     end
     respond_with @event
