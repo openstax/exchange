@@ -6,7 +6,8 @@ module Api::V1
              type: String,
              writeable: false,
              schema_info: {
-               required: true
+               required: true,
+               description: 'The label by which this person is known to researchers'
              }
 
   end

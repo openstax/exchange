@@ -3,43 +3,40 @@ module Api::V1
     include Roar::Representer::JSON
 
       property :identifier,
-               class: Identifier,
-               decorator: IdentifierRepresenter,
-               writeable: true,
+               class: String,
+               writeable: false,
                schema_info: {
                  required: true,
-                 description: "The anonymous user associated with this Event"
+                 description: 'The identifier for the user associated with this Event'
                }
 
       property :resource,
-               class: Resource,
-               decorator: ResourceRepresenter,
+               class: String,
                writeable: true,
                schema_info: {
                  required: true,
-                 description: "The Resource associated with this Event"
+                 description: 'The Resource associated with this Event'
                }
 
       property :attempt,
-               class: Attempt,
-               decorator: AttemptRepresenter,
+               class: String,
                writeable: true,
                schema_info: {
-                 description: "The Attempt associated with this Event"
+                 description: 'The Attempt associated with this Event'
                }
 
       property :metadata,
                class: String,
                writeable: true,
                schema_info: {
-                 description: "The metadata associated with this Event"
+                 description: 'The metadata associated with this Event'
                }
 
       property :occurred_at,
                class: String,
                writeable: true,
                schema_info: {
-                 description: "The date and time when this Event occurred"
+                 description: 'The date and time when this Event occurred'
                }
 
   end

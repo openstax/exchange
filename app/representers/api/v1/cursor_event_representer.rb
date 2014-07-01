@@ -5,21 +5,27 @@ module Api::V1
                class: String,
                writeable: true,
                schema_info: {
-                 description: "A unique identifier for the object that triggered this CursorEvent"
+                 description: 'The object that triggered this CursorEvent'
+               }
+
+      property :action,
+               class: String
+               schema_info: {
+                 description: 'The action performed by the user during this CursorEvent'
                }
 
       property :x_position,
                class: Integer,
                writeable: true,
                schema_info: {
-                 description: "The cursor X position when this CursorEvent occurred"
+                 description: 'The cursor X position when this CursorEvent occurred'
                }
 
       property :y_position,
                class: Integer,
                writeable: true,
                schema_info: {
-                 description: "The cursor Y position when this CursorEvent occurred"
+                 description: 'The cursor Y position when this CursorEvent occurred'
                }
 
   end

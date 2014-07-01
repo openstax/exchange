@@ -37,12 +37,14 @@ ActiveRecord::Schema.define(:version => 20140626210504) do
   add_index "agents", ["disabled_at"], :name => "index_agents_on_disabled_at"
 
   create_table "attempts", :force => true do |t|
-    t.integer  "resource_id", :null => false
-    t.string   "reference",   :null => false
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "identifier_id", :null => false
+    t.integer  "resource_id",   :null => false
+    t.string   "reference",     :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
+  add_index "attempts", ["identifier_id", "resource_id"], :name => "index_attempts_on_identifier_id_and_resource_id"
   add_index "attempts", ["resource_id", "reference"], :name => "index_attempts_on_resource_id_and_reference", :unique => true
 
   create_table "browsing_events", :force => true do |t|
@@ -83,13 +85,14 @@ ActiveRecord::Schema.define(:version => 20140626210504) do
     t.text     "metadata",      :default => "", :null => false
     t.datetime "occurred_at",                   :null => false
     t.string   "object"
+    t.string   "action"
     t.integer  "x_position"
     t.integer  "y_position"
-    t.boolean  "clicked"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
   end
 
+  add_index "cursor_events", ["action"], :name => "index_cursor_events_on_action"
   add_index "cursor_events", ["attempt_id"], :name => "index_cursor_events_on_attempt_id"
   add_index "cursor_events", ["identifier_id"], :name => "index_cursor_events_on_identifier_id"
   add_index "cursor_events", ["object"], :name => "index_cursor_events_on_object"
@@ -176,23 +179,21 @@ ActiveRecord::Schema.define(:version => 20140626210504) do
   add_index "fine_print_signatures", ["user_id", "user_type", "contract_id"], :name => "index_fine_print_s_on_u_id_and_u_type_and_c_id", :unique => true
 
   create_table "grading_events", :force => true do |t|
-    t.integer  "identifier_id",                               :null => false
-    t.integer  "resource_id",                                 :null => false
-    t.integer  "attempt_id",                  :default => 0,  :null => false
-    t.text     "metadata",                    :default => "", :null => false
-    t.datetime "occurred_at",                                 :null => false
-    t.binary   "grader_id",     :limit => 16
-    t.string   "grader_type"
+    t.integer  "identifier_id",                 :null => false
+    t.integer  "resource_id",                   :null => false
+    t.integer  "attempt_id",    :default => 0,  :null => false
+    t.text     "metadata",      :default => "", :null => false
+    t.datetime "occurred_at",                   :null => false
+    t.integer  "grader_id"
     t.string   "grade"
     t.text     "feedback"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   add_index "grading_events", ["attempt_id"], :name => "index_grading_events_on_attempt_id"
   add_index "grading_events", ["grade"], :name => "index_grading_events_on_grade"
   add_index "grading_events", ["grader_id"], :name => "index_grading_events_on_grader_id"
-  add_index "grading_events", ["grader_type"], :name => "index_grading_events_on_grader_type"
   add_index "grading_events", ["identifier_id"], :name => "index_grading_events_on_identifier_id"
   add_index "grading_events", ["occurred_at"], :name => "index_grading_events_on_occurred_at"
   add_index "grading_events", ["resource_id"], :name => "index_grading_events_on_resource_id"
@@ -214,18 +215,6 @@ ActiveRecord::Schema.define(:version => 20140626210504) do
   add_index "heartbeat_events", ["resource_id"], :name => "index_heartbeat_events_on_resource_id"
   add_index "heartbeat_events", ["scroll_position"], :name => "index_heartbeat_events_on_scroll_position"
 
-  create_table "identifiers", :force => true do |t|
-    t.string   "value",       :null => false
-    t.integer  "person_id",   :null => false
-    t.integer  "platform_id", :null => false
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  add_index "identifiers", ["person_id", "platform_id"], :name => "index_identifiers_on_person_id_and_platform_id", :unique => true
-  add_index "identifiers", ["platform_id"], :name => "index_identifiers_on_platform_id"
-  add_index "identifiers", ["value"], :name => "index_identifiers_on_value", :unique => true
-
   create_table "input_events", :force => true do |t|
     t.integer  "identifier_id",                 :null => false
     t.integer  "resource_id",                   :null => false
@@ -233,17 +222,17 @@ ActiveRecord::Schema.define(:version => 20140626210504) do
     t.text     "metadata",      :default => "", :null => false
     t.datetime "occurred_at",                   :null => false
     t.string   "object"
-    t.string   "action_type"
-    t.string   "input_type"
-    t.text     "input"
+    t.string   "action"
+    t.string   "data_type"
+    t.text     "data"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
   end
 
-  add_index "input_events", ["action_type"], :name => "index_input_events_on_action_type"
+  add_index "input_events", ["action"], :name => "index_input_events_on_action"
   add_index "input_events", ["attempt_id"], :name => "index_input_events_on_attempt_id"
+  add_index "input_events", ["data_type"], :name => "index_input_events_on_data_type"
   add_index "input_events", ["identifier_id"], :name => "index_input_events_on_identifier_id"
-  add_index "input_events", ["input_type"], :name => "index_input_events_on_input_type"
   add_index "input_events", ["object"], :name => "index_input_events_on_object"
   add_index "input_events", ["occurred_at"], :name => "index_input_events_on_occurred_at"
   add_index "input_events", ["resource_id"], :name => "index_input_events_on_resource_id"
@@ -413,27 +402,26 @@ ActiveRecord::Schema.define(:version => 20140626210504) do
   add_index "subscribers", ["application_id"], :name => "index_subscribers_on_application_id", :unique => true
 
   create_table "task_events", :force => true do |t|
-    t.integer  "identifier_id",                               :null => false
-    t.integer  "resource_id",                                 :null => false
-    t.integer  "attempt_id",                  :default => 0,  :null => false
-    t.text     "metadata",                    :default => "", :null => false
-    t.datetime "occurred_at",                                 :null => false
-    t.integer  "number"
-    t.binary   "assigner_id",   :limit => 16
-    t.string   "assigner_type"
+    t.integer  "identifier_id",                 :null => false
+    t.integer  "resource_id",                   :null => false
+    t.integer  "attempt_id",    :default => 0,  :null => false
+    t.text     "metadata",      :default => "", :null => false
+    t.datetime "occurred_at",                   :null => false
+    t.string   "uid"
+    t.integer  "assigner_id"
     t.datetime "due_date"
-    t.boolean  "is_complete"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.string   "status"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   add_index "task_events", ["assigner_id"], :name => "index_task_events_on_assigner_id"
-  add_index "task_events", ["assigner_type"], :name => "index_task_events_on_assigner_type"
   add_index "task_events", ["attempt_id"], :name => "index_task_events_on_attempt_id"
   add_index "task_events", ["due_date"], :name => "index_task_events_on_due_date"
   add_index "task_events", ["identifier_id"], :name => "index_task_events_on_identifier_id"
-  add_index "task_events", ["number"], :name => "index_task_events_on_number"
   add_index "task_events", ["occurred_at"], :name => "index_task_events_on_occurred_at"
   add_index "task_events", ["resource_id"], :name => "index_task_events_on_resource_id"
+  add_index "task_events", ["status"], :name => "index_task_events_on_status"
+  add_index "task_events", ["uid"], :name => "index_task_events_on_uid"
 
 end

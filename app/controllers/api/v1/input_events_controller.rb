@@ -7,10 +7,11 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
       This controller uses the Implicit flow.
       The token is obtained by the platform by creating an Identifier object.
 
-      All events have the following fields in common:
-      identifier (uuid), resource (string), occurred_at (datetime) and metadata (text).
+      All events have the following fields in common: identifier (string),
+      resource (string), attempt (string), occurred_at (datetime) and metadata (text).
 
-      Additionally, InputEvents have the object (string), input_type (string), data_type (string), data (text) and file_name(string) fields.
+      Additionally, InputEvents have the object (string), action (string),
+      data_type (string), data (text) and file_name (string) fields.
     EOS
   end
 

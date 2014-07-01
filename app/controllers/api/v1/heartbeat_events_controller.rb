@@ -7,8 +7,8 @@ class Api::V1::HeartbeatEventsController < OpenStax::Api::V1::ApiController
       This controller uses the Implicit flow.
       The token is obtained by the platform by creating an Identifier object.
 
-      All events have the following fields in common:
-      identifier (uuid), resource (string), occurred_at (datetime) and metadata (text).
+      All events have the following fields in common: identifier (string),
+      resource (string), attempt (string), occurred_at (datetime) and metadata (text).
 
       Additionally, HeartbeatEvents have the scroll_position (integer) field.
     EOS

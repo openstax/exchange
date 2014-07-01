@@ -6,10 +6,10 @@ class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
     description <<-EOS
       This controller uses the Client Credentials flow.
 
-      All events have the following fields in common:
-      identifier (uid), resource (string), occurred_at (datetime) and metadata (text).
+      All events have the following fields in common: identifier (string),
+      resource (string), attempt (string), occurred_at (datetime) and metadata (text).
 
-      Additionally, GradingEvents have the grader (uid), grade (float) and
+      Additionally, GradingEvents have the grader (string), grade (string) and
       feedback (text) fields.
     EOS
   end

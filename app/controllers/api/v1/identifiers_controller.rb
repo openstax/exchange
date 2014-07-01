@@ -9,7 +9,7 @@ class Api::V1::IdentifiersController < OpenStax::Api::V1::ApiController
 
       Identifiers represent an anonymous student, grader, TA or instructor.
 
-      They only have a unique, random 16 byte id and a person_id field.
+      They only have a unique, random id made of 64 hex chars, and a person_id field.
     EOS
   end
 

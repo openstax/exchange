@@ -6,31 +6,31 @@ module Api::V1
              type: Integer,
              writeable: false,
              schema_info: {
-               description: "The number of Events that match the " +
-                 "query, can be more than the number returned"
+               description: 'The number of Events that match the ' +
+                 'query, can be more than the number returned'
              }
 
     property :page,
              type: Integer, 
              writeable: false,
              schema_info: {
-               description: "The current page number of the returned results"
+               description: 'The current page number of the returned results'
              }
 
     property :per_page,
              type: Integer,
              writeable: false,
              schema_info: {
-               description: "The number of results per page"
+               description: 'The number of results per page'
              }
 
     property :order_by,
              type: String,
              writeable: false,
              schema_info: {
-               description: "The ordering info, which may be different than " +
-                 "what was requested if the request was missing defaults or " +
-                 "had bad settings."
+               description: 'The ordering info, which may be different than ' +
+                 'what was requested if the request was missing defaults or ' +
+                 'had bad settings.'
              }
 
     property :events,
