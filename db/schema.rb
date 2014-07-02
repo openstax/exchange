@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140626210504) do
+ActiveRecord::Schema.define(:version => 20140702151603) do
 
   create_table "administrators", :force => true do |t|
     t.integer  "account_id",  :null => false
@@ -227,16 +227,16 @@ ActiveRecord::Schema.define(:version => 20140626210504) do
     t.datetime "occurred_at",                 :null => false
     t.text     "metadata",    :default => "", :null => false
     t.string   "object"
-    t.string   "action"
-    t.string   "data_type"
-    t.text     "data"
+    t.string   "category"
+    t.string   "input_type"
+    t.text     "value"
     t.datetime "created_at",                  :null => false
     t.datetime "updated_at",                  :null => false
   end
 
-  add_index "input_events", ["action"], :name => "index_input_events_on_action"
   add_index "input_events", ["attempt_id"], :name => "index_input_events_on_attempt_id"
-  add_index "input_events", ["data_type"], :name => "index_input_events_on_data_type"
+  add_index "input_events", ["category"], :name => "index_input_events_on_category"
+  add_index "input_events", ["input_type"], :name => "index_input_events_on_input_type"
   add_index "input_events", ["object"], :name => "index_input_events_on_object"
   add_index "input_events", ["occurred_at"], :name => "index_input_events_on_occurred_at"
   add_index "input_events", ["person_id"], :name => "index_input_events_on_person_id"
@@ -260,6 +260,30 @@ ActiveRecord::Schema.define(:version => 20140626210504) do
   add_index "interactive_activities", ["person_id"], :name => "index_interactive_activities_on_person_id"
   add_index "interactive_activities", ["resource_id"], :name => "index_interactive_activities_on_resource_id"
   add_index "interactive_activities", ["seconds_active"], :name => "index_interactive_activities_on_seconds_active"
+
+  create_table "message_events", :force => true do |t|
+    t.integer  "person_id",                   :null => false
+    t.integer  "resource_id",                 :null => false
+    t.integer  "attempt_id",  :default => 0,  :null => false
+    t.datetime "occurred_at",                 :null => false
+    t.text     "metadata",    :default => "", :null => false
+    t.string   "uid",                         :null => false
+    t.integer  "replied_id"
+    t.text     "to",          :default => "", :null => false
+    t.text     "cc",          :default => "", :null => false
+    t.text     "bcc",         :default => "", :null => false
+    t.text     "subject",     :default => "", :null => false
+    t.text     "body",        :default => "", :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  add_index "message_events", ["attempt_id"], :name => "index_message_events_on_attempt_id"
+  add_index "message_events", ["occurred_at"], :name => "index_message_events_on_occurred_at"
+  add_index "message_events", ["person_id"], :name => "index_message_events_on_person_id"
+  add_index "message_events", ["replied_id"], :name => "index_message_events_on_replied_id"
+  add_index "message_events", ["resource_id"], :name => "index_message_events_on_resource_id"
+  add_index "message_events", ["uid"], :name => "index_message_events_on_uid", :unique => true
 
   create_table "oauth_access_grants", :force => true do |t|
     t.integer  "resource_owner_id", :null => false

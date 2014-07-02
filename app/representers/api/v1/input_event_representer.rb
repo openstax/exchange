@@ -9,14 +9,14 @@ module Api::V1
                description: 'The input object that triggered this InputEvent'
              }
 
-    property :purpose,
+    property :category,
              type: String,
              writeable: true,
              schema_info: {
-               description: 'The purpose of this input'
+               description: 'The category/purpose of this input'
              }
 
-    property :data_type,
+    property :input_type,
              type: String,
              writeable: true,
              schema_info: {

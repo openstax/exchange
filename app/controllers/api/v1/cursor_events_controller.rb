@@ -21,7 +21,7 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/cursor_events', 'Creates a new CursorEvent.'
+  api :POST, '/cursor_events', 'Creates a new generic CursorEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 
@@ -31,6 +31,34 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
   EOS
   def create
     event_create(CursorEvent)
+  end
+
+  api :POST, '/mouse_movement_events', 'Creates a new MouseMovementEvent.'
+  description <<-EOS
+    This API call must be used with the Implicit flow.
+
+    Creates an Event that records the user moving the mouse over a tracked UI object.
+
+    #{json_schema(Api::V1::CursorEventRepresenter, include: :simple)}
+  EOS
+  def create_mouse_movement
+    event_create(CursorEvent) do |e|
+      e.action = 'mouse_movement'
+    end
+  end
+
+  api :POST, '/mouse_click_events', 'Creates a new MouseClickEvent.'
+  description <<-EOS
+    This API call must be used with the Implicit flow.
+
+    Creates an Event that records the user clicking on a tracked UI object.
+
+    #{json_schema(Api::V1::CursorEventRepresenter, include: :simple)}
+  EOS
+  def create_mouse_click
+    event_create(CursorEvent) do |e|
+      e.action = 'mouse_click'
+    end
   end
 
 end

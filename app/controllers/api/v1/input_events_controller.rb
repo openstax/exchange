@@ -21,7 +21,7 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/input_events', 'Creates a new InputEvent.'
+  api :POST, '/input_events', 'Creates a new generic InputEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 
@@ -31,6 +31,36 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
   EOS
   def create
     event_create(InputEvent)
+  end
+
+  api :POST, '/multiple_choice_input_events', 'Creates a new MultipleChoiceInputEvent.'
+  description <<-EOS
+    This API call must be used with the Implicit flow.
+
+    Creates an Event that records the user submitting a multiple choice answer.
+
+    #{json_schema(Api::V1::InputEventRepresenter, include: :simple)}
+  EOS
+  def create_multiple_choice
+    event_create(InputEvent) do |e|
+      e.category = 'multiple_choice'
+      e.input_type = 'radio'
+    end
+  end
+
+  api :POST, '/free_response_input_events', 'Creates a new FreeResponseInputEvent.'
+  description <<-EOS
+    This API call must be used with the Implicit flow.
+
+    Creates an Event that records the user submitting a free response answer.
+
+    #{json_schema(Api::V1::InputEventRepresenter, include: :simple)}
+  EOS
+  def create_free_response
+    event_create(InputEvent) do |e|
+      e.category = 'free_response'
+      e.input_type = 'text'
+    end
   end
 
 end

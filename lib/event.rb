@@ -41,8 +41,8 @@ module Event
   end
 
   module Routing
-    def event_routes(res)
-      resources res, only: :create
+    def event_routes(res, options = {})
+      resources res, {only: :create}.merge(options)
     end
   end
 end
