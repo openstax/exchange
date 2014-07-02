@@ -2,7 +2,7 @@ class CreateMessageEvents < ActiveRecord::Migration
   def change
     create_table :message_events do |t|
       t.event
-      t.string :uid, null: false
+      t.string :message_uid, null: false
       t.integer :replied_id
       t.text :to, null: false, default: ''
       t.text :cc, null: false, default: ''
@@ -14,7 +14,7 @@ class CreateMessageEvents < ActiveRecord::Migration
     end
 
     add_event_index :message_events
-    add_index :message_events, :uid, unique: true
+    add_index :message_events, :message_uid, unique: true
     add_index :message_events, :replied_id
   end
 end

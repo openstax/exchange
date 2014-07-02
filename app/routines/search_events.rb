@@ -10,80 +10,197 @@ class SearchEvents
 
   protected
 
-  SORTABLE_FIELDS = ['identifier', 'resource', 'id']
+  SORTABLE_FIELDS = ['id', 'identifier', 'resource', 'attempt', 'occurred_at']
   SORT_ASCENDING = 'ASC'
   SORT_DESCENDING = 'DESC'
 
   def exec(query, options={})
 
-    users = User.scoped
+    events = {:browsing => BrowsingEvent.scoped,
+              :heartbeat => HeartbeatEvent.scoped,
+              :cursor => CursorEvent.scoped,
+              :mouse_movement => CursorEvent.where(:action => 'mouse_movement'),
+              :mouse_click => CursorEvent.where(:action => 'mouse_click'),
+              :input => InputEvent.scoped,
+              :multiple_choice => InputEvent.where(:category => 'multiple_choice'),
+              :free_response => InputEvent.where(:category => 'free_response'),
+              :message => MessageEvent.scoped,
+              :grading => GradingEvent.scoped,
+              :task => TaskEvent.scoped}
     
     KeywordSearch.search(query) do |with|
 
       with.default_keyword :any
 
-      with.keyword :username do |usernames|
-        users = users.where{username.like_any my{prep_usernames(usernames)}}
+      # Event keywords
+
+      with.keyword :type do |types|
+        events = events.slice(types)
       end
 
-      with.keyword :first_name do |first_names|
-        users = users.where{lower(first_name).like_any my{prep_names(first_names)}}
+      with.keyword :id do |ids, positive|
+        method = positive ? :in : :not_in
+        events = Hash[events.collect{|k,v| [k, v.where{
+          id.send(method, ids)}]}]
       end
 
-      with.keyword :last_name do |last_names|
-        users = users.where{lower(last_name).like_any my{prep_names(last_names)}}
+      with.keyword :identifier do |identifiers, positive|
+        method = positive ? :in : :not_in
+        events = Hash[events.collect{|k,v| [k, v.joins(:identifier).where{
+          identifier.token.send(method, identifiers)}]}]
       end
 
-      with.keyword :full_name do |full_names|
-        users = users.where{lower(full_name).like_any my{prep_names(full_names)}}
+      with.keyword :resource do |resources, positive|
+        method = positive ? :like_any : :not_like_any
+        events = Hash[events.collect{|k,v| [k, v.joins(:resource).where{
+          resource.reference.send(method, resources)}]}]
       end
 
-      with.keyword :name do |names|
-        names = prep_names(names)
-        users = users.where{ (lower(full_name).like_any names)  | 
-                             (lower(last_name).like_any names)  |
-                             (lower(first_name).like_any names) }
+      with.keyword :attempt do |attempts, positive|
+        method = positive ? :like_any : :not_like_any
+        events = Hash[events.collect{|k,v| [k, v.joins(:attempt).where{
+          attempt.reference.send(method, attempts)}]}]
       end
 
-      with.keyword :id do |ids|
-        users = users.where{id.in ids}
+      with.keyword :occurred_at do |occurred_ats, positive|
+        method = positive ? :like_any : :not_like_any
+        events = Hash[events.collect{|k,v| [k, v.where{
+          occurred_at.send(method, occurred_ats)}]}]
       end
 
-      with.keyword :email do |emails|
-        users = users.joins{contact_infos}
-                     .where{{contact_infos: sift(:email_addresses)}}
-                     .where{{contact_infos: sift(:verified)}}
-                     .where{contact_infos.value.in emails}
+      with.keyword :metadata do |metadatas, positive|
+        method = positive ? :like_any : :not_like_any
+        events = Hash[events.collect{|k,v| [k, v.where{
+          metadata.send(method, metadatas)}]}]
       end
 
-      # Rerun the queries above for 'any' terms (which are ones without a
-      # prefix).  
+      # BrowsingEvent keywords
 
-      with.keyword :any do |terms|
-        names = prep_names(terms)
+      with.keyword :referer do |referers, positive|
+        events = events.slice(:browsing)
 
-        users = users.joins{contact_infos.outer}
-                     .where{
-                              (         username.like_any  my{prep_usernames(terms)}) |
-                              (lower(first_name).like_any  names)                     |
-                              (lower(last_name).like_any   names)                     |
-                              (lower(full_name).like_any   names)                     |
-                              (id.in                       terms)                     |
-                              ( (contact_infos.value.in      terms) & 
-                                (contact_infos.verified.eq   true) )
-                           }
+        method = positive ? :like_any : :not_like_any
+        events = Hash[events.collect{|k,v| [k, v.where{
+          referer.send(method, referers)}]}]
+      end
+
+      # HeartbeatEvent keywords
+
+      with.keyword :scroll_position do |scroll_positions, positive|
+        events = events.slice(:heartbeat)
+
+        method = positive ? :like_any : :not_like_any
+        events = Hash[events.collect{|k,v| [k, v.where{
+          scroll_position.send(method, scroll_positions)}]}]
+      end
+
+      # CursorEvent and InputEvent keywords
+
+      with.keyword :object do |objects, positive|
+        events = events.slice(:cursor, :input)
+
+        method = positive ? :like_any : :not_like_any
+        events = Hash[events.collect{|k,v| [k, v.where{
+          object.send(method, objects)}]}]
+      end
+
+      # CursorEvent keywords
+
+      [:action, :x_position, :y_position].each do |keyword|
+        with.keyword keyword do |terms, positive|
+          events = events.slice(:cursor)
+
+          method = positive ? :like_any : :not_like_any
+          events = Hash[events.collect{|k,v| [k, v.where{
+            send(keyword).send(method, terms)}]}]
+        end
+      end
+
+      # InputEvent keywords
+
+      [:category, :input_type, :value].each do |keyword|
+        with.keyword keyword do |terms, positive|
+          events = events.slice(:input)
+
+          method = positive ? :like_any : :not_like_any
+          events = Hash[events.collect{|k,v| [k, v.where{
+            send(keyword).send(method, terms)}]}]
+        end
+      end
+
+      # MessageEvent keywords
+
+      [:message_uid, :to, :cc, :bcc, :subject, :body].each do |keyword|
+        with.keyword keyword do |terms, positive|
+          events = events.slice(:message)
+
+          method = positive ? :like_any : :not_like_any
+          events = Hash[events.collect{|k,v| [k, v.where{
+            send(keyword).send(method, terms)}]}]
+        end
+      end
+
+      with.keyword :replied do |uids, positive|
+        events = events.slice(:message)
+
+        method = positive ? :in : :not_in
+        events = Hash[events.collect{|k,v| [k, v.joins(:replied).where{
+          replied.uid.send(method, uids)}]}]
+      end
+
+      # GradingEvent keywords
+
+      with.keyword :grader do |graders, positive|
+        events = events.slice(:grading)
+
+        method = positive ? :in : :not_in
+        events = Hash[events.collect{|k,v| [k, v.joins(:grader).where{
+          grader.token.send(method, graders)}]}]
+      end
+
+      [:grade, :feedback].each do |keyword|
+        with.keyword keyword do |terms, positive|
+          events = events.slice(:grading)
+
+          method = positive ? :like_any : :not_like_any
+          events = Hash[events.collect{|k,v| [k, v.where{
+            send(keyword).send(method, terms)}]}]
+        end
+      end
+
+      # TaskEvent keywords
+
+      [:task_uid, :due_date, :status].each do |keyword|
+        with.keyword keyword do |terms, positive|
+          events = events.slice(:task)
+
+          method = positive ? :like_any : :not_like_any
+          events = Hash[events.collect{|k,v| [k, v.where{
+            send(keyword).send(method, terms)}]}]
+        end
+      end
+
+      with.keyword :assigner do |assigners, positive|
+        events = events.slice(:task)
+
+        method = positive ? :in : :not_in
+        events = Hash[events.collect{|k,v| [k, v.joins(:assigner).where{
+          assigner.token.send(method, assigners)}]}]
+      end
+
+      # No keyword
+
+      with.keyword :any do |terms, positive|
+        outputs[:events] = {}
+        return
       end
 
     end
 
-    # Select only distinct records
-
-    users = users.uniq
-
     # Ordering
 
     # Parse the input
-    order_bys = (options[:order_by] || 'username').split(',').collect{|ob| ob.strip.split(' ')}
+    order_bys = (options[:order_by] || '').split(',').collect{|ob| ob.strip.split(' ')}
 
     # Toss out bad input, provide default direction
     order_bys = order_bys.collect do |order_by|
@@ -97,13 +214,13 @@ class SearchEvents
     order_bys.compact!
 
     # Use a default sort if none provided
-    order_bys = ['username', SORT_ASCENDING] if order_bys.empty?
+    order_bys = [['occurred_at', SORT_ASCENDING]] if order_bys.empty?
 
     # Convert to query style
     order_bys = order_bys.collect{|order_by| "#{order_by[0]} #{order_by[1]}"}
 
     order_bys.each do |order_by|
-      users = users.order(order_by)
+      events = Hash[events.collect{|k,v| [k, v.order(order_by)]}]
     end
 
     # Translate to routine outputs
@@ -111,25 +228,12 @@ class SearchEvents
     outputs[:query] = query
     outputs[:order_by] = order_bys.join(', ') # convert back to one string
 
-    if options[:return_all]
-      outputs[:users] = users
-      return
-    end
-
     # Count results
 
-    outputs[:num_matching_users] = users.count
+    outputs[:num_matching_events] = events.sum{|k,v| v.count}
 
-    # Return no results if maximum number of results is exceeded
+    outputs[:events] = events
 
-    outputs[:users] = (outputs[:num_matching_users] > MAX_MATCHING_USERS) ?
-                        User.where('0=1') : users
-
-  end
-
-  # Downcase, and put a wildcard at the end.  For the moment don't exclude characters
-  def prep_names(names)
-    names.collect{|name| name.downcase + '%'}
   end
 
 end

@@ -2,13 +2,18 @@ module Api::V1
   class EventRepresenter < Roar::Decorator
     include Roar::Representer::JSON
 
+    property :id,
+             type: Integer,
+             writeable: false,
+             schema_info: {
+               description: 'The id given to this Event'
+             }
+
     property :identifier,
              class: Identifier,
              decorator: IdentifierRepresenter,
              writeable: false,
-             simple: true,
              schema_info: {
-               required: true,
                description: 'The identifier for the user associated with this Event'
              }
 

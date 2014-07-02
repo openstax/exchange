@@ -86,7 +86,10 @@ class Api::V1::EventsController < OpenStax::Api::V1::ApiController
     `occurred_at ASC, resource` &ndash; sorts by Event date ascending, then by resource descending 
   EOS
   def index
-    OSU::AccessPolicy.require_action_allowed!(:index, current_api_user, Event)
+    # Can't use AccessPolicy, since Event is a Module
+    raise SecurityTransgression unless doorkeeper_token.application &&\
+                                       doorkeeper_token.resource_owner_id.nil?
+
     options = params.slice(:page, :per_page, :order_by)
     outputs = SearchEvents.call(params[:q], options).outputs
     respond_with outputs, represent_with: Api::V1::EventSearchRepresenter
