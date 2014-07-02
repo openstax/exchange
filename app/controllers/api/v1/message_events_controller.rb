@@ -12,8 +12,8 @@ class Api::V1::MessageEventsController < OpenStax::Api::V1::ApiController
       All events have the following fields in common: identifier (string),
       resource (string), attempt (string), occurred_at (datetime) and metadata (text).
 
-      Additionally, MessageInputEvents have the to (string), cc (string),
-      bcc (string) and subject (string) fields.
+      Additionally, MessageEvents have the uid(string), replied_id (integer),
+      to (text), cc (text), bcc (text), subject (text) and body (text) fields.
     EOS
   end
 
@@ -21,16 +21,16 @@ class Api::V1::MessageEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/message_input_events', 'Creates a new MessageInputEvent.'
+  api :POST, '/message_events', 'Creates a new MessageEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 
     Creates an Event that records the user sending a message to other users.
 
-    #{json_schema(Api::V1::MessageInputEventRepresenter, include: :writeable)}
+    #{json_schema(Api::V1::MessageEventRepresenter, include: :writeable)}
   EOS
   def create
-    event_create(InputEvent, Api::V1::MessageInputEventRepresenter)
+    event_create(MessageEvent)
   end
 
 end
