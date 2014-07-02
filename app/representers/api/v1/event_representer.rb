@@ -6,6 +6,7 @@ module Api::V1
              class: Identifier,
              decorator: IdentifierRepresenter,
              writeable: false,
+             simple: true,
              schema_info: {
                required: true,
                description: 'The identifier for the user associated with this Event'
@@ -15,6 +16,7 @@ module Api::V1
              exec_context: :decorator,
              type: String,
              writeable: true,
+             simple: true,
              schema_info: {
                required: true,
                description: 'The Resource associated with this Event'
@@ -24,6 +26,7 @@ module Api::V1
              exec_context: :decorator,
              type: String,
              writeable: true,
+             simple: true,
              schema_info: {
                description: 'The Attempt associated with this Event'
              }
@@ -31,6 +34,7 @@ module Api::V1
     property :metadata,
              type: String,
              writeable: true,
+             simple: true,
              schema_info: {
                description: 'The metadata associated with this Event'
              }
@@ -38,6 +42,7 @@ module Api::V1
     property :occurred_at,
              type: String,
              writeable: true,
+             simple: true,
              schema_info: {
                description: 'The date and time when this Event occurred'
              }

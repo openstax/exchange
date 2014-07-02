@@ -4,25 +4,29 @@ module Api::V1
     property :object,
              type: String,
              writeable: true,
+             simple: true,
              schema_info: {
                description: 'The input object that triggered this InputEvent'
              }
 
-    property :action,
+    property :purpose,
              type: String,
+             writeable: true,
              schema_info: {
-               description: 'The action performed by the user during this InputEvent'
+               description: 'The purpose of this input'
              }
 
     property :data_type,
              type: String,
+             writeable: true,
              schema_info: {
-               description: 'The type of data in the "data" field'
+               description: 'The type of data in the "value" field'
              }
 
-    property :data,
+    property :value,
              type: String,
              writeable: true,
+             simple: true,
              schema_info: {
                description: 'The data sent by the user during this InputEvent'
              }

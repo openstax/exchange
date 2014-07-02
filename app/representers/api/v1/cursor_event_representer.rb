@@ -4,12 +4,14 @@ module Api::V1
     property :object,
              type: String,
              writeable: true,
+             simple: true,
              schema_info: {
                description: 'The object that triggered this CursorEvent'
              }
 
     property :action,
              type: String,
+             writeable: true,
              schema_info: {
                description: 'The action performed by the user during this CursorEvent'
              }
@@ -17,6 +19,7 @@ module Api::V1
     property :x_position,
              type: Integer,
              writeable: true,
+             simple: true,
              schema_info: {
                description: 'The cursor X position when this CursorEvent occurred'
              }
@@ -24,6 +27,7 @@ module Api::V1
     property :y_position,
              type: Integer,
              writeable: true,
+             simple: true,
              schema_info: {
                description: 'The cursor Y position when this CursorEvent occurred'
              }

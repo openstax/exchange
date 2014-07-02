@@ -12,7 +12,7 @@ class Api::V1::MultipleChoiceEventsController < OpenStax::Api::V1::ApiController
       All events have the following fields in common: identifier (string),
       resource (string), attempt (string), occurred_at (datetime) and metadata (text).
 
-      Additionally, MultipleChoiceInputEvents have the object (string) and data (text) fields.
+      Additionally, MultipleChoiceInputEvents have the object (string) and value (text) fields.
     EOS
   end
 
@@ -26,10 +26,13 @@ class Api::V1::MultipleChoiceEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records the user submitting a multiple choice answer.
 
-    #{json_schema(Api::V1::InputEventRepresenter, include: :writeable)}
+    #{json_schema(Api::V1::InputEventRepresenter, include: :simple)}
   EOS
   def create
-    event_create(InputEvent)
+    event_create(InputEvent) do |e|
+      e.category = 'multiple_choice'
+      e.input_type = 'radio'
+    end
   end
 
 end

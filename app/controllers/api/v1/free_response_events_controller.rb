@@ -12,7 +12,7 @@ class Api::V1::FreeResponseEventsController < OpenStax::Api::V1::ApiController
       All events have the following fields in common: identifier (string),
       resource (string), attempt (string), occurred_at (datetime) and metadata (text).
 
-      Additionally, FreeResponseInputEvents have the object (string) and data (text) fields.
+      Additionally, FreeResponseInputEvents have the object (string) and value (text) fields.
     EOS
   end
 
@@ -26,10 +26,13 @@ class Api::V1::FreeResponseEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records the user submitting a free response answer.
 
-    #{json_schema(Api::V1::InputEventRepresenter, include: :writeable)}
+    #{json_schema(Api::V1::InputEventRepresenter, include: :simple)}
   EOS
   def create
-    event_create(InputEvent)
+    event_create(InputEvent) do |e|
+      e.category = 'free_response'
+      e.input_type = 'text'
+    end
   end
 
 end

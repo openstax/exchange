@@ -5,6 +5,7 @@ module Api::V1
     property :num_matching_events,
              type: Integer,
              writeable: false,
+             readable: true,
              schema_info: {
                description: 'The number of Events that match the ' +
                  'query, can be more than the number returned'
@@ -13,6 +14,7 @@ module Api::V1
     property :page,
              type: Integer, 
              writeable: false,
+             readable: true,
              schema_info: {
                description: 'The current page number of the returned results'
              }
@@ -20,6 +22,7 @@ module Api::V1
     property :per_page,
              type: Integer,
              writeable: false,
+             readable: true,
              schema_info: {
                description: 'The number of results per page'
              }
@@ -27,6 +30,7 @@ module Api::V1
     property :order_by,
              type: String,
              writeable: false,
+             readable: true,
              schema_info: {
                description: 'The ordering info, which may be different than ' +
                  'what was requested if the request was missing defaults or ' +
@@ -35,12 +39,14 @@ module Api::V1
 
     property :events,
              class: Array,
+             readable: true,
              schema_info: {
                definitions: ::Hash[
                  [BrowsingEventRepresenter, HeartbeatEventRepresenter,
                   CursorEventRepresenter, InputEventRepresenter].collect { |r|
-                   [r.name.to_sym, OpenStax::Api::RepresentableSchemaPrinter.json_schema(
-                                   r, include: :readable)]
+                   [r.name.demodulize.to_sym,
+                    OpenStax::Api::RepresentableSchemaPrinter.json_schema(
+                      r, include: :readable)]
                  }
                ],
                items: {

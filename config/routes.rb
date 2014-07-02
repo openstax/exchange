@@ -75,11 +75,12 @@ Exchange::Application.routes.draw do
 
     event_routes :browsing_events
     event_routes :heartbeat_events
+    event_routes :cursor_events
     event_routes :mouse_movement_events
     event_routes :mouse_click_events
+    event_routes :input_events
     event_routes :multiple_choice_events
     event_routes :free_response_events
-    event_routes :interactive_events
     event_routes :message_events
     event_routes :grading_events
     event_routes :task_events
