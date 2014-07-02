@@ -10,8 +10,8 @@ module Api::V1
              }
 
     property :identifier,
-             class: Identifier,
-             decorator: IdentifierRepresenter,
+             exec_context: :decorator,
+             type: String,
              writeable: false,
              schema_info: {
                description: 'The identifier for the user associated with this Event'
@@ -51,6 +51,10 @@ module Api::V1
              schema_info: {
                description: 'The date and time when this Event occurred'
              }
+
+    def identifier
+      represented.identifier.token
+    end
 
     def resource
       represented.resource.reference
