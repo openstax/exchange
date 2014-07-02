@@ -92,6 +92,7 @@ class Api::V1::EventsController < OpenStax::Api::V1::ApiController
 
     options = params.slice(:page, :per_page, :order_by)
     outputs = SearchEvents.call(params[:q], options).outputs
+    puts outputs[:events]
     respond_with outputs, represent_with: Api::V1::EventSearchRepresenter
   end
 

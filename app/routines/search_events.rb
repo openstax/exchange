@@ -19,11 +19,7 @@ class SearchEvents
     events = {:browsing => BrowsingEvent.scoped,
               :heartbeat => HeartbeatEvent.scoped,
               :cursor => CursorEvent.scoped,
-              :mouse_movement => CursorEvent.where(:action => 'mouse_movement'),
-              :mouse_click => CursorEvent.where(:action => 'mouse_click'),
               :input => InputEvent.scoped,
-              :multiple_choice => InputEvent.where(:category => 'multiple_choice'),
-              :free_response => InputEvent.where(:category => 'free_response'),
               :message => MessageEvent.scoped,
               :grading => GradingEvent.scoped,
               :task => TaskEvent.scoped}
