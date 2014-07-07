@@ -21,9 +21,9 @@ gem 'newrelic_rpm'
 gem 'squeel'
 gem 'yaml_db'
 
-gem 'openstax_utilities', '~> 2.2.1'
-gem 'openstax_accounts', '~> 1.0.0'
-gem 'openstax_api', '~> 2.1.0'
+gem 'openstax_utilities', '~> 2.2.3'
+gem 'openstax_accounts', '~> 2.0.0'
+gem 'openstax_api', '~> 2.2.3'
 
 gem 'apipie-rails'
 gem 'maruku'
@@ -35,7 +35,7 @@ gem 'roar-rails'
 
 gem 'exception_notification'
 
-gem 'action_interceptor', '~> 0.1.2'
+gem 'action_interceptor', '~> 0.2.3'
 gem 'fine_print', '~> 1.4.1'
 
 gem 'lev', '~> 2.1.0'
@@ -50,7 +50,6 @@ group :development, :test do
   gem 'brakeman'
   gem 'railroady'
   gem 'rspec-rails'
-  gem 'rspec-rerun'
   gem 'cucumber-rails', :require => false
   gem 'nifty-generators'
   gem 'factory_girl_rails'
@@ -58,7 +57,7 @@ group :development, :test do
 end
 
 group :production do
-  gem 'mysql2', '~> 0.3.11'
+  gem 'mysql2'
   gem 'unicorn'
   gem 'lograge', '~> 0.3.0'
 end

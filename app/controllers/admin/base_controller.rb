@@ -4,17 +4,16 @@
 module Admin
   class BaseController < ApplicationController
 
-    if Rails.env.production?
-      before_filter :authenticate_admin!
-    else
-      skip_before_filter :authenticate_user!
-      skip_before_filter :require_registration!
+    layout 'application_body_nav'
 
-      fine_print_skip_signatures :general_terms_of_use,
-                                 :privacy_policy
+    before_filter :authenticate_administrator! if Rails.env.production?
+
+    def index
+      @applications = Doorkeeper::Application.all
     end
     
     def cron
+      raise NotYetImplemented
       Ost::Cron::execute_cron_jobs
       flash[:notice] = "Ran cron tasks"
       redirect_to admin_path  

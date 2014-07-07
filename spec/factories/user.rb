@@ -1,9 +1,17 @@
 FactoryGirl.define do
   factory :user do
-    openstax_accounts_user
+    openstax_accounts_account
 
     trait :admin do
-      is_admin true
+      role 'admin'
+    end
+
+    trait :agent do
+      role 'agent'
+    end
+
+    trait :researcher do
+      role 'researcher'
     end
 
     trait :terms_agreed do

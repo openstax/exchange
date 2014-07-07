@@ -18,3 +18,4 @@
 //= require jquery.ui.all
 //= require_tree ./utils
 //= require bootstrap
+//= require console

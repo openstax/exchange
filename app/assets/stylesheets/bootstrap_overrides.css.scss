@@ -1,7 +1,6 @@
 @import 'common';
 @import 'bootstrap';
 
-
 select, input[type='text'], input[type='search'] {
   @extend .form-control;
 }

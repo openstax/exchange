@@ -4,22 +4,20 @@ Exchange::Application.routes.draw do
 
   root :to => "static_pages#home"
 
+  # Status
+
+  get :status, to: lambda { head :ok }
+
   # Gems
 
-  use_doorkeeper
+  use_doorkeeper do
+    skip_controllers :applications
+  end
 
   mount OpenStax::Accounts::Engine, at: "/accounts"
   mount FinePrint::Engine, at: "/fine_print"
 
-  # Developer
-
-  namespace 'dev' do
-    resources :users, only: [:create] do
-      post 'generate', on: :collection
-    end
-  end
-
-  # Admin
+  # Administrator
 
   namespace 'admin' do
     get '/', to: 'base#index'
@@ -34,10 +32,35 @@ Exchange::Application.routes.draw do
     get 'raise_not_yet_implemented',    to: 'base#raise_not_yet_implemented'
     get 'raise_illegal_argument',       to: 'base#raise_illegal_argument'
 
-    resources :users, only: [:index, :show, :update, :edit] do
+    resources :accounts, only: [:index] do
       post 'become', on: :member
-      post 'index', on: :collection
     end
+
+    user_routes :administrators
+    user_routes :researchers
+
+    application_routes :platforms
+    application_routes :subscribers
+  end
+
+  # Agent
+
+  namespace 'manage' do
+    get '/', to: 'base#index'
+
+    user_routes :agents
+
+    application_routes :platforms
+    application_routes :subscribers
+  end
+
+  # Researcher
+
+  namespace 'research' do
+    get '/', to: 'base#index'
+
+    resources :events, only: :index
+    resources :activities, only: :index
   end
 
   # JSON API
@@ -45,32 +68,43 @@ Exchange::Application.routes.draw do
   apipie
 
   api :v1, :default => true do
-      resources :identities, :only => [:create]
+    resources :identifiers, only: :create
+
+    resources :events, only: :index
+    resources :activities, only: :index
+
+    event_routes :browsing_events
+    event_routes :heartbeat_events
+    event_routes :cursor_events
+    event_routes :mouse_movement_events, to: 'cursor_events#create_mouse_movement'
+    event_routes :mouse_click_events, to: 'cursor_events#create_mouse_click'
+    event_routes :input_events
+    event_routes :multiple_choice_events, to: 'input_events#create_multiple_choice'
+    event_routes :free_response_events, to: 'input_events#create_free_response'
+    event_routes :message_events
+    event_routes :grading_events
+    event_routes :task_events
+
+    #activity_routes
   end
 
-  # HTML Pages
+  # Shared Pages
 
   # Resources
 
   resources :terms, only: [:index, :show] do
     collection do
       get 'pose'
-      post 'agree', as: 'agree_to'
+      post 'agree'
     end
   end
 
   # Singular routes
   # Only for routes with unique names
 
-  resource :user, only: [], path: '', as: '' do
-    get 'registration'
-    put 'register'
-  end
-
   resource :static_page, only: [], path: '', as: '' do
     get 'api'
     get 'copyright'
-    get 'status'
     get 'about'
   end
 

@@ -1,0 +1,25 @@
+module Eventful
+  module ActiveRecord
+    def self.included(base)
+      base.extend ClassMethods
+    end
+
+    module ClassMethods
+      def acts_as_eventful
+        relation_sym = name.underscore.to_sym
+
+        class_exec do
+          has_many :browsing_events, inverse_of: relation_sym
+          has_many :heartbeat_events, inverse_of: relation_sym
+          has_many :cursor_events, inverse_of: relation_sym
+          has_many :input_events, inverse_of: relation_sym
+          has_many :task_events, inverse_of: relation_sym
+          has_many :grading_events, inverse_of: relation_sym
+          has_many :message_events, inverse_of: relation_sym
+        end
+      end
+    end
+  end
+end
+
+ActiveRecord::Base.send :include, Eventful::ActiveRecord

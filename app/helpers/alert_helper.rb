@@ -99,7 +99,7 @@ module AlertHelper
     classes = ["alert"]
     classes << case alert[:type]
                when :error
-                 "alert-error"
+                 "alert-warning"
                when :success
                  "alert-success"
                when :info

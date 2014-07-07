@@ -6,8 +6,15 @@ COPYRIGHT_HOLDER = "Rice University"
 COPYRIGHT_START_YEAR = 2013
 
 require 'secret_settings'
-require 'extend_builtins'
+require 'controller_extensions'
 require 'utilities'
+require 'user'
+require 'app'
+require 'event'
+require 'eventful'
+require 'event_rest'
+require 'activity'
+require 'referable'
 
 # Initialize the rails application
 Exchange::Application.initialize!

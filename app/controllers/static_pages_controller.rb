@@ -5,9 +5,6 @@ class StaticPagesController < ApplicationController
 
   layout :resolve_layout
 
-  skip_protect_beta :only => [:status]
-  skip_before_filter :authenticate_user!
-  skip_interceptor :registration, :only => [:status]
   fine_print_skip_signatures :general_terms_of_use,
                              :privacy_policy
 
@@ -18,11 +15,6 @@ class StaticPagesController < ApplicationController
   end
 
   def about
-  end
-
-  # Used by AWS (and others) to make sure the site is still up.
-  def status
-    head :ok
   end
 
 protected

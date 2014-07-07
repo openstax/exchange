@@ -1,0 +1,19 @@
+<%= render :partial => 'shared/console', locals: {
+  panes: {
+    :users => {:partial => 'openstax/accounts/shared/accounts/index',
+               :locals => { :search_action_path => admin_accounts_path,
+                            :method => :get,
+                            :remote => true }},
+    :administrators => {:partial => 'admin/users/index',
+                        :locals => { :user_type => 'Administrator' }},
+    #:agents => {:partial => 'admin/users/index',
+    #            :locals => { :user_type => 'Agent' }},
+    :researchers => {:partial => 'admin/users/index',
+                     :locals => { :user_type => 'Researcher' }},
+    :platforms => {:partial => 'admin/applications/index',
+                   :locals => { :application_class => Platform }},
+    :subscribers => {:partial => 'admin/applications/index',
+                     :locals => { :application_class => Subscriber }},
+    :misc => {:partial => 'misc'}
+  }
+} %>
