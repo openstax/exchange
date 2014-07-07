@@ -13,6 +13,7 @@ require 'app'
 require 'event'
 require 'event_rest'
 require 'activity'
+require 'referable'
 
 # Initialize the rails application
 Exchange::Application.initialize!

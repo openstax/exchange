@@ -87,12 +87,12 @@ class Api::V1::EventsController < OpenStax::Api::V1::ApiController
   EOS
   def index
     # Can't use AccessPolicy, since Event is a Module
-    raise SecurityTransgression unless doorkeeper_token.application &&\
-                                       doorkeeper_token.resource_owner_id.nil?
+    app = doorkeeper_token.application
+    raise SecurityTransgression unless app && doorkeeper_token.resource_owner_id.nil?
 
-    options = params.slice(:page, :per_page, :order_by)
+    client = Platform.for(app) ? :platform : (Subscriber.for(app) ? :subscriber : nil)
+    options = params.slice(:page, :per_page, :order_by).merge(:client => client)
     outputs = SearchEvents.call(params[:q], options).outputs
-    puts outputs[:events]
     respond_with outputs, represent_with: Api::V1::EventSearchRepresenter
   end
 

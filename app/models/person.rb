@@ -1,6 +1,5 @@
 class Person < ActiveRecord::Base
-  has_one :identifier, class_name: 'Doorkeeper::AccessToken',
-                       foreign_key: :resource_owner_id,
+  has_one :identifier, foreign_key: :resource_owner_id,
                        inverse_of: :resource_owner
 
   belongs_to :superseder, class_name: 'Person', inverse_of: :superseded

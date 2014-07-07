@@ -14,8 +14,9 @@ class SearchEvents
   SORT_ASCENDING = 'ASC'
   SORT_DESCENDING = 'DESC'
 
-  def exec(query, options={})
+  def exec(query, client, options={})
 
+  if client.is_a? Platform
     events = {:browsing => BrowsingEvent.scoped,
               :heartbeat => HeartbeatEvent.scoped,
               :cursor => CursorEvent.scoped,
@@ -23,6 +24,15 @@ class SearchEvents
               :message => MessageEvent.scoped,
               :grading => GradingEvent.scoped,
               :task => TaskEvent.scoped}
+  elsif client.is_a?(Subscriber) || client.is_a?(Researcher)
+    events = {:browsing => BrowsingEvent.scoped,
+              :heartbeat => HeartbeatEvent.scoped,
+              :cursor => CursorEvent.scoped,
+              :input => InputEvent.scoped,
+              :message => MessageEvent.scoped,
+              :grading => GradingEvent.scoped,
+              :task => TaskEvent.scoped}
+  end
     
     KeywordSearch.search(query) do |with|
 

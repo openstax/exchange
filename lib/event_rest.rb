@@ -4,7 +4,7 @@ module EventRest
   def get_resource(klass)
     app = current_application
     return nil unless app
-    platform = Platform.where(application_id: app.id).first
+    platform = Platform.for(app)
     Resource.find_or_create(platform, params[:resource])
   end
 

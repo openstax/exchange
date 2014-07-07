@@ -14,6 +14,10 @@ module App
 
           validates_presence_of :application
           validates_uniqueness_of :application_id
+
+          def self.for(app)
+            where(application_id: app.id).first
+          end
         end
       end
     end

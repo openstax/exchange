@@ -8,8 +8,7 @@ Identifier.class_exec do
   protected
 
   def client_credentials_or_platform
-    return if resource_owner_id.nil? || \
-              Platform.where(:application_id => application_id).first
+    return if resource_owner_id.nil? || Platform.for(application)
     errors.add(:application, 'Only Platforms can obtain Identifiers')
     false
   end

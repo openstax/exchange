@@ -14,7 +14,15 @@ module Api::V1
              type: String,
              writeable: false,
              schema_info: {
-               description: 'The identifier for the user associated with this Event'
+               description: 'The identifier for the user associated with this Event; Visible only to Platforms'
+             }
+
+    property :person,
+             class: Person,
+             decorator: PersonRepresenter,
+             writeable: false,
+             schema_info: {
+               description: 'The researh label for the user associated with this Event; Visible only to Subscribers and Researchers'
              }
 
     property :resource,
