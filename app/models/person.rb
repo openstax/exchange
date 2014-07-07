@@ -3,14 +3,26 @@ class Person < ActiveRecord::Base
                        foreign_key: :resource_owner_id,
                        inverse_of: :resource_owner
 
-  belongs_to :successor, class_name: 'Person', inverse_of: :succeeded
+  belongs_to :superseder, class_name: 'Person', inverse_of: :superseded
 
-  has_many :succeeded, class_name: 'Person', inverse_of: :successor
+  has_many :superseded, class_name: 'Person', inverse_of: :superseder
 
   validates :label, presence: true, uniqueness: true
   validates_presence_of :identifier
 
   before_validation :generate_label, on: :create
+
+  def superseded_labels
+    superseded.collect{|p| p.label}
+  end
+
+  def supersede_by(person)
+    Person.transaction do
+      superseded.update_all(:superseder => person)
+      self.superseder = person
+      self.save!
+    end
+  end
 
   protected
 
