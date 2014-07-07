@@ -29,11 +29,13 @@ class Api::V1::IdentifiersController < OpenStax::Api::V1::ApiController
   EOS
   def create
     @identifier = Identifier.new
-    @identifier.resource_owner = Person.new
     @identifier.application = current_application
+    @person = Person.new
+    @person.platform = Platform.for(current_application)
+    @person.identifier = @identifier
 
     OSU::AccessPolicy.require_action_allowed!(:create, current_api_user, @identifier)
-    @identifier.save! # This save should have no reason to fail
+    @person.save! # If this fails, we should get a 422 error
 
     respond_with @identifier, represent_with: Api::V1::IdentifierRepresenter, status: :created
   end

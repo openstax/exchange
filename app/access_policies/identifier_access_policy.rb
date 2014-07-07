@@ -3,7 +3,7 @@ class IdentifierAccessPolicy
 
   def self.action_allowed?(action, requestor, identifier)
     # Client Credentials flow
-    return false unless requestor.is_a? Doorkeeper::Application &&\
+    return false unless requestor.is_a?(Doorkeeper::Application) &&\
                         Platform.for(requestor)
 
     # The only action on Identifier is create

@@ -28,6 +28,10 @@ module User
             update_attribute(:disabled_at, nil)
           end
 
+          def self.for(acc)
+            return nil unless acc.is_a? OpenStax::Accounts::Account
+            where(account_id: acc.id).first
+          end
         end
       end
     end

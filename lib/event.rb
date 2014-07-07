@@ -6,11 +6,13 @@ module Event
 
     module ClassMethods
       def acts_as_event
+        relation_sym = name.tableize.to_sym
+
         class_exec do
-          belongs_to :platform, inverse_of: name.tableize
-          belongs_to :person, inverse_of: name.tableize
-          belongs_to :resource, inverse_of: name.tableize
-          belongs_to :attempt, inverse_of: name.tableize
+          belongs_to :platform, inverse_of: relation_sym
+          belongs_to :person, inverse_of: relation_sym
+          belongs_to :resource, inverse_of: relation_sym
+          belongs_to :attempt, inverse_of: relation_sym
 
           has_one :identifier, through: :person
 

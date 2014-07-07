@@ -16,6 +16,7 @@ module App
           validates_uniqueness_of :application_id
 
           def self.for(app)
+            return nil unless app.is_a? Doorkeeper::Application
             where(application_id: app.id).first
           end
         end

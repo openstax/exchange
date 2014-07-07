@@ -10,7 +10,8 @@ module Api::V1
              }
 
     property :identifier,
-             exec_context: :decorator,
+             getter: lambda { |args| Platform.for(args[:requestor]) ? \
+                                       identifier.token : nil },
              type: String,
              writeable: false,
              schema_info: {
@@ -18,6 +19,9 @@ module Api::V1
              }
 
     property :person,
+             getter: lambda { |args| (Subscriber.for(args[:requestor]) ||\
+                                      Researcher.for(args[:requestor])) ? \
+                                       person : nil },
              class: Person,
              decorator: PersonRepresenter,
              writeable: false,
@@ -59,10 +63,6 @@ module Api::V1
              schema_info: {
                description: 'The date and time when this Event occurred'
              }
-
-    def identifier
-      represented.identifier.token
-    end
 
     def resource
       represented.resource.reference

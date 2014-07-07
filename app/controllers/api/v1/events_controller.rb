@@ -90,10 +90,9 @@ class Api::V1::EventsController < OpenStax::Api::V1::ApiController
     app = doorkeeper_token.application
     raise SecurityTransgression unless app && doorkeeper_token.resource_owner_id.nil?
 
-    requestor = Platform.for(app) || Subscriber.for(app)
-    options = params.slice(:page, :per_page, :order_by).merge(:client => client)
-    outputs = SearchEvents.call(params[:q], requestor, options).outputs
-    respond_with outputs, represent_with: Api::V1::EventSearchRepresenter
+    options = params.slice(:page, :per_page, :order_by)
+    outputs = SearchEvents.call(params[:q], app, options).outputs
+    respond_with outputs, represent_with: Api::V1::EventSearchRepresenter, requestor: app
   end
 
 end
