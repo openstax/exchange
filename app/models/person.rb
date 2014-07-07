@@ -1,4 +1,6 @@
 class Person < ActiveRecord::Base
+  acts_as_eventful
+
   has_one :identifier, foreign_key: :resource_owner_id,
                        inverse_of: :resource_owner
 

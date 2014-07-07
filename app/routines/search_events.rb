@@ -17,13 +17,13 @@ class SearchEvents
   def exec(query, client, options={})
 
   if client.is_a? Platform
-    events = {:browsing => BrowsingEvent.scoped,
-              :heartbeat => HeartbeatEvent.scoped,
-              :cursor => CursorEvent.scoped,
-              :input => InputEvent.scoped,
-              :message => MessageEvent.scoped,
-              :grading => GradingEvent.scoped,
-              :task => TaskEvent.scoped}
+    events = {:browsing => client.browsing_events,
+              :heartbeat => client.heartbeat_events,
+              :cursor => client.cursor_events,
+              :input => client.input_events,
+              :message => client.message_events,
+              :grading => client.grading_events,
+              :task => client.task_events}
   elsif client.is_a?(Subscriber) || client.is_a?(Researcher)
     events = {:browsing => BrowsingEvent.scoped,
               :heartbeat => HeartbeatEvent.scoped,
@@ -32,6 +32,9 @@ class SearchEvents
               :message => MessageEvent.scoped,
               :grading => GradingEvent.scoped,
               :task => TaskEvent.scoped}
+  else
+    outputs[:events] = {}
+    return 
   end
     
     KeywordSearch.search(query) do |with|

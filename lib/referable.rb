@@ -7,7 +7,7 @@ module Referable
     module ClassMethods
       def acts_as_referable
         class_exec do
-          belongs_to :platform, inverse_of: name.tableize
+          acts_as_eventful
 
           validates_uniqueness_of :reference, scope: :platform_id
 
@@ -30,6 +30,7 @@ module Referable
   module Migration
     module Columns
       def referable
+        eventful
         integer :platform_id, null: false
         string :reference, null: false
       end
@@ -37,6 +38,7 @@ module Referable
 
     module Indices
       def add_referable_index(table_name)
+        add_eventful_index table_name
         add_index table_name, [:reference, :platform_id], unique: true
         add_index table_name, :platform_id
       end

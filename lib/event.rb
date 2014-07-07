@@ -7,13 +7,25 @@ module Event
     module ClassMethods
       def acts_as_event
         class_exec do
-          belongs_to :person
-          belongs_to :resource
-          belongs_to :attempt
+          belongs_to :platform, inverse_of: name.tableize
+          belongs_to :person, inverse_of: name.tableize
+          belongs_to :resource, inverse_of: name.tableize
+          belongs_to :attempt, inverse_of: name.tableize
 
           has_one :identifier, through: :person
 
           validates_presence_of :person, :resource, :occurred_at
+          validate :same_platform
+
+          protected
+
+          def same_platform
+            return if person.platform_id == platform_id &&\
+                      resource.platform_id == platform_id &&\
+                      (attempt.nil? || attempt.platform_id == platform_id)
+            errors.add(:application, 'Cannot refer to a Person, Resource or Attempt belonging to another Platform')
+            false
+          end
         end
       end
     end
@@ -22,6 +34,7 @@ module Event
   module Migration
     module Columns
       def event
+        integer :platform_id, null: false
         integer :person_id, null: false
         integer :resource_id, null: false
         integer :attempt_id, null: false, default: ''
@@ -32,6 +45,7 @@ module Event
 
     module Indices
       def add_event_index(table_name)
+        add_index table_name, :platform_id
         add_index table_name, :person_id
         add_index table_name, :resource_id
         add_index table_name, :attempt_id
