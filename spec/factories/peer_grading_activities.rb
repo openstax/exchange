@@ -2,8 +2,8 @@
 
 FactoryGirl.define do
   factory :peer_grading_activity do
-    gradee_id ""
-    grade "MyString"
-    feedback "MyText"
+    association :gradee, factory: :person
+    grade "A"
+    feedback "MyFeedback"
   end
 end

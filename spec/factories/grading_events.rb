@@ -2,9 +2,11 @@
 
 FactoryGirl.define do
   factory :grading_event do
-    grader_id ""
-    grader_type "MyString"
-    grade "MyString"
-    feedback "MyText"
+    event_factory
+
+    grader "MyGrader"
+    grader_type "Algorithm"
+    grade "A"
+    feedback "MyFeedback"
   end
 end

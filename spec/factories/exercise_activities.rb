@@ -2,8 +2,8 @@
 
 FactoryGirl.define do
   factory :exercise_activity do
-    answer "MyString"
+    answer "a"
     correct false
-    free_response "MyText"
+    free_response "MyFreeResponse"
   end
 end

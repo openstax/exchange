@@ -2,10 +2,11 @@
 
 FactoryGirl.define do
   factory :input_event do
-    object "MyString"
-    input_type "MyString"
-    data_type "MyString"
-    data "MyText"
-    filename "MyString"
+    event_factory
+
+    object "MyObject"
+    category "free_response"
+    data_type "text"
+    data "MyFreeResponse"
   end
 end

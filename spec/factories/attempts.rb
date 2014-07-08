@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :attempt do
-    resource_id 1
-    name "MyString"
+    resource
+    reference "MyReference"
   end
 end

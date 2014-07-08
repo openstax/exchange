@@ -37,14 +37,14 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
   add_index "agents", ["disabled_at"], :name => "index_agents_on_disabled_at"
 
   create_table "attempts", :force => true do |t|
-    t.integer  "platform_id", :null => false
+    t.integer  "resource_id", :null => false
     t.string   "reference",   :null => false
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
 
-  add_index "attempts", ["platform_id"], :name => "index_attempts_on_platform_id"
-  add_index "attempts", ["reference", "platform_id"], :name => "index_attempts_on_reference_and_platform_id", :unique => true
+  add_index "attempts", ["reference", "resource_id"], :name => "index_attempts_on_reference_and_resource_id", :unique => true
+  add_index "attempts", ["resource_id"], :name => "index_attempts_on_resource_id"
 
   create_table "browsing_events", :force => true do |t|
     t.integer  "platform_id",                 :null => false
@@ -378,14 +378,12 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
 
   create_table "people", :force => true do |t|
     t.string   "label",         :null => false
-    t.integer  "platform_id",   :null => false
     t.integer  "superseder_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
 
   add_index "people", ["label"], :name => "index_people_on_label", :unique => true
-  add_index "people", ["platform_id"], :name => "index_people_on_platform_id"
   add_index "people", ["superseder_id"], :name => "index_people_on_superseder_id"
 
   create_table "platforms", :force => true do |t|

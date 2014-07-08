@@ -2,6 +2,8 @@
 
 FactoryGirl.define do
   factory :browsing_event do
-    referer "MyString"
+    event_factory
+
+    referer "MyReferer"
   end
 end

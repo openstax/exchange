@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :feedback_activity do
     correct false
-    grade "MyString"
-    feedback "MyText"
+    grade "A"
+    feedback "MyFeedback"
   end
 end

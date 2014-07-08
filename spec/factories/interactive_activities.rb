@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :interactive_activity do
-    progress "MyText"
+    progress "MyProgress"
   end
 end

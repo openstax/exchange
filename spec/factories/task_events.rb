@@ -3,9 +3,9 @@
 FactoryGirl.define do
   factory :task_event do
     number 1
-    assigner_id ""
-    assigner_type "MyString"
-    due_date "2014-06-26 14:52:16"
+    assigner "TeSR"
+    assigner_type "Algorithm"
+    due_date {Time.now + 5.minutes}
     is_complete false
   end
 end

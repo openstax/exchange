@@ -17,17 +17,6 @@ module Event
           has_one :identifier, through: :person
 
           validates_presence_of :person, :resource, :occurred_at
-          validate :same_platform
-
-          protected
-
-          def same_platform
-            return if person.platform_id == platform_id &&\
-                      resource.platform_id == platform_id &&\
-                      (attempt.nil? || attempt.platform_id == platform_id)
-            errors.add(:application, 'Cannot refer to a Person, Resource or Attempt belonging to another Platform')
-            false
-          end
         end
       end
     end
@@ -59,6 +48,16 @@ module Event
   module Routing
     def event_routes(res, options = {})
       resources res, {only: :create}.merge(options)
+    end
+  end
+
+  module Factory
+    def event_factory
+      person
+      platform { Platform.for(person.application) }
+      resource { FactoryGirl.build(:resource, platform: platform) }
+      attempt { FactoryGirl.build(:attempt, resource: resource) }
+      occurred_at { Time.now }
     end
   end
 end

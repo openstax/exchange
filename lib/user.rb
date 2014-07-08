@@ -58,6 +58,20 @@ module User
       resources klass, only: [:index, :create, :destroy]
     end
   end
+
+  module Factory
+    def user_factory
+      association :account, factory: :openstax_accounts_account
+
+      trait :terms_agreed do
+        after(:create) do |user, evaluator|
+          FinePrint::Contract.all.each do |contract|
+            FinePrint.sign_contract(user.account, contract)
+          end
+        end
+      end
+    end
+  end
 end
 
 ActiveRecord::Base.send :include, User::ActiveRecord

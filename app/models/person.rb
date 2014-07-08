@@ -5,7 +5,7 @@ class Person < ActiveRecord::Base
                        foreign_key: :resource_owner_id,
                        inverse_of: :resource_owner
 
-  belongs_to :platform, inverse_of: :people
+  has_one :application, through: :identifier
 
   belongs_to :superseder, class_name: 'Person', inverse_of: :superseded
 
@@ -13,7 +13,7 @@ class Person < ActiveRecord::Base
            foreign_key: :superseder_id, inverse_of: :superseder
 
   validates :label, presence: true, uniqueness: true
-  validates_presence_of :identifier, :platform
+  validates_presence_of :identifier
 
   before_validation :generate_label, on: :create
 

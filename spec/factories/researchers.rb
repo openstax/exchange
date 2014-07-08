@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :researcher do
-    account_id 1
+    user_factory
   end
 end

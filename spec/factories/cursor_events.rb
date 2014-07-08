@@ -2,9 +2,11 @@
 
 FactoryGirl.define do
   factory :cursor_event do
-    object "MyString"
-    x_position 1
-    y_position 1
+    event_factory
+
+    object "MyObject"
+    x_position 42
+    y_position 42
     clicked false
   end
 end

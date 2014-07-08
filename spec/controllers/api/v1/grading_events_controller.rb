@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Api::V1::GradingEventsController, :type => :api, :version => :v1 do
+describe Api::V1::GradingEventsController, :type => :controller, :api => true, :version => :v1 do
 
   it '' do
   end

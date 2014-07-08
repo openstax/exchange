@@ -31,7 +31,6 @@ class Api::V1::IdentifiersController < OpenStax::Api::V1::ApiController
     @identifier = Identifier.new
     @identifier.application = current_application
     @person = Person.new
-    @person.platform = Platform.for(current_application)
     @person.identifier = @identifier
 
     OSU::AccessPolicy.require_action_allowed!(:create, current_api_user, @identifier)

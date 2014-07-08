@@ -7,7 +7,7 @@ class IdentifierAccessPolicy
                         Platform.for(requestor)
 
     # The only action on Identifier is create
-    action == :create
+    action == :create && identifier.application == requestor
   end
 
 end

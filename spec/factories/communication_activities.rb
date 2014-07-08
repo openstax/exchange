@@ -2,10 +2,10 @@
 
 FactoryGirl.define do
   factory :communication_activity do
-    to ""
-    cc ""
-    bcc ""
-    subject ""
-    body "MyText"
+    to "bob@example.com"
+    cc "charlie@example.com"
+    bcc "eve@example.com"
+    subject "Hello"
+    body "Hello World"
   end
 end
