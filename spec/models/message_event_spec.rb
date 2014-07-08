@@ -1,5 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe MessageEvent, :type => :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe MessageEvent, :type => :model do
+  it '' do
+  end
 end

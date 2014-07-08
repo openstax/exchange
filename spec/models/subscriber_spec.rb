@@ -1,5 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Subscriber, :type => :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe Subscriber, :type => :model do
+  it '' do
+  end
 end

@@ -87,7 +87,7 @@ class Api::V1::EventsController < OpenStax::Api::V1::ApiController
   EOS
   def index
     # Can't use AccessPolicy, since Event is a Module
-    app = doorkeeper_token.application
+    app = doorkeeper_token.try(:application)
     raise SecurityTransgression unless app && doorkeeper_token.resource_owner_id.nil?
 
     options = params.slice(:page, :per_page, :order_by)

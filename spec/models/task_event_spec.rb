@@ -1,5 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe TaskEvent, :type => :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe TaskEvent, :type => :model do
+  it '' do
+  end
 end
