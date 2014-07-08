@@ -1,8 +1,8 @@
 class CreateResources < ActiveRecord::Migration
   def change
     create_table :resources do |t|
-      t.integer :platform_id, null: false
       t.string :reference, null: false
+      t.integer :platform_id
 
       t.timestamps
     end

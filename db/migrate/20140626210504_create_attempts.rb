@@ -1,8 +1,8 @@
 class CreateAttempts < ActiveRecord::Migration
   def change
     create_table :attempts do |t|
-      t.integer :resource_id, null: false
       t.string :reference, null: false
+      t.integer :resource_id, null: false
 
       t.timestamps
     end

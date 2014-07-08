@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
   add_index "agents", ["disabled_at"], :name => "index_agents_on_disabled_at"
 
   create_table "attempts", :force => true do |t|
-    t.integer  "resource_id", :null => false
     t.string   "reference",   :null => false
+    t.integer  "resource_id", :null => false
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
@@ -423,8 +423,8 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
   add_index "researchers", ["disabled_at"], :name => "index_researchers_on_disabled_at"
 
   create_table "resources", :force => true do |t|
-    t.integer  "platform_id", :null => false
     t.string   "reference",   :null => false
+    t.integer  "platform_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end

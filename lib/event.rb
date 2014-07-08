@@ -17,6 +17,18 @@ module Event
           has_one :identifier, through: :person
 
           validates_presence_of :person, :resource, :occurred_at
+
+          validate :consistency
+ 
+          protected
+ 
+          def consistency
+            return if person.application == platform.application &&\
+                      (resource.platform.nil? || resource.platform == platform) &&\
+                      (attempt.nil? || attempt.resource == resource)
+            errors.add(:base, 'Event components do not match')
+            false
+          end
         end
       end
     end
