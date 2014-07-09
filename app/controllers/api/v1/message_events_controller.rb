@@ -21,7 +21,7 @@ class Api::V1::MessageEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/platforms/events/messages', 'Creates a new MessageEvent.'
+  api :POST, '/events/platforms/messages', 'Creates a new MessageEvent.'
   description <<-EOS
     This API call must be used with the Client Credentials flow.
 

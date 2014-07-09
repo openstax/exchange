@@ -68,8 +68,10 @@ Exchange::Application.routes.draw do
   apipie
 
   api :v1, :default => true do
-    resources :identifiers, only: :create do
-      resources :events, only: [] do
+    resources :identifiers, only: :create
+
+    scope '/events' do
+      scope '/identifiers' do
         event_routes :pages
         event_routes :heartbeats
         event_routes :cursors
@@ -77,20 +79,14 @@ Exchange::Application.routes.draw do
         event_routes :mouse_clicks, to: 'cursor_events#create_mouse_click'
         event_routes :inputs
       end
-    end
 
-    resources :platforms, only: [] do
-      resources :events, only: :index do
+      scope '/platforms' do
         event_routes :multiple_choices, to: 'input_events#create_multiple_choice'
         event_routes :free_responses, to: 'input_events#create_free_response'
         event_routes :messages
         event_routes :gradings
         event_routes :tasks
       end
-    end
-
-    resources :subscribers, only: [] do
-      resources :events, only: :index
     end
 
     resources :activities, only: :index

@@ -20,7 +20,7 @@ class Api::V1::HeartbeatEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/identifiers/events/heartbeats', 'Creates a new HeartbeatEvent.'
+  api :POST, '/events/identifiers/heartbeats', 'Creates a new HeartbeatEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 

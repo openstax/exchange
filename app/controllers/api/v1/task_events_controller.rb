@@ -20,7 +20,7 @@ class Api::V1::TaskEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/platforms/events/tasks', 'Creates a new TaskEvent.'
+  api :POST, '/events/platforms/tasks', 'Creates a new TaskEvent.'
   description <<-EOS
     This API call must be used with the Client Credentials flow.
 

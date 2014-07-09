@@ -20,7 +20,7 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/identifiers/events/inputs', 'Creates a new InputEvent.'
+  api :POST, '/events/identifiers/inputs', 'Creates a new InputEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 
@@ -35,7 +35,7 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
     end
   end
 
-  api :POST, '/platforms/events/multiple_choices', 'Creates a new MultipleChoiceInputEvent.'
+  api :POST, '/events/platforms/multiple_choices', 'Creates a new MultipleChoiceInputEvent.'
   description <<-EOS
     This API call must be used with the Client Credentials flow.
 
@@ -52,7 +52,7 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
     end
   end
 
-  api :POST, '/platforms/events/free_responses', 'Creates a new FreeResponseInputEvent.'
+  api :POST, '/events/platforms/free_responses', 'Creates a new FreeResponseInputEvent.'
   description <<-EOS
     This API call must be used with the Client Credentials flow.
 

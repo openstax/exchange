@@ -21,7 +21,7 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/identifiers/events/cursors', 'Creates a new generic CursorEvent.'
+  api :POST, '/events/identifiers/cursors', 'Creates a new generic CursorEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 
@@ -33,7 +33,7 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
     event_create(CursorEvent)
   end
 
-  api :POST, '/identifiers/events/mouse_movements', 'Creates a new MouseMovementEvent.'
+  api :POST, '/events/identifiers/mouse_movements', 'Creates a new MouseMovementEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 
@@ -47,7 +47,7 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
     end
   end
 
-  api :POST, '/identifiers/events/mouse_clicks', 'Creates a new MouseClickEvent.'
+  api :POST, '/events/identifiers/mouse_clicks', 'Creates a new MouseClickEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 

@@ -57,7 +57,9 @@ module Event
 
   module Routing
     def event_routes(res, options = {})
-      resources res, {only: :create}.merge(options)
+      resources res, {only: :create,
+                      controller: "#{res.to_s.singularize}_events".to_sym}
+                     .merge(options)
     end
   end
 
