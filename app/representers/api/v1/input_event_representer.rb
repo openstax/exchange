@@ -1,19 +1,11 @@
 module Api::V1
   class InputEventRepresenter < EventRepresenter
 
-    property :object,
-             type: String,
-             writeable: true,
-             simple: true,
-             schema_info: {
-               description: 'The input object that triggered this InputEvent'
-             }
-
     property :category,
              type: String,
-             writeable: true,
+             writeable: false,
              schema_info: {
-               description: 'The category/purpose of this input'
+               description: 'The category/purpose of this input; Automatically set to "user" for user-submitted events'
              }
 
     property :input_type,

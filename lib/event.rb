@@ -12,11 +12,10 @@ module Event
           belongs_to :platform, inverse_of: relation_sym
           belongs_to :person, inverse_of: relation_sym
           belongs_to :resource, inverse_of: relation_sym
-          belongs_to :attempt, inverse_of: relation_sym
 
           has_one :identifier, through: :person
 
-          validates_presence_of :person, :resource, :occurred_at
+          validates_presence_of :person, :resource, :attempt
 
           validate :consistency
  
@@ -24,8 +23,7 @@ module Event
  
           def consistency
             return if person.application == platform.application &&\
-                      (resource.platform.nil? || resource.platform == platform) &&\
-                      (attempt.nil? || attempt.resource == resource)
+                      (resource.platform.nil? || resource.platform == platform)
             errors.add(:base, 'Event components do not match')
             false
           end
@@ -40,9 +38,9 @@ module Event
         integer :platform_id, null: false
         integer :person_id, null: false
         integer :resource_id, null: false
-        integer :attempt_id, null: false, default: ''
-        datetime :occurred_at, null: false
-        text :metadata, null: false, default: ''
+        integer :attempt, null: false
+        string :selector
+        text :metadata
       end
     end
 
@@ -51,8 +49,8 @@ module Event
         add_index table_name, :platform_id
         add_index table_name, :person_id
         add_index table_name, :resource_id
-        add_index table_name, :attempt_id
-        add_index table_name, :occurred_at
+        add_index table_name, :attempt
+        add_index table_name, :selector
       end
     end
   end
@@ -68,8 +66,7 @@ module Event
       person
       platform { Platform.for(person.application) }
       resource { FactoryGirl.build(:resource, platform: platform) }
-      attempt { FactoryGirl.build(:attempt, resource: resource) }
-      occurred_at { Time.now }
+      selector { '#my_selector' }
     end
   end
 end

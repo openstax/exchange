@@ -1,11 +1,11 @@
 module Api::V1
   class GradingEventRepresenter < EventRepresenter
 
-    property :grader,
+    property :grader_id,
              type: String,
              writeable: true,
              schema_info: {
-               description: 'An identifier for the user or algorithm doing the grading'
+               description: 'A unique string that identifies the user or algorithm doing the grading'
              }
 
     property :grade,

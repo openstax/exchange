@@ -1,9 +1,10 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :browsing_event do
+  factory :page_event do
     event_factory
 
-    referer "MyReferer"
+    from "MyReferer"
+    to "MyDestination"
   end
 end

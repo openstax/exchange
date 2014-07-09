@@ -6,14 +6,13 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
     api_versions "v1"
     short_description 'Represents the user inputting information into a form or similar'
     description <<-EOS
-      This controller uses the Implicit flow.
-      The token is obtained by the platform by creating an Identifier object.
+      This controller uses either Implicit or Client Credential tokens.
+      Implicit tokens are obtained by the platform by creating an Identifier object.
 
       All events have the following fields in common: identifier (string),
-      resource (string), attempt (string), occurred_at (datetime) and metadata (text).
+      resource (string), attempt (integer), selector (string) and metadata (text).
 
-      Additionally, InputEvents have the object (string), category (string)
-      input_type (string) and value (text) fields.
+      Additionally, InputEvents have the input_type (string) and value (text) fields.
     EOS
   end
 
@@ -21,7 +20,7 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/input_events', 'Creates a new generic InputEvent.'
+  api :POST, '/identifiers/events/inputs', 'Creates a new InputEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 
@@ -30,34 +29,41 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::InputEventRepresenter, include: :writeable)}
   EOS
   def create
-    event_create(InputEvent)
+    raise SecurityTransgression if current_api_user.human_user.nil?
+    event_create(InputEvent) do |e|
+      e.category = 'user'
+    end
   end
 
-  api :POST, '/multiple_choice_input_events', 'Creates a new MultipleChoiceInputEvent.'
+  api :POST, '/platforms/events/multiple_choices', 'Creates a new MultipleChoiceInputEvent.'
   description <<-EOS
-    This API call must be used with the Implicit flow.
+    This API call must be used with the Client Credentials flow.
 
     Creates an Event that records the user submitting a multiple choice answer.
 
-    #{json_schema(Api::V1::InputEventRepresenter, include: :simple)}
+    #{json_schema(Api::V1::InputEventRepresenter, include: [:simple, :app])}
   EOS
   def create_multiple_choice
+    raise SecurityTransgression unless current_api_user.human_user.nil?
     event_create(InputEvent) do |e|
+      e.person_id = Identifier.where(:token => params[:identifier]).first.resource_owner_id
       e.category = 'multiple_choice'
       e.input_type = 'radio'
     end
   end
 
-  api :POST, '/free_response_input_events', 'Creates a new FreeResponseInputEvent.'
+  api :POST, '/platforms/events/free_responses', 'Creates a new FreeResponseInputEvent.'
   description <<-EOS
-    This API call must be used with the Implicit flow.
+    This API call must be used with the Client Credentials flow.
 
     Creates an Event that records the user submitting a free response answer.
 
-    #{json_schema(Api::V1::InputEventRepresenter, include: :simple)}
+    #{json_schema(Api::V1::InputEventRepresenter, include: [:simple, :app])}
   EOS
   def create_free_response
+    raise SecurityTransgression unless current_api_user.human_user.nil?
     event_create(InputEvent) do |e|
+      e.person_id = Identifier.where(:token => params[:identifier]).first.resource_owner_id
       e.category = 'free_response'
       e.input_type = 'text'
     end

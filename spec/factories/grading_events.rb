@@ -5,7 +5,7 @@ FactoryGirl.define do
     event_factory
 
     grader "MyGrader"
-    grader_type "Algorithm"
+    grader_type "algorithm"
     grade "A"
     feedback "MyFeedback"
   end

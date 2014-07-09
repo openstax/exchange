@@ -11,8 +11,8 @@ class Api::V1::EventsController < OpenStax::Api::V1::ApiController
       an object or clicking), and InputEvent (interacting with a form input or other kinds
       of inputs).
 
-      All events have the following fields in common:
-      identifier (uuid), resource (string), occurred_at (datetime) and metadata.
+      All events have the following fields in common: identifier (string),
+      resource (string), attempt (integer), selector (string) and metadata (text).
 
       Each type of event has additional fields depending on its type. Consult their
       schemas for more information.

@@ -4,9 +4,9 @@ FactoryGirl.define do
   factory :cursor_event do
     event_factory
 
-    object "MyObject"
+    action "MyAction"
+    href "http://www.example.com"
     x_position 42
     y_position 42
-    clicked false
   end
 end

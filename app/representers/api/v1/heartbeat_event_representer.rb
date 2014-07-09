@@ -1,7 +1,7 @@
 module Api::V1
   class HeartbeatEventRepresenter < EventRepresenter
 
-    property :scroll_position,
+    property :y_position,
              type: Integer,
              writeable: true,
              schema_info: {

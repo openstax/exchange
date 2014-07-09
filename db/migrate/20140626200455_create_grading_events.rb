@@ -2,7 +2,7 @@ class CreateGradingEvents < ActiveRecord::Migration
   def change
     create_table :grading_events do |t|
       t.event
-      t.integer :grader_id
+      t.string :grader_id
       t.string :grade
       t.text :feedback
 
