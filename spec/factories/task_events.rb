@@ -4,10 +4,9 @@ FactoryGirl.define do
   factory :task_event do
     extend Event::Factory
 
-    number 1
-    assigner "TeSR"
-    assigner_type "algorithm"
+    sequence(:number)
+    association :assigner, factory: :person
+    status :assigned
     due_date {Time.now + 5.minutes}
-    is_complete false
   end
 end

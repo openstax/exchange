@@ -2,8 +2,8 @@ class CreateTaskEvents < ActiveRecord::Migration
   def change
     create_table :task_events do |t|
       t.event
-      t.string :task_id
-      t.string :assigner_id
+      t.integer :number
+      t.integer :assigner_id
       t.datetime :due_date
       t.string :status
 
@@ -11,7 +11,7 @@ class CreateTaskEvents < ActiveRecord::Migration
     end
 
     add_event_index :task_events
-    add_index :task_events, :task_id
+    add_index :task_events, [:number, :platform_id]
     add_index :task_events, :assigner_id
     add_index :task_events, :due_date
     add_index :task_events, :status

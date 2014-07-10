@@ -1,19 +1,18 @@
 module Api::V1
   class MessageEventRepresenter < EventRepresenter
 
-    property :message_id,
-             type: String,
+    property :number,
+             type: Integer,
              writeable: true,
              schema_info: {
-               description: 'A unique string that identifies this message'
+               description: 'A unique number that identifies this message'
              }
 
-    property :in_reply_to_id,
-             exec_context: :decorator,
-             type: String,
+    property :in_reply_to_number,
+             type: Integer,
              writeable: true,
              schema_info: {
-               description: 'The id of the message this is a reply to'
+               description: 'The number of the message this is a reply to'
              }
 
     property :to,
@@ -53,10 +52,6 @@ module Api::V1
                required: true,
                description: 'The message\'s body'
              }
-
-    def in_reply_to_id
-      represented.in_reply_to.message_id
-    end
 
   end
 end

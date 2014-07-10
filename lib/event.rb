@@ -74,6 +74,54 @@ module Event
     end
   end
 
+  module Decorator
+    def self.included(base)
+      base.extend ClassMethods
+    end
+
+    module ClassMethods
+      def identifier_or_person_property(attribute = :person)
+
+        property_block = lambda {
+          property :identifier,
+                   getter: lambda { |args| Platform.for(args[:requestor]) ? \
+                                             send(attribute).try(:identifier).try(:token) : \
+                                             nil },
+                   setter: lambda { |val, args|
+                                    person_id = Identifier.where(token: val).first
+                                                          .try(:resource_owner_id)
+                                    send("#{attribute.to_s}_id=", person_id) },
+                   type: String,
+                   writeable: true,
+                   app: true,
+                   schema_info: {
+                     description: "The identifier for the #{attribute.to_s} associated with this Event; Visible only to Platforms"
+                   }
+
+          property :person,
+                   getter: lambda { |args| (Subscriber.for(args[:requestor]) ||\
+                                            Researcher.for(args[:requestor])) ? \
+                                             send(attribute) : nil },
+                   class: Person,
+                   decorator: Api::V1::PersonRepresenter,
+                   writeable: false,
+                   schema_info: {
+                     description: "The researh label for the #{attribute.to_s} associated with this Event; Visible only to Subscribers and Researchers"
+                   }
+        }
+
+        if attribute == :person
+          class_exec &property_block
+        else
+          nested attribute, writeable: true do
+            class_exec &property_block
+          end
+        end
+
+      end
+    end
+  end
+
   module ApiController
     protected
 
@@ -85,7 +133,8 @@ module Event
         @event = event_class.new
         consume!(@event, options)
         @event.platform = Platform.for(current_application)
-        @event.person_id = doorkeeper_token.try(:resource_owner_id)
+        resource_owner_id = doorkeeper_token.try(:resource_owner_id)
+        @event.person_id = resource_owner_id if resource_owner_id
         yield @event if block_given?
         OSU::AccessPolicy.require_action_allowed!(:create, current_api_user, @event)
       end

@@ -34,9 +34,7 @@ class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::GradingEventRepresenter, include: [:writeable, :app])}
   EOS
   def create
-    event_create(GradingEvent) do |e|
-      e.person_id = Identifier.where(:token => params[:identifier]).first.resource_owner_id
-    end
+    event_create(GradingEvent)
   end
 
 end

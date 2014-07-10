@@ -10,13 +10,14 @@ def user_event_controller_spec(event_type)
 
   describe controller_class, :type => :controller, :api => true, :version => :v1 do
 
-    let!(:event) { FactoryGirl.create(event_symbol) }
-    let!(:platform) { event.platform }
-    let!(:identifier) { event.person.identifier }
+    let!(:platform) { FactoryGirl.create(:platform) }
+    let!(:identifier) { FactoryGirl.create(:identifier, application: platform.application) }
     let!(:platform_access_token) { FactoryGirl.create(:access_token,
                                                       application: platform.application) }
     let!(:access_token) { FactoryGirl.create(:access_token) }
-    let!(:valid_json) { representer_class.new(event).to_json }
+    let!(:event) { FactoryGirl.build(event_symbol, person: identifier.resource_owner) }
+    let!(:valid_json) { representer_class.new(event)
+                                         .to_json }
 
     context 'success' do
       it 'should be creatable by a user with an identifier if it has all required fields' do
@@ -27,25 +28,43 @@ def user_event_controller_spec(event_type)
         expect(event_class.count).to eq(c + 1)
         new_event = event_class.last
         expected_response = representer_class.new(new_event)
-                              .to_json(requestor: platform.application)
+                                             .to_json(requestor: platform.application)
         expect(response.body).to eq(expected_response)
         expect(new_event.resource.reference).to eq('MyResource')
         expect(new_event.attempt).to eq(42)
         expect(new_event.selector).to eq('#my_selector')
       end
+
+      it 'does not allow the identifier to be set' do
+        person_2 = FactoryGirl.create(:person)
+        event.person = person_2
+        c = event_class.count
+        api_post :create, identifier,
+                 raw_post_data: representer_class.new(event)
+                                                 .to_json(requestor: platform.application)
+        expect(response.status).to eq(201)
+
+        expect(event_class.count).to eq(c + 1)
+        new_event = event_class.last
+        expected_response = representer_class.new(new_event)
+                              .to_json(requestor: platform.application)
+        expect(response.body).to eq(expected_response)
+        expect(new_event.person).not_to eq(person_2)
+        expect(new_event.person).to eq(identifier.resource_owner)
+      end
     end
 
     context 'authorization error' do
-      it 'should not be creatable by a non-platform app' do
+      it 'should not be creatable by a platform app without an identifier' do
         c = event_class.count
-        expect{api_post :create, access_token, raw_post_data: valid_json}.to(
+        expect{api_post :create, platform_access_token, raw_post_data: valid_json}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
       end
 
-      it 'should not be creatable by a platform app without an identifier' do
+      it 'should not be creatable by a non-platform app' do
         c = event_class.count
-        expect{api_post :create, platform_access_token, raw_post_data: valid_json}.to(
+        expect{api_post :create, access_token, raw_post_data: valid_json}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
       end

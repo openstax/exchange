@@ -168,7 +168,7 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
     t.integer  "attempt",     :null => false
     t.string   "selector"
     t.text     "metadata"
-    t.string   "grader_id"
+    t.integer  "grader_id"
     t.string   "grade"
     t.text     "feedback"
     t.datetime "created_at",  :null => false
@@ -244,26 +244,26 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
   add_index "interactive_activities", ["seconds_active"], :name => "index_interactive_activities_on_seconds_active"
 
   create_table "message_events", :force => true do |t|
-    t.integer  "platform_id",    :null => false
-    t.integer  "person_id",      :null => false
-    t.integer  "resource_id",    :null => false
-    t.integer  "attempt",        :null => false
+    t.integer  "platform_id",        :null => false
+    t.integer  "person_id",          :null => false
+    t.integer  "resource_id",        :null => false
+    t.integer  "attempt",            :null => false
     t.string   "selector"
     t.text     "metadata"
-    t.string   "message_id",     :null => false
-    t.integer  "in_reply_to_id"
+    t.integer  "number",             :null => false
+    t.integer  "in_reply_to_number"
     t.text     "to"
     t.text     "cc"
     t.text     "bcc"
     t.text     "subject"
     t.text     "body"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
   add_index "message_events", ["attempt"], :name => "index_message_events_on_attempt"
-  add_index "message_events", ["in_reply_to_id"], :name => "index_message_events_on_in_reply_to_id"
-  add_index "message_events", ["message_id"], :name => "index_message_events_on_message_id", :unique => true
+  add_index "message_events", ["in_reply_to_number", "platform_id"], :name => "index_message_events_on_in_reply_to_number_and_platform_id"
+  add_index "message_events", ["number", "platform_id"], :name => "index_message_events_on_number_and_platform_id", :unique => true
   add_index "message_events", ["person_id"], :name => "index_message_events_on_person_id"
   add_index "message_events", ["platform_id"], :name => "index_message_events_on_platform_id"
   add_index "message_events", ["resource_id"], :name => "index_message_events_on_resource_id"
@@ -442,8 +442,8 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
     t.integer  "attempt",     :null => false
     t.string   "selector"
     t.text     "metadata"
-    t.string   "task_id"
-    t.string   "assigner_id"
+    t.integer  "number"
+    t.integer  "assigner_id"
     t.datetime "due_date"
     t.string   "status"
     t.datetime "created_at",  :null => false
@@ -453,11 +453,11 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
   add_index "task_events", ["assigner_id"], :name => "index_task_events_on_assigner_id"
   add_index "task_events", ["attempt"], :name => "index_task_events_on_attempt"
   add_index "task_events", ["due_date"], :name => "index_task_events_on_due_date"
+  add_index "task_events", ["number", "platform_id"], :name => "index_task_events_on_number_and_platform_id"
   add_index "task_events", ["person_id"], :name => "index_task_events_on_person_id"
   add_index "task_events", ["platform_id"], :name => "index_task_events_on_platform_id"
   add_index "task_events", ["resource_id"], :name => "index_task_events_on_resource_id"
   add_index "task_events", ["selector"], :name => "index_task_events_on_selector"
   add_index "task_events", ["status"], :name => "index_task_events_on_status"
-  add_index "task_events", ["task_id"], :name => "index_task_events_on_task_id"
 
 end
