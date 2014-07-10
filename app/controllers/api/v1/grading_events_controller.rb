@@ -1,6 +1,6 @@
 class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
 
-  include EventRest
+  include Event::ApiController
 
   resource_description do
     api_versions "v1"

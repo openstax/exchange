@@ -1,3 +1,15 @@
+PATH
+  remote: ../openstax_api
+  specs:
+    openstax_api (2.2.3)
+      doorkeeper (>= 0.5)
+      exception_notification (>= 4.0)
+      openstax_utilities (>= 1.0.1)
+      rails (>= 3.1)
+      representable (>= 1.8)
+      roar (>= 0.12.1)
+      roar-rails (>= 0.1.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -129,7 +141,7 @@ GEM
     hashie (2.1.2)
     highline (1.6.21)
     hike (1.2.3)
-    i18n (0.6.9)
+    i18n (0.6.11)
     jbuilder (2.1.1)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -199,14 +211,6 @@ GEM
       sass-rails (>= 3.1)
       squeel (>= 0.5.0)
       uglifier (>= 1.0)
-    openstax_api (2.2.3)
-      doorkeeper (>= 0.5)
-      exception_notification (>= 4.0)
-      openstax_utilities (>= 1.0.1)
-      rails (>= 3.1)
-      representable (>= 1.8)
-      roar (>= 0.12.1)
-      roar-rails (>= 0.1.2)
     openstax_utilities (2.2.3)
       attribeautiful (>= 0.0.7)
       rails (>= 3.1)
@@ -318,7 +322,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.39)
-    uber (0.0.6)
+    uber (0.0.7)
     uglifier (2.5.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -361,13 +365,13 @@ DEPENDENCIES
   newrelic_rpm
   nifty-generators
   openstax_accounts (~> 2.0.0)
-  openstax_api (~> 2.2.3)
+  openstax_api!
   openstax_utilities (~> 2.2.3)
   quiet_assets
   rack-test
   railroady
   rails (= 3.2.17)
-  representable (~> 1.8.3)
+  representable
   roar-rails
   rspec-rails
   sass-rails (~> 3.2.3)

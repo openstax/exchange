@@ -17,7 +17,7 @@ class SearchEvents
   def exec(query, requestor, options={})
 
     if Subscriber.for(requestor) || Researcher.for(requestor)
-      events = {:browsing => BrowsingEvent.scoped,
+      events = {:page => PageEvent.scoped,
                 :heartbeat => HeartbeatEvent.scoped,
                 :cursor => CursorEvent.scoped,
                 :input => InputEvent.scoped,
@@ -27,7 +27,7 @@ class SearchEvents
     else
       platform = Platform.for(requestor)
       if platform
-        events = {:browsing => platform.browsing_events,
+        events = {:page => platform.page_events,
                   :heartbeat => platform.heartbeat_events,
                   :cursor => platform.cursor_events,
                   :input => platform.input_events,
@@ -74,10 +74,10 @@ class SearchEvents
           attempt.reference.send(method, attempts)}]}]
       end
 
-      with.keyword :occurred_at do |occurred_ats, positive|
+      with.keyword :created_at do |created_ats, positive|
         method = positive ? :like_any : :not_like_any
         events = Hash[events.collect{|k,v| [k, v.where{
-          occurred_at.send(method, occurred_ats)}]}]
+          created_at.send(method, created_ats)}]}]
       end
 
       with.keyword :metadata do |metadatas, positive|
@@ -226,7 +226,7 @@ class SearchEvents
     order_bys.compact!
 
     # Use a default sort if none provided
-    order_bys = [['occurred_at', SORT_ASCENDING]] if order_bys.empty?
+    order_bys = [['created_at', SORT_ASCENDING]] if order_bys.empty?
 
     # Convert to query style
     order_bys = order_bys.collect{|order_by| "#{order_by[0]} #{order_by[1]}"}

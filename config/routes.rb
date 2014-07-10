@@ -70,6 +70,8 @@ Exchange::Application.routes.draw do
   api :v1, :default => true do
     resources :identifiers, only: :create
 
+    resources :events, only: :index
+
     scope '/events' do
       scope '/identifiers' do
         event_routes :pages

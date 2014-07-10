@@ -39,7 +39,10 @@ module Api::V1
              }
 
     property :resource,
-             exec_context: :decorator,
+             getter: lambda { |args| resource.reference },
+             setter: lambda { |val, args| puts args
+              self.resource = Resource.find_or_create(
+                                Platform.for(args[:requestor]), val) },
              type: String,
              writeable: true,
              simple: true,
@@ -71,10 +74,6 @@ module Api::V1
              schema_info: {
                description: 'The date and time when this Event was sent to Exchange'
              }
-
-    def resource
-      represented.resource.reference
-    end
 
   end
 end

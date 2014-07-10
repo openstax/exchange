@@ -12,7 +12,6 @@ require 'user'
 require 'app'
 require 'event'
 require 'eventful'
-require 'event_rest'
 require 'activity'
 
 # Initialize the rails application
