@@ -23,7 +23,7 @@ gem 'yaml_db'
 
 gem 'openstax_utilities', '~> 2.2.3'
 gem 'openstax_accounts', '~> 2.0.0'
-gem 'openstax_api', :path => '../openstax_api'
+gem 'openstax_api', '~> 2.2.3'
 
 gem 'apipie-rails'
 gem 'maruku'
