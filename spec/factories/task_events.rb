@@ -2,6 +2,8 @@
 
 FactoryGirl.define do
   factory :task_event do
+    extend Event::Factory
+
     number 1
     assigner "TeSR"
     assigner_type "algorithm"

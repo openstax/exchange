@@ -3,6 +3,6 @@
 FactoryGirl.define do
   factory :resource do
     platform
-    reference "MyReference"
+    reference "MyResource"
   end
 end

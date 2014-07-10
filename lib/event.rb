@@ -24,7 +24,7 @@ module Event
           def consistency
             # Skip this check if the presence check fails
             return unless platform && person && resource
-            return if person.application == platform.application &&\
+            return if person.identifier.application == platform.application &&\
                       (resource.platform.nil? || resource.platform == platform)
             errors.add(:base, 'Event components do not match')
             false
@@ -64,11 +64,13 @@ module Event
   end
 
   module Factory
-    def event_factory
-      person
-      platform { Platform.for(person.application) }
-      resource { FactoryGirl.build(:resource, platform: platform) }
-      selector { '#my_selector' }
+    def self.extended(base)
+      base.platform
+      base.person { FactoryGirl.build(:identifier,
+                      application: platform.application).resource_owner }
+      base.resource { FactoryGirl.build(:resource, platform: platform) }
+      base.attempt 42
+      base.selector '#my_selector'
     end
   end
 
@@ -83,7 +85,7 @@ module Event
         @event = event_class.new
         consume!(@event, options)
         @event.platform = Platform.for(current_application)
-        @event.person_id = doorkeeper_token.resource_owner_id
+        @event.person_id = doorkeeper_token.try(:resource_owner_id)
         yield @event if block_given?
         OSU::AccessPolicy.require_action_allowed!(:create, current_api_user, @event)
       end

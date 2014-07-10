@@ -39,9 +39,8 @@ module Api::V1
              }
 
     property :resource,
-             getter: lambda { |args| resource.reference },
-             setter: lambda { |val, args| puts args
-              self.resource = Resource.find_or_create(
+             getter: lambda { |args| resource.try(:reference) },
+             setter: lambda { |val, args| self.resource = Resource.find_or_create(
                                 Platform.for(args[:requestor]), val) },
              type: String,
              writeable: true,

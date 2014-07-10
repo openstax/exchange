@@ -334,16 +334,16 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
     t.integer  "attempt",     :null => false
     t.string   "selector"
     t.text     "metadata"
-    t.string   "referer"
+    t.string   "from"
     t.string   "to"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
 
   add_index "page_events", ["attempt"], :name => "index_page_events_on_attempt"
+  add_index "page_events", ["from"], :name => "index_page_events_on_from"
   add_index "page_events", ["person_id"], :name => "index_page_events_on_person_id"
   add_index "page_events", ["platform_id"], :name => "index_page_events_on_platform_id"
-  add_index "page_events", ["referer"], :name => "index_page_events_on_referer"
   add_index "page_events", ["resource_id"], :name => "index_page_events_on_resource_id"
   add_index "page_events", ["selector"], :name => "index_page_events_on_selector"
   add_index "page_events", ["to"], :name => "index_page_events_on_to"

@@ -2,10 +2,10 @@
 
 FactoryGirl.define do
   factory :cursor_event do
-    event_factory
+    extend Event::Factory
 
     action "MyAction"
-    href "http://www.example.com"
+    href "http://my.link.org"
     x_position 42
     y_position 42
   end

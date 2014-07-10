@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :grading_event do
-    event_factory
+    extend Event::Factory
 
     grader "MyGrader"
     grader_type "algorithm"

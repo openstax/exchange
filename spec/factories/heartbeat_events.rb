@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :heartbeat_event do
-    event_factory
+    extend Event::Factory
 
     y_position 42
   end

@@ -2,9 +2,9 @@
 
 FactoryGirl.define do
   factory :page_event do
-    event_factory
+    extend Event::Factory
 
-    from "MyReferer"
-    to "MyDestination"
+    from "http://my.referer.org"
+    to "http://my.destination.org"
   end
 end
