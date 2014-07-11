@@ -50,6 +50,8 @@ module ControllerExtensions
              ActionController::UnknownController,
              AbstractController::ActionNotFound
           [:not_found, false]
+        when Apipie::ParamMissing
+          [:unprocessable_entity, false]
         else
           [:internal_server_error, true]
         end

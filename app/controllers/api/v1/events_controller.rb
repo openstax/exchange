@@ -76,7 +76,7 @@ class Api::V1::EventsController < OpenStax::Api::V1::ApiController
     A string that indicates how to sort the results of the query. The string
     is a comma-separated list of fields with an optional sort direction. The
     sort will be performed in the order the fields are given.
-    The fields can be one of #{SearchEvents::SORTABLE_FIELDS.collect{|sf| "`"+sf+"`"}.join(', ')}.
+    The fields can be one of #{SearchEvents::SORTABLE_FIELDS_MAP.keys.collect{|sf| "`"+sf+"`"}.join(', ')}.
     Sort directions can either be `ASC` for an ascending sort, or `DESC` for a
     descending sort. If not provided, an ascending sort is assumed. Sort directions
     should be separated from the fields by a space. (default: `occurred_at DESC`)

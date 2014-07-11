@@ -8,7 +8,8 @@ describe Api::V1::IdentifiersController, :type => :controller, :api => true, :ve
   let!(:access_token) { FactoryGirl.create(:access_token) }
   let!(:identifier) { FactoryGirl.create(:identifier) }
 
-  context 'authorization' do
+  context 'success' do
+
     it 'should be creatable by a platform app with an access token' do
       api_post :create, platform_access_token
       expect(response.status).to eq(201)
@@ -18,6 +19,10 @@ describe Api::V1::IdentifiersController, :type => :controller, :api => true, :ve
       }.to_json
       expect(response.body).to eq(expected_response)
     end
+
+  end
+
+  context 'authorization error' do
 
     it 'should not be creatable by a non-platform app' do
       c = Identifier.count
@@ -36,6 +41,7 @@ describe Api::V1::IdentifiersController, :type => :controller, :api => true, :ve
       expect{api_post :create, nil}.to raise_error(SecurityTransgression)
       expect(Identifier.count).to eq(c)
     end
+
   end
 
 end
