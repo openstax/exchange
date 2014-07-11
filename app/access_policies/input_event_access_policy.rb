@@ -8,7 +8,8 @@ class InputEventAccessPolicy
                           Platform.for(requestor)))
 
     # The only action on these InputEvents is create
-    action == :create
+    action == :create && (requestor == input_event.person || \
+                          Platform.for(requestor) == input_event.platform)
   end
 
 end

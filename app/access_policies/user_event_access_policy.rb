@@ -7,7 +7,7 @@ class UserEventAccessPolicy
     return false unless requestor.is_a? Person
 
     # The only action on these Events is create
-    action == :create
+    action == :create && requestor == user_event.person
   end
 
 end
