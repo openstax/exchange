@@ -69,23 +69,21 @@ class SearchEvents
         events = events.slice(types)
       end
 
-      with.keyword :id do |ids, positive|
-        method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.where{
-          id.send(method, ids)}]}]
+      [:id, :identifier, :attempt].each do |keyword|
+        with.keyword keyword do |terms, positive|
+          method = positive ? :in : :not_in
+          events = Hash[events.collect{|k,v| [k, v.where{
+            __send__(keyword).send(method, terms)}]}]
+        end
       end
 
-      with.keyword :identifier do |identifiers, positive|
-        method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.joins(:identifier).where{
-          identifier.token.send(method, identifiers)}]}]
-      end
-
-      with.keyword :selector do |selectors, positive|
-        method = positive ? :like_any : :not_like_any
-        selectors = like_strings(selectors)
-        events = Hash[events.collect{|k,v| [k, v.where{
-          object.send(method, selectors)}]}]
+      [:selector, :created_at, :metadata].each do |keyword|
+        with.keyword keyword do |terms, positive|
+          method = positive ? :like_any : :not_like_any
+          terms = like_strings(terms)
+          events = Hash[events.collect{|k,v| [k, v.where{
+            __send__(keyword).send(method, terms)}]}]
+        end
       end
 
       with.keyword :resource do |resources, positive|
@@ -93,26 +91,6 @@ class SearchEvents
         resources = like_strings(resources)
         events = Hash[events.collect{|k,v| [k, v.joins(:resource).where{
           resource.reference.send(method, resources)}]}]
-      end
-
-      with.keyword :attempt do |attempts, positive|
-        method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.joins(:attempt).where{
-          attempt.reference.send(method, attempts)}]}]
-      end
-
-      with.keyword :created_at do |created_ats, positive|
-        method = positive ? :like_any : :not_like_any
-        created_ats = like_strings(created_ats)
-        events = Hash[events.collect{|k,v| [k, v.where{
-          created_at.send(method, created_ats)}]}]
-      end
-
-      with.keyword :metadata do |metadatas, positive|
-        method = positive ? :like_any : :not_like_any
-        metadatas = like_strings(metadatas)
-        events = Hash[events.collect{|k,v| [k, v.where{
-          metadata.send(method, metadatas)}]}]
       end
 
       # BrowsingEvent keywords
@@ -126,27 +104,33 @@ class SearchEvents
           referer.send(method, referers)}]}]
       end
 
-      # HeartbeatEvent keywords
+      # CursorEvent keywords
 
-      with.keyword :scroll_position do |scroll_positions, positive|
-        events = events.slice(:heartbeat)
+      with.keyword :action do |actions, positive|
+        events = events.slice(:cursor)
+
+        method = positive ? :like_any : :not_like_any
+        actions = like_strings(actions)
+        events = Hash[events.collect{|k,v| [k, v.where{
+          action.send(method, actions)}]}]
+      end
+
+      with.keyword :x_position do |x_positions, positive|
+        events = events.slice(:cursor)
 
         method = positive ? :in : :not_in
         events = Hash[events.collect{|k,v| [k, v.where{
-          scroll_position.send(method, scroll_positions)}]}]
+          x_position.send(method, x_positions)}]}]
       end
 
-      # CursorEvent keywords
+      # HeartbeatEvent and CursorEvent keywords
 
-      [:action, :x_position, :y_position].each do |keyword|
-        with.keyword keyword do |terms, positive|
-          events = events.slice(:cursor)
+      with.keyword :y_position do |y_positions, positive|
+        events = events.slice(:heartbeat, :cursor)
 
-          method = positive ? :like_any : :not_like_any
-          terms = like_strings(terms)
-          events = Hash[events.collect{|k,v| [k, v.where{
-            send(keyword).send(method, terms)}]}]
-        end
+        method = positive ? :in : :not_in
+        events = Hash[events.collect{|k,v| [k, v.where{
+          y_position.send(method, y_positions)}]}]
       end
 
       # InputEvent keywords
@@ -158,7 +142,7 @@ class SearchEvents
           method = positive ? :like_any : :not_like_any
           terms = like_strings(terms)
           events = Hash[events.collect{|k,v| [k, v.where{
-            send(keyword).send(method, terms)}]}]
+            __send__(keyword).send(method, terms)}]}]
         end
       end
 
@@ -171,7 +155,7 @@ class SearchEvents
           method = positive ? :like_any : :not_like_any
           terms = like_strings(terms)
           events = Hash[events.collect{|k,v| [k, v.where{
-            send(keyword).send(method, terms)}]}]
+            __send__(keyword).send(method, terms)}]}]
         end
       end
 
@@ -200,7 +184,7 @@ class SearchEvents
           method = positive ? :like_any : :not_like_any
           terms = like_strings(terms)
           events = Hash[events.collect{|k,v| [k, v.where{
-            send(keyword).send(method, terms)}]}]
+            __send__(keyword).send(method, terms)}]}]
         end
       end
 
@@ -213,7 +197,7 @@ class SearchEvents
           method = positive ? :like_any : :not_like_any
           terms = like_strings(terms)
           events = Hash[events.collect{|k,v| [k, v.where{
-            send(keyword).send(method, terms)}]}]
+            __send__(keyword).send(method, terms)}]}]
         end
       end
 

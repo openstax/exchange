@@ -17,8 +17,9 @@ describe Api::V1::EventsController, :type => :controller, :api => true, :version
   let!(:resource_2) { FactoryGirl.create :resource, platform: nil,
                                                     reference: 'Awesome Resource' }
 
-  let!(:my_event)      { FactoryGirl.create :heartbeat_event, resource: resource_2 }
-  let!(:my_event_json) { Api::V1::HeartbeatEventRepresenter.new(my_event)
+  let!(:my_event_1) { FactoryGirl.create :heartbeat_event, resource: resource_2 }
+  let!(:my_event_2) { FactoryGirl.create :heartbeat_event }
+  let!(:my_event_json) { Api::V1::HeartbeatEventRepresenter.new(my_event_1)
                            .to_json(requestor: subscriber.application) }
 
   before(:each) do
@@ -60,9 +61,9 @@ describe Api::V1::EventsController, :type => :controller, :api => true, :version
       expect(response.code).to eq('200')
 
       output = JSON.parse(response.body)
-      expect(output['num_matching_events']).to eq(71)
+      expect(output['num_matching_events']).to eq(72)
       expect(output['order_by']).to eq('created_at DESC')
-      expect(output['events'].values.flatten.count).to eq(71)
+      expect(output['events'].values.flatten.count).to eq(72)
 
       api_get :index, subscriber_token, parameters: {q: 'resource:me'}
       expect(response.code).to eq('200')
@@ -80,9 +81,9 @@ describe Api::V1::EventsController, :type => :controller, :api => true, :version
 
       output = JSON.parse(response.body)
 
-      expect(output['num_matching_events']).to eq(71)
+      expect(output['num_matching_events']).to eq(72)
       expect(output['order_by']).to eq 'resource ASC, created_at DESC'
-      expect(output['events'].values.flatten.count).to eq(71)
+      expect(output['events'].values.flatten.count).to eq(72)
       expect(output['events']['heartbeat'].first.to_json).to eq(my_event_json)
     end
 
