@@ -32,8 +32,7 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
     t.datetime "updated_at",                        :null => false
   end
 
-  add_index "agents", ["account_id"], :name => "index_agents_on_account_id", :unique => true
-  add_index "agents", ["application_id"], :name => "index_agents_on_application_id"
+  add_index "agents", ["account_id", "application_id"], :name => "index_agents_on_account_id_and_application_id", :unique => true
   add_index "agents", ["disabled_at"], :name => "index_agents_on_disabled_at"
 
   create_table "communication_activities", :force => true do |t|

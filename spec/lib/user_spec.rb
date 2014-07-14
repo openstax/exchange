@@ -18,9 +18,6 @@ describe User do
     administrator_1.account = nil
     expect(administrator_1.save).to eq(false)
     expect(administrator_1.errors.messages).to eq(:account => ["can't be blank"])
-    administrator_1.account = administrator_2.account
-    expect(administrator_1.save).to eq(false)
-    expect(administrator_1.errors.messages).to eq(:account_id => ["has already been taken"])
     [:username, :first_name, :last_name,
      :full_name, :title, :name, :casual_name].each do |attr|
       expect(administrator_2.send(attr)).to eq(administrator_2.account.send(attr))
@@ -30,7 +27,6 @@ describe User do
     expect(administrator_2.is_disabled?).to eq(true)
     administrator_2.enable
     expect(administrator_2.is_disabled?).to eq(false)
-    expect(Administrator.for(administrator_2.account)).to eq(administrator_2)
   end
 
 end

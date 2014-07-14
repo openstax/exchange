@@ -24,7 +24,7 @@ class Person < ActiveRecord::Base
 
   def supersede_by(person)
     Person.transaction do
-      superseded.update_all(:superseder => person)
+      superseded.update_all(:superseder_id => person.id)
       self.superseder = person
       self.save!
     end

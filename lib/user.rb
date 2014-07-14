@@ -11,7 +11,6 @@ module User
                      class_name: "OpenStax::Accounts::Account"
 
           validates_presence_of :account
-          validates_uniqueness_of :account_id
 
           delegate :username, :first_name, :last_name, :full_name,
                    :title, :name, :casual_name, to: :account
@@ -26,11 +25,6 @@ module User
 
           def enable
             update_attribute(:disabled_at, nil)
-          end
-
-          def self.for(acc)
-            return nil unless acc.is_a? OpenStax::Accounts::Account
-            where(account_id: acc.id).first
           end
         end
       end

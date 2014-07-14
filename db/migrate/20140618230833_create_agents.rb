@@ -8,7 +8,7 @@ class CreateAgents < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_user_index :agents
-    add_index :agents, :application_id
+    add_index :agents, [:account_id, :application_id], unique: true
+    add_index :agents, :disabled_at
   end
 end
