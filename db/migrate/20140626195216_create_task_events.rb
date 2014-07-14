@@ -2,7 +2,7 @@ class CreateTaskEvents < ActiveRecord::Migration
   def change
     create_table :task_events do |t|
       t.event
-      t.integer :number
+      t.integer :number, null: false
       t.integer :assigner_id
       t.datetime :due_date
       t.string :status

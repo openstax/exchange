@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :administrator do
-    user_factory
+    extend User::Factory
   end
 end

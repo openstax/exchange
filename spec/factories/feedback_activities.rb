@@ -2,6 +2,8 @@
 
 FactoryGirl.define do
   factory :feedback_activity do
+    extend Activity::Factory
+
     correct false
     grade "A"
     feedback "MyFeedback"

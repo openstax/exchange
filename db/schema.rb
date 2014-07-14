@@ -37,25 +37,27 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
   add_index "agents", ["disabled_at"], :name => "index_agents_on_disabled_at"
 
   create_table "communication_activities", :force => true do |t|
-    t.integer  "person_id",                         :null => false
-    t.integer  "resource_id",                       :null => false
-    t.integer  "attempt_id"
-    t.datetime "first_activity_at",                 :null => false
-    t.datetime "last_activity_at",                  :null => false
-    t.integer  "seconds_active",                    :null => false
-    t.text     "to",                                :null => false
-    t.text     "cc",                :default => "", :null => false
-    t.text     "bcc",               :default => "", :null => false
-    t.text     "subject",                           :null => false
-    t.text     "body",              :default => "", :null => false
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.integer  "platform_id",                    :null => false
+    t.integer  "person_id",                      :null => false
+    t.integer  "resource_id",                    :null => false
+    t.integer  "attempt",                        :null => false
+    t.datetime "first_event_at",                 :null => false
+    t.datetime "last_event_at",                  :null => false
+    t.integer  "seconds_active",                 :null => false
+    t.text     "to",                             :null => false
+    t.text     "cc",             :default => "", :null => false
+    t.text     "bcc",            :default => "", :null => false
+    t.text     "subject",                        :null => false
+    t.text     "body",           :default => "", :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
-  add_index "communication_activities", ["attempt_id"], :name => "index_communication_activities_on_attempt_id"
-  add_index "communication_activities", ["first_activity_at"], :name => "index_communication_activities_on_first_activity_at"
-  add_index "communication_activities", ["last_activity_at"], :name => "index_communication_activities_on_last_activity_at"
+  add_index "communication_activities", ["attempt"], :name => "index_communication_activities_on_attempt"
+  add_index "communication_activities", ["first_event_at"], :name => "index_communication_activities_on_first_event_at"
+  add_index "communication_activities", ["last_event_at"], :name => "index_communication_activities_on_last_event_at"
   add_index "communication_activities", ["person_id"], :name => "index_communication_activities_on_person_id"
+  add_index "communication_activities", ["platform_id"], :name => "index_communication_activities_on_platform_id"
   add_index "communication_activities", ["resource_id"], :name => "index_communication_activities_on_resource_id"
   add_index "communication_activities", ["seconds_active"], :name => "index_communication_activities_on_seconds_active"
 
@@ -96,46 +98,50 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
   add_index "event_subscribers", ["subscriber_id", "read"], :name => "index_event_subscribers_on_subscriber_id_and_read"
 
   create_table "exercise_activities", :force => true do |t|
-    t.integer  "person_id",                         :null => false
-    t.integer  "resource_id",                       :null => false
-    t.integer  "attempt_id"
-    t.datetime "first_activity_at",                 :null => false
-    t.datetime "last_activity_at",                  :null => false
-    t.integer  "seconds_active",                    :null => false
-    t.string   "answer",                            :null => false
-    t.boolean  "correct",                           :null => false
-    t.text     "free_response",     :default => "", :null => false
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.integer  "platform_id",                    :null => false
+    t.integer  "person_id",                      :null => false
+    t.integer  "resource_id",                    :null => false
+    t.integer  "attempt",                        :null => false
+    t.datetime "first_event_at",                 :null => false
+    t.datetime "last_event_at",                  :null => false
+    t.integer  "seconds_active",                 :null => false
+    t.string   "answer",                         :null => false
+    t.boolean  "correct",                        :null => false
+    t.text     "free_response",  :default => "", :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   add_index "exercise_activities", ["answer"], :name => "index_exercise_activities_on_answer"
-  add_index "exercise_activities", ["attempt_id"], :name => "index_exercise_activities_on_attempt_id"
-  add_index "exercise_activities", ["first_activity_at"], :name => "index_exercise_activities_on_first_activity_at"
-  add_index "exercise_activities", ["last_activity_at"], :name => "index_exercise_activities_on_last_activity_at"
+  add_index "exercise_activities", ["attempt"], :name => "index_exercise_activities_on_attempt"
+  add_index "exercise_activities", ["first_event_at"], :name => "index_exercise_activities_on_first_event_at"
+  add_index "exercise_activities", ["last_event_at"], :name => "index_exercise_activities_on_last_event_at"
   add_index "exercise_activities", ["person_id"], :name => "index_exercise_activities_on_person_id"
+  add_index "exercise_activities", ["platform_id"], :name => "index_exercise_activities_on_platform_id"
   add_index "exercise_activities", ["resource_id"], :name => "index_exercise_activities_on_resource_id"
   add_index "exercise_activities", ["seconds_active"], :name => "index_exercise_activities_on_seconds_active"
 
   create_table "feedback_activities", :force => true do |t|
-    t.integer  "person_id",                         :null => false
-    t.integer  "resource_id",                       :null => false
-    t.integer  "attempt_id"
-    t.datetime "first_activity_at",                 :null => false
-    t.datetime "last_activity_at",                  :null => false
-    t.integer  "seconds_active",                    :null => false
-    t.boolean  "correct",                           :null => false
+    t.integer  "platform_id",                    :null => false
+    t.integer  "person_id",                      :null => false
+    t.integer  "resource_id",                    :null => false
+    t.integer  "attempt",                        :null => false
+    t.datetime "first_event_at",                 :null => false
+    t.datetime "last_event_at",                  :null => false
+    t.integer  "seconds_active",                 :null => false
+    t.boolean  "correct",                        :null => false
     t.string   "grade"
-    t.text     "feedback",          :default => "", :null => false
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.text     "feedback",       :default => "", :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
-  add_index "feedback_activities", ["attempt_id"], :name => "index_feedback_activities_on_attempt_id"
-  add_index "feedback_activities", ["first_activity_at"], :name => "index_feedback_activities_on_first_activity_at"
+  add_index "feedback_activities", ["attempt"], :name => "index_feedback_activities_on_attempt"
+  add_index "feedback_activities", ["first_event_at"], :name => "index_feedback_activities_on_first_event_at"
   add_index "feedback_activities", ["grade"], :name => "index_feedback_activities_on_grade"
-  add_index "feedback_activities", ["last_activity_at"], :name => "index_feedback_activities_on_last_activity_at"
+  add_index "feedback_activities", ["last_event_at"], :name => "index_feedback_activities_on_last_event_at"
   add_index "feedback_activities", ["person_id"], :name => "index_feedback_activities_on_person_id"
+  add_index "feedback_activities", ["platform_id"], :name => "index_feedback_activities_on_platform_id"
   add_index "feedback_activities", ["resource_id"], :name => "index_feedback_activities_on_resource_id"
   add_index "feedback_activities", ["seconds_active"], :name => "index_feedback_activities_on_seconds_active"
 
@@ -225,21 +231,23 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
   add_index "input_events", ["selector"], :name => "index_input_events_on_selector"
 
   create_table "interactive_activities", :force => true do |t|
-    t.integer  "person_id",                         :null => false
-    t.integer  "resource_id",                       :null => false
-    t.integer  "attempt_id"
-    t.datetime "first_activity_at",                 :null => false
-    t.datetime "last_activity_at",                  :null => false
-    t.integer  "seconds_active",                    :null => false
-    t.text     "progress",          :default => "", :null => false
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.integer  "platform_id",                    :null => false
+    t.integer  "person_id",                      :null => false
+    t.integer  "resource_id",                    :null => false
+    t.integer  "attempt",                        :null => false
+    t.datetime "first_event_at",                 :null => false
+    t.datetime "last_event_at",                  :null => false
+    t.integer  "seconds_active",                 :null => false
+    t.text     "progress",       :default => "", :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
-  add_index "interactive_activities", ["attempt_id"], :name => "index_interactive_activities_on_attempt_id"
-  add_index "interactive_activities", ["first_activity_at"], :name => "index_interactive_activities_on_first_activity_at"
-  add_index "interactive_activities", ["last_activity_at"], :name => "index_interactive_activities_on_last_activity_at"
+  add_index "interactive_activities", ["attempt"], :name => "index_interactive_activities_on_attempt"
+  add_index "interactive_activities", ["first_event_at"], :name => "index_interactive_activities_on_first_event_at"
+  add_index "interactive_activities", ["last_event_at"], :name => "index_interactive_activities_on_last_event_at"
   add_index "interactive_activities", ["person_id"], :name => "index_interactive_activities_on_person_id"
+  add_index "interactive_activities", ["platform_id"], :name => "index_interactive_activities_on_platform_id"
   add_index "interactive_activities", ["resource_id"], :name => "index_interactive_activities_on_resource_id"
   add_index "interactive_activities", ["seconds_active"], :name => "index_interactive_activities_on_seconds_active"
 
@@ -349,25 +357,27 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
   add_index "page_events", ["to"], :name => "index_page_events_on_to"
 
   create_table "peer_grading_activities", :force => true do |t|
-    t.integer  "person_id",                                       :null => false
-    t.integer  "resource_id",                                     :null => false
-    t.integer  "attempt_id"
-    t.datetime "first_activity_at",                               :null => false
-    t.datetime "last_activity_at",                                :null => false
-    t.integer  "seconds_active",                                  :null => false
-    t.binary   "gradee_id",         :limit => 16,                 :null => false
-    t.string   "grade",                                           :null => false
-    t.text     "feedback",                        :default => "", :null => false
-    t.datetime "created_at",                                      :null => false
-    t.datetime "updated_at",                                      :null => false
+    t.integer  "platform_id",                                  :null => false
+    t.integer  "person_id",                                    :null => false
+    t.integer  "resource_id",                                  :null => false
+    t.integer  "attempt",                                      :null => false
+    t.datetime "first_event_at",                               :null => false
+    t.datetime "last_event_at",                                :null => false
+    t.integer  "seconds_active",                               :null => false
+    t.binary   "gradee_id",      :limit => 16,                 :null => false
+    t.string   "grade",                                        :null => false
+    t.text     "feedback",                     :default => "", :null => false
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
   end
 
-  add_index "peer_grading_activities", ["attempt_id"], :name => "index_peer_grading_activities_on_attempt_id"
-  add_index "peer_grading_activities", ["first_activity_at"], :name => "index_peer_grading_activities_on_first_activity_at"
+  add_index "peer_grading_activities", ["attempt"], :name => "index_peer_grading_activities_on_attempt"
+  add_index "peer_grading_activities", ["first_event_at"], :name => "index_peer_grading_activities_on_first_event_at"
   add_index "peer_grading_activities", ["grade"], :name => "index_peer_grading_activities_on_grade"
   add_index "peer_grading_activities", ["gradee_id"], :name => "index_peer_grading_activities_on_gradee_id"
-  add_index "peer_grading_activities", ["last_activity_at"], :name => "index_peer_grading_activities_on_last_activity_at"
+  add_index "peer_grading_activities", ["last_event_at"], :name => "index_peer_grading_activities_on_last_event_at"
   add_index "peer_grading_activities", ["person_id"], :name => "index_peer_grading_activities_on_person_id"
+  add_index "peer_grading_activities", ["platform_id"], :name => "index_peer_grading_activities_on_platform_id"
   add_index "peer_grading_activities", ["resource_id"], :name => "index_peer_grading_activities_on_resource_id"
   add_index "peer_grading_activities", ["seconds_active"], :name => "index_peer_grading_activities_on_seconds_active"
 
@@ -390,20 +400,22 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
   add_index "platforms", ["application_id"], :name => "index_platforms_on_application_id", :unique => true
 
   create_table "reading_activities", :force => true do |t|
-    t.integer  "person_id",         :null => false
-    t.integer  "resource_id",       :null => false
-    t.integer  "attempt_id"
-    t.datetime "first_activity_at", :null => false
-    t.datetime "last_activity_at",  :null => false
-    t.integer  "seconds_active",    :null => false
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.integer  "platform_id",    :null => false
+    t.integer  "person_id",      :null => false
+    t.integer  "resource_id",    :null => false
+    t.integer  "attempt",        :null => false
+    t.datetime "first_event_at", :null => false
+    t.datetime "last_event_at",  :null => false
+    t.integer  "seconds_active", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
-  add_index "reading_activities", ["attempt_id"], :name => "index_reading_activities_on_attempt_id"
-  add_index "reading_activities", ["first_activity_at"], :name => "index_reading_activities_on_first_activity_at"
-  add_index "reading_activities", ["last_activity_at"], :name => "index_reading_activities_on_last_activity_at"
+  add_index "reading_activities", ["attempt"], :name => "index_reading_activities_on_attempt"
+  add_index "reading_activities", ["first_event_at"], :name => "index_reading_activities_on_first_event_at"
+  add_index "reading_activities", ["last_event_at"], :name => "index_reading_activities_on_last_event_at"
   add_index "reading_activities", ["person_id"], :name => "index_reading_activities_on_person_id"
+  add_index "reading_activities", ["platform_id"], :name => "index_reading_activities_on_platform_id"
   add_index "reading_activities", ["resource_id"], :name => "index_reading_activities_on_resource_id"
   add_index "reading_activities", ["seconds_active"], :name => "index_reading_activities_on_seconds_active"
 
@@ -442,7 +454,7 @@ ActiveRecord::Schema.define(:version => 20140702151603) do
     t.integer  "attempt",     :null => false
     t.string   "selector"
     t.text     "metadata"
-    t.integer  "number"
+    t.integer  "number",      :null => false
     t.integer  "assigner_id"
     t.datetime "due_date"
     t.string   "status"

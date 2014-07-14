@@ -37,19 +37,17 @@ module User
     end
   end
 
-  module Migration
-    module Columns
-      def user
-        integer :account_id, null: false
-        datetime :disabled_at
-      end
+  module TableDefinition
+    def user
+      integer :account_id, null: false
+      datetime :disabled_at
     end
+  end
 
-    module Indices
-      def add_user_index(table_name)
-        add_index table_name, :account_id, unique: true
-        add_index table_name, :disabled_at
-      end
+  module Migration
+    def add_user_index(table_name)
+      add_index table_name, :account_id, unique: true
+      add_index table_name, :disabled_at
     end
   end
 
@@ -60,11 +58,11 @@ module User
   end
 
   module Factory
-    def user_factory
-      association :account, factory: :openstax_accounts_account
+    def self.extended(base)
+      base.association :account, factory: :openstax_accounts_account
 
-      trait :terms_agreed do
-        after(:create) do |user, evaluator|
+      base.trait :terms_agreed do
+        base.after(:create) do |user, evaluator|
           FinePrint::Contract.all.each do |contract|
             FinePrint.sign_contract(user.account, contract)
           end
@@ -76,7 +74,6 @@ end
 
 ActiveRecord::Base.send :include, User::ActiveRecord
 ActiveRecord::ConnectionAdapters::TableDefinition.send :include,
-                                                       User::Migration::Columns
-ActiveRecord::Migration.send :include, User::Migration::Indices
-ActionDispatch::Routing::Mapper.send :include,
-                                     User::Routing
+                                                       User::TableDefinition
+ActiveRecord::Migration.send :include, User::Migration
+ActionDispatch::Routing::Mapper.send :include, User::Routing

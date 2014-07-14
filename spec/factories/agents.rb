@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :agent do
-    user_factory
+    extend User::Factory
 
     application
     is_manager false

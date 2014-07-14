@@ -26,7 +26,7 @@ module Event
             return unless platform && person && resource
             return if person.identifier.application == platform.application &&\
                       (resource.platform.nil? || resource.platform == platform)
-            errors.add(:base, 'Event components do not match')
+            errors.add(:base, 'Event components refer to different platforms')
             false
           end
         end

@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :researcher do
-    user_factory
+    extend User::Factory
   end
 end

@@ -13,6 +13,7 @@ require 'app'
 require 'event'
 require 'eventful'
 require 'activity'
+require 'active'
 
 # Initialize the rails application
 Exchange::Application.initialize!

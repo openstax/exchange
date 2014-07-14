@@ -24,17 +24,15 @@ module App
     end
   end
 
-  module Migration
-    module Columns
-      def application
-        integer :application_id, null: false
-      end
+  module TableDefinition
+    def application
+      integer :application_id, null: false
     end
+  end
 
-    module Indices
-      def add_application_index(table_name)
-        add_index table_name, :application_id, unique: true
-      end
+  module Migration
+    def add_application_index(table_name)
+      add_index table_name, :application_id, unique: true
     end
   end
 
@@ -50,7 +48,6 @@ end
 
 ActiveRecord::Base.send :include, App::ActiveRecord
 ActiveRecord::ConnectionAdapters::TableDefinition.send :include,
-                                                       App::Migration::Columns
-ActiveRecord::Migration.send :include, App::Migration::Indices
-ActionDispatch::Routing::Mapper.send :include,
-                                     App::Routing
+                                                       App::TableDefinition
+ActiveRecord::Migration.send :include, App::Migration
+ActionDispatch::Routing::Mapper.send :include, App::Routing

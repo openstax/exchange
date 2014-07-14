@@ -92,8 +92,6 @@ Exchange::Application.routes.draw do
     end
 
     resources :activities, only: :index
-
-    #activity_routes
   end
 
   # Shared Pages

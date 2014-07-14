@@ -1,5 +1,6 @@
 class Person < ActiveRecord::Base
   acts_as_eventful
+  acts_as_active
 
   has_one :identifier, class_name: '::Identifier',
                        foreign_key: :resource_owner_id,
