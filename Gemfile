@@ -30,7 +30,7 @@ gem 'maruku'
 
 gem 'doorkeeper'
 
-gem 'representable', '~> 1.8.3'
+gem 'representable'
 gem 'roar-rails'
 
 gem 'exception_notification'

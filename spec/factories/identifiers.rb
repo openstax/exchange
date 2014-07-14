@@ -1,9 +1,11 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
-
 FactoryGirl.define do
   factory :identifier do
-    person_id 1
-    platform_id 1
-    value "MyString"
+    application { FactoryGirl.build(:platform).application }
+    expires_in 2.hours
+
+    after(:build) do |identifier, evaluator|
+      identifier.resource_owner = FactoryGirl.build(:person, identifier: identifier)\
+        unless identifier.resource_owner
+    end
   end
 end

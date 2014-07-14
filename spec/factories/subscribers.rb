@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :subscriber do
-    application_id 1
+    application
   end
 end

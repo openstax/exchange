@@ -7,8 +7,8 @@ module Api::V1
              type: String,
              writeable: false,
              schema_info: {
-               description: 'Bearer OAuth token to be used to record Events by this user',
-               required: true
+               required: true,
+               description: 'Bearer OAuth token to be used to record Events by this user'
              }
 
   end

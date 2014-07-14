@@ -2,6 +2,8 @@
 
 FactoryGirl.define do
   factory :heartbeat_event do
-    scroll_position 1
+    extend Event::Factory
+
+    y_position 42
   end
 end

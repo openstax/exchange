@@ -2,9 +2,11 @@
 
 FactoryGirl.define do
   factory :cursor_event do
-    object "MyString"
-    x_position 1
-    y_position 1
-    clicked false
+    extend Event::Factory
+
+    action "MyAction"
+    href "http://my.link.org"
+    x_position 42
+    y_position 42
   end
 end

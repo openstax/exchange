@@ -2,5 +2,6 @@
 
 FactoryGirl.define do
   factory :reading_activity do
+    extend Activity::Factory
   end
 end

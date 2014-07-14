@@ -8,7 +8,7 @@ class ApplicationEventAccessPolicy
                         Platform.for(requestor)
 
     # The only action for these Events is create
-    action == :create
+    action == :create && Platform.for(requestor) == application_event.platform
   end
 
 end

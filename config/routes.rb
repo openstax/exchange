@@ -71,21 +71,27 @@ Exchange::Application.routes.draw do
     resources :identifiers, only: :create
 
     resources :events, only: :index
+
+    scope '/events' do
+      scope '/identifiers' do
+        event_routes :pages
+        event_routes :heartbeats
+        event_routes :cursors
+        event_routes :mouse_movements, to: 'cursor_events#create_mouse_movement'
+        event_routes :mouse_clicks, to: 'cursor_events#create_mouse_click'
+        event_routes :inputs
+      end
+
+      scope '/platforms' do
+        event_routes :multiple_choices, to: 'input_events#create_multiple_choice'
+        event_routes :free_responses, to: 'input_events#create_free_response'
+        event_routes :messages
+        event_routes :gradings
+        event_routes :tasks
+      end
+    end
+
     resources :activities, only: :index
-
-    event_routes :browsing_events
-    event_routes :heartbeat_events
-    event_routes :cursor_events
-    event_routes :mouse_movement_events, to: 'cursor_events#create_mouse_movement'
-    event_routes :mouse_click_events, to: 'cursor_events#create_mouse_click'
-    event_routes :input_events
-    event_routes :multiple_choice_events, to: 'input_events#create_multiple_choice'
-    event_routes :free_response_events, to: 'input_events#create_free_response'
-    event_routes :message_events
-    event_routes :grading_events
-    event_routes :task_events
-
-    #activity_routes
   end
 
   # Shared Pages

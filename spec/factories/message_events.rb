@@ -2,10 +2,13 @@
 
 FactoryGirl.define do
   factory :message_event do
-    to "MyText"
-    cc "MyText"
-    bcc "MyText"
-    subject "MyText"
-    body "MyText"
+    extend Event::Factory
+
+    sequence(:number)
+    to "bob@example.com"
+    cc "charlie@example.com"
+    bcc "eve@example.com"
+    subject "Hello"
+    body "Hello World"
   end
 end

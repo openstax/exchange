@@ -59,6 +59,8 @@ module Exchange
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+    config.i18n.enforce_available_locales = true
+
     config.generators do |g|
       g.test_framework :rspec, :view_specs => false, :fixture => false
       g.fixture_replacement :factory_girl, :dir => 'spec/factories'

@@ -1,19 +1,18 @@
 class Api::V1::TaskEventsController < OpenStax::Api::V1::ApiController
 
-  include EventRest
+  include Event::ApiController
 
   resource_description do
     api_versions "v1"
     short_description 'Represents a task being assigned to a user'
     description <<-EOS
-      This controller uses the Client Credentials flow.
+      This controller uses a token obtained through the Client Credentials flow.
 
       All events have the following fields in common: identifier (string),
-      resource (string), attempt (string), occurred_at (datetime) and metadata (text).
+      resource (string), attempt (integer), selector (string) and metadata (text).
 
-      Additionally, TaskEvents have the following fields:
-
-      uid (string), assigner (string), due_date (datetime), status (string)
+      Additionally, TaskEvents have the task (string), assigner (string),
+      due_date (datetime) and status (string) fields.
     EOS
   end
 
@@ -21,13 +20,13 @@ class Api::V1::TaskEventsController < OpenStax::Api::V1::ApiController
   # create
   ###############################################################
 
-  api :POST, '/task_events', 'Creates a new TaskEvent.'
+  api :POST, '/events/platforms/tasks', 'Creates a new TaskEvent.'
   description <<-EOS
     This API call must be used with the Client Credentials flow.
 
     Creates an Event that records or updates a task assignment.
 
-    #{json_schema(Api::V1::TaskEventRepresenter, include: :writeable)}
+    #{json_schema(Api::V1::TaskEventRepresenter, include: [:writeable, :app])}
   EOS
   def create
     event_create(TaskEvent)

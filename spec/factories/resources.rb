@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :resource do
-    platform_id 1
-    reference "MyString"
+    platform
+    reference "MyResource"
   end
 end

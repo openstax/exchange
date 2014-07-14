@@ -2,8 +2,9 @@
 
 FactoryGirl.define do
   factory :agent do
-    account_id 1
-    application_id 1
+    extend User::Factory
+
+    application
     is_manager false
   end
 end

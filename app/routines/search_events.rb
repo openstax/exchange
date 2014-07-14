@@ -10,30 +10,49 @@ class SearchEvents
 
   protected
 
-  SORTABLE_FIELDS = ['id', 'identifier', 'resource', 'attempt', 'occurred_at']
-  SORT_ASCENDING = 'ASC'
-  SORT_DESCENDING = 'DESC'
+  SORTABLE_FIELDS_MAP = {'id' => [nil, :id],
+                         'identifier' => ['Identifier', :token],
+                         'selector' => [nil, :selector],
+                         'resource' => ['Resource', :reference],
+                         'attempt' => [nil, :attempt],
+                         'created_at' => [nil, :created_at]}
+  SORT_ASCENDING = 'asc'
+  SORT_DESCENDING = 'desc'
 
   def exec(query, requestor, options={})
 
     if Subscriber.for(requestor) || Researcher.for(requestor)
-      events = {:browsing => BrowsingEvent.scoped,
-                :heartbeat => HeartbeatEvent.scoped,
-                :cursor => CursorEvent.scoped,
-                :input => InputEvent.scoped,
-                :message => MessageEvent.scoped,
-                :grading => GradingEvent.scoped,
-                :task => TaskEvent.scoped}
+      events = {:page => PageEvent.includes(
+                           [:platform, {person: :identifier}, :resource]),
+                :heartbeat => HeartbeatEvent.includes(
+                                [:platform, {person: :identifier}, :resource]),
+                :cursor => CursorEvent.includes(
+                             [:platform, {person: :identifier}, :resource]),
+                :input => InputEvent.includes(
+                            [:platform, {person: :identifier}, :resource]),
+                :message => MessageEvent.includes(
+                              [:platform, {person: :identifier}, :resource]),
+                :grading => GradingEvent.includes(
+                              [:platform, {person: :identifier}, :resource]),
+                :task => TaskEvent.includes(
+                           [:platform, {person: :identifier}, :resource])}
     else
       platform = Platform.for(requestor)
       if platform
-        events = {:browsing => platform.browsing_events,
-                  :heartbeat => platform.heartbeat_events,
-                  :cursor => platform.cursor_events,
-                  :input => platform.input_events,
-                  :message => platform.message_events,
-                  :grading => platform.grading_events,
-                  :task => platform.task_events}
+        events = {:page => platform.page_events.includes(
+                             [{person: :identifier}, :resource]),
+                  :heartbeat => platform.heartbeat_events.includes(
+                             [{person: :identifier}, :resource]),
+                  :cursor => platform.cursor_events.includes(
+                             [{person: :identifier}, :resource]),
+                  :input => platform.input_events.includes(
+                             [{person: :identifier}, :resource]),
+                  :message => platform.message_events.includes(
+                             [{person: :identifier}, :resource]),
+                  :grading => platform.grading_events.includes(
+                             [{person: :identifier}, :resource]),
+                  :task => platform.task_events.includes(
+                             [{person: :identifier}, :resource])}
       else
         outputs[:events] = {}
         return
@@ -50,40 +69,28 @@ class SearchEvents
         events = events.slice(types)
       end
 
-      with.keyword :id do |ids, positive|
-        method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.where{
-          id.send(method, ids)}]}]
+      [:id, :identifier, :attempt].each do |keyword|
+        with.keyword keyword do |terms, positive|
+          method = positive ? :in : :not_in
+          events = Hash[events.collect{|k,v| [k, v.where{
+            __send__(keyword).send(method, terms)}]}]
+        end
       end
 
-      with.keyword :identifier do |identifiers, positive|
-        method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.joins(:identifier).where{
-          identifier.token.send(method, identifiers)}]}]
+      [:selector, :created_at, :metadata].each do |keyword|
+        with.keyword keyword do |terms, positive|
+          method = positive ? :like_any : :not_like_any
+          terms = like_strings(terms)
+          events = Hash[events.collect{|k,v| [k, v.where{
+            __send__(keyword).send(method, terms)}]}]
+        end
       end
 
       with.keyword :resource do |resources, positive|
         method = positive ? :like_any : :not_like_any
+        resources = like_strings(resources)
         events = Hash[events.collect{|k,v| [k, v.joins(:resource).where{
           resource.reference.send(method, resources)}]}]
-      end
-
-      with.keyword :attempt do |attempts, positive|
-        method = positive ? :like_any : :not_like_any
-        events = Hash[events.collect{|k,v| [k, v.joins(:attempt).where{
-          attempt.reference.send(method, attempts)}]}]
-      end
-
-      with.keyword :occurred_at do |occurred_ats, positive|
-        method = positive ? :like_any : :not_like_any
-        events = Hash[events.collect{|k,v| [k, v.where{
-          occurred_at.send(method, occurred_ats)}]}]
-      end
-
-      with.keyword :metadata do |metadatas, positive|
-        method = positive ? :like_any : :not_like_any
-        events = Hash[events.collect{|k,v| [k, v.where{
-          metadata.send(method, metadatas)}]}]
       end
 
       # BrowsingEvent keywords
@@ -92,40 +99,38 @@ class SearchEvents
         events = events.slice(:browsing)
 
         method = positive ? :like_any : :not_like_any
+        referers = like_strings(referers)
         events = Hash[events.collect{|k,v| [k, v.where{
           referer.send(method, referers)}]}]
       end
 
-      # HeartbeatEvent keywords
-
-      with.keyword :scroll_position do |scroll_positions, positive|
-        events = events.slice(:heartbeat)
-
-        method = positive ? :like_any : :not_like_any
-        events = Hash[events.collect{|k,v| [k, v.where{
-          scroll_position.send(method, scroll_positions)}]}]
-      end
-
-      # CursorEvent and InputEvent keywords
-
-      with.keyword :object do |objects, positive|
-        events = events.slice(:cursor, :input)
-
-        method = positive ? :like_any : :not_like_any
-        events = Hash[events.collect{|k,v| [k, v.where{
-          object.send(method, objects)}]}]
-      end
-
       # CursorEvent keywords
 
-      [:action, :x_position, :y_position].each do |keyword|
-        with.keyword keyword do |terms, positive|
-          events = events.slice(:cursor)
+      with.keyword :action do |actions, positive|
+        events = events.slice(:cursor)
 
-          method = positive ? :like_any : :not_like_any
-          events = Hash[events.collect{|k,v| [k, v.where{
-            send(keyword).send(method, terms)}]}]
-        end
+        method = positive ? :like_any : :not_like_any
+        actions = like_strings(actions)
+        events = Hash[events.collect{|k,v| [k, v.where{
+          action.send(method, actions)}]}]
+      end
+
+      with.keyword :x_position do |x_positions, positive|
+        events = events.slice(:cursor)
+
+        method = positive ? :in : :not_in
+        events = Hash[events.collect{|k,v| [k, v.where{
+          x_position.send(method, x_positions)}]}]
+      end
+
+      # HeartbeatEvent and CursorEvent keywords
+
+      with.keyword :y_position do |y_positions, positive|
+        events = events.slice(:heartbeat, :cursor)
+
+        method = positive ? :in : :not_in
+        events = Hash[events.collect{|k,v| [k, v.where{
+          y_position.send(method, y_positions)}]}]
       end
 
       # InputEvent keywords
@@ -135,29 +140,31 @@ class SearchEvents
           events = events.slice(:input)
 
           method = positive ? :like_any : :not_like_any
+          terms = like_strings(terms)
           events = Hash[events.collect{|k,v| [k, v.where{
-            send(keyword).send(method, terms)}]}]
+            __send__(keyword).send(method, terms)}]}]
         end
       end
 
-      # MessageEvent keywords
+      # TaskEvent keywords
 
-      [:message_uid, :to, :cc, :bcc, :subject, :body].each do |keyword|
+      [:due_date, :status].each do |keyword|
         with.keyword keyword do |terms, positive|
-          events = events.slice(:message)
+          events = events.slice(:task)
 
           method = positive ? :like_any : :not_like_any
+          terms = like_strings(terms)
           events = Hash[events.collect{|k,v| [k, v.where{
-            send(keyword).send(method, terms)}]}]
+            __send__(keyword).send(method, terms)}]}]
         end
       end
 
-      with.keyword :replied do |uids, positive|
-        events = events.slice(:message)
+      with.keyword :assigner do |assigners, positive|
+        events = events.slice(:task)
 
         method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.joins(:replied).where{
-          replied.uid.send(method, uids)}]}]
+        events = Hash[events.collect{|k,v| [k, v.joins(:assigner).where{
+          assigner.token.send(method, assigners)}]}]
       end
 
       # GradingEvent keywords
@@ -175,29 +182,40 @@ class SearchEvents
           events = events.slice(:grading)
 
           method = positive ? :like_any : :not_like_any
+          terms = like_strings(terms)
           events = Hash[events.collect{|k,v| [k, v.where{
-            send(keyword).send(method, terms)}]}]
+            __send__(keyword).send(method, terms)}]}]
         end
       end
 
-      # TaskEvent keywords
+      # MessageEvent keywords
 
-      [:task_uid, :due_date, :status].each do |keyword|
+      [:to, :cc, :bcc, :subject, :body].each do |keyword|
         with.keyword keyword do |terms, positive|
-          events = events.slice(:task)
+          events = events.slice(:message)
 
           method = positive ? :like_any : :not_like_any
+          terms = like_strings(terms)
           events = Hash[events.collect{|k,v| [k, v.where{
-            send(keyword).send(method, terms)}]}]
+            __send__(keyword).send(method, terms)}]}]
         end
       end
 
-      with.keyword :assigner do |assigners, positive|
-        events = events.slice(:task)
+      with.keyword :in_reply_to_number do |numbers, positive|
+        events = events.slice(:message)
 
         method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.joins(:assigner).where{
-          assigner.token.send(method, assigners)}]}]
+        events = Hash[events.collect{|k,v| [k, v.where{
+          in_reply_to_number.send(method, numbers)}]}]
+      end
+
+      # TaskEvent and MessageEvent keyword
+      with.keyword :number do |numbers, positive|
+        events = events.slice(:task, :message)
+
+        method = positive ? :in : :not_in
+        events = Hash[events.collect{|k,v| [k, v.where{
+          number.send(method, numbers)}]}]
       end
 
       # No keyword
@@ -212,33 +230,41 @@ class SearchEvents
     # Ordering
 
     # Parse the input
-    order_bys = (options[:order_by] || '').split(',').collect{|ob| ob.strip.split(' ')}
+    order_bys = (options[:order_by] || '').split(',').collect{ |ob|ob.strip.split(' ') }
 
     # Toss out bad input, provide default direction
     order_bys = order_bys.collect do |order_by|
       field, direction = order_by
-      next if !SORTABLE_FIELDS.include?(field)
+      tc = SORTABLE_FIELDS_MAP[field.to_s.downcase]
+      next if !tc
       direction ||= SORT_ASCENDING
+      direction = direction.to_s.downcase
       next if direction != SORT_ASCENDING && direction != SORT_DESCENDING
-      [field, direction]
+      [tc, direction].flatten
     end
-
-    order_bys.compact!
 
     # Use a default sort if none provided
-    order_bys = [['occurred_at', SORT_ASCENDING]] if order_bys.empty?
+    order_bys = [[nil, :created_at, SORT_DESCENDING]] if order_bys.empty?
 
-    # Convert to query style
-    order_bys = order_bys.collect{|order_by| "#{order_by[0]} #{order_by[1]}"}
-
-    order_bys.each do |order_by|
-      events = Hash[events.collect{|k,v| [k, v.order(order_by)]}]
-    end
+    # Apply ordering
+    events = Hash[events.collect do |k,v|
+      event_name = "#{k.to_s.capitalize}Event"
+      event_order_by = order_bys.collect do |o|
+        klass = (o.first || event_name).to_s.classify.constantize
+        column = o.second
+        direction = o.third
+        klass.arel_table[column].send(direction)
+      end
+      [k, v.order(event_order_by)]
+    end]
 
     # Translate to routine outputs
 
     outputs[:query] = query
-    outputs[:order_by] = order_bys.join(', ') # convert back to one string
+    outputs[:order_by] = order_bys.collect {|o|
+      field = o.first ? o.first.downcase : o.second.to_s
+      "#{field} #{o.third.to_s.upcase}"
+    }.join(', ') # Convert back to one string
 
     # Count results
 
@@ -246,6 +272,10 @@ class SearchEvents
 
     outputs[:events] = events
 
+  end
+
+  def like_strings(strings)
+    strings.collect { |s| "%#{s}%" }
   end
 
 end

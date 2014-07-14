@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :event_subscriber do
-    event_id 1
-    subscriber_id 1
+    event
+    subscriber
   end
 end

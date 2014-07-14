@@ -1,19 +1,14 @@
 module Api::V1
   class TaskEventRepresenter < EventRepresenter
 
-    property :uid,
-             type: String,
+    property :number,
+             type: Integer,
              writeable: true,
              schema_info: {
-               description: 'A unique identifier for this task'
+               description: 'A unique number that identifies this task'
              }
 
-    property :assigner,
-             type: String,
-             writeable: true,
-             schema_info: {
-               description: 'An identifier for the user or algorithm that assigned the task'
-             }
+    identifier_or_person_property :assigner
 
     property :status,
              type: String,

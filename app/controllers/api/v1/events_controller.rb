@@ -11,8 +11,8 @@ class Api::V1::EventsController < OpenStax::Api::V1::ApiController
       an object or clicking), and InputEvent (interacting with a form input or other kinds
       of inputs).
 
-      All events have the following fields in common:
-      identifier (uuid), resource (string), occurred_at (datetime) and metadata.
+      All events have the following fields in common: identifier (string),
+      resource (string), attempt (integer), selector (string) and metadata (text).
 
       Each type of event has additional fields depending on its type. Consult their
       schemas for more information.
@@ -76,7 +76,7 @@ class Api::V1::EventsController < OpenStax::Api::V1::ApiController
     A string that indicates how to sort the results of the query. The string
     is a comma-separated list of fields with an optional sort direction. The
     sort will be performed in the order the fields are given.
-    The fields can be one of #{SearchEvents::SORTABLE_FIELDS.collect{|sf| "`"+sf+"`"}.join(', ')}.
+    The fields can be one of #{SearchEvents::SORTABLE_FIELDS_MAP.keys.collect{|sf| "`"+sf+"`"}.join(', ')}.
     Sort directions can either be `ASC` for an ascending sort, or `DESC` for a
     descending sort. If not provided, an ascending sort is assumed. Sort directions
     should be separated from the fields by a space. (default: `occurred_at DESC`)
@@ -87,7 +87,7 @@ class Api::V1::EventsController < OpenStax::Api::V1::ApiController
   EOS
   def index
     # Can't use AccessPolicy, since Event is a Module
-    app = doorkeeper_token.application
+    app = doorkeeper_token.try(:application)
     raise SecurityTransgression unless app && doorkeeper_token.resource_owner_id.nil?
 
     options = params.slice(:page, :per_page, :order_by)

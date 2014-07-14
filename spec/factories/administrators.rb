@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :administrator do
-    account_id 1
+    extend User::Factory
   end
 end

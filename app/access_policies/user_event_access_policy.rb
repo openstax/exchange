@@ -4,10 +4,10 @@ class UserEventAccessPolicy
 
   def self.action_allowed?(action, requestor, user_event)
     # Implicit flow
-    return false if requestor.is_a? Doorkeeper::Application
+    return false unless requestor.is_a? Person
 
     # The only action on these Events is create
-    action == :create
+    action == :create && requestor == user_event.person
   end
 
 end

@@ -2,6 +2,8 @@
 
 FactoryGirl.define do
   factory :interactive_activity do
-    progress "MyText"
+    extend Activity::Factory
+
+    progress "MyProgress"
   end
 end

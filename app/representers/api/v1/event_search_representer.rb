@@ -22,7 +22,7 @@ module Api::V1
              }
 
     property :order_by,
-             type: String,
+             type: Object,
              schema_info: {
                description: 'The ordering info, which may be different than ' +
                  'what was requested if the request was missing defaults or ' +
@@ -32,11 +32,11 @@ module Api::V1
     property :events, schema_info: {
       description: 'The Events matching the query or a subset thereof when paginating' } do
 
-      collection :browsing,
-                 class: BrowsingEvent,
-                 decorator: BrowsingEventRepresenter,
+      collection :page,
+                 class: PageEvent,
+                 decorator: PageEventRepresenter,
                  schema_info: {
-                   description: 'The matching BrowsingEvents'
+                   description: 'The matching PageEvents'
                  }
 
       collection :heartbeat,
