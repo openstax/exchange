@@ -1,6 +1,9 @@
 OpenStax Exchange
 =================
 
+[![Build Status](https://travis-ci.org/openstax/exchange.svg?branch=master)](https://travis-ci.org/openstax/exchange)
+[![Code Climate](https://codeclimate.com/github/openstax/exchange.png)](https://codeclimate.com/github/openstax/exchange)
+
 OpenStax Exchange stores and provides learner interaction "big data".
 
 ## Development Setup
