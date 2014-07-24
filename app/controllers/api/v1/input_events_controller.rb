@@ -46,7 +46,8 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
   def create_multiple_choice
     raise SecurityTransgression unless current_api_user.human_user.nil?
     event_create(InputEvent) do |e|
-      e.person_id = Identifier.where(:token => params[:identifier]).first.resource_owner_id
+      e.person_id = Identifier.where(:token => params[:identifier])
+                              .first.try(:resource_owner_id)
       e.category = 'multiple_choice'
       e.input_type = 'radio'
     end
@@ -63,7 +64,8 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
   def create_free_response
     raise SecurityTransgression unless current_api_user.human_user.nil?
     event_create(InputEvent) do |e|
-      e.person_id = Identifier.where(:token => params[:identifier]).first.resource_owner_id
+      e.person_id = Identifier.where(:token => params[:identifier])
+                              .first.try(:resource_owner_id)
       e.category = 'free_response'
       e.input_type = 'text'
     end
