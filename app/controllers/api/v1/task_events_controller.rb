@@ -29,7 +29,10 @@ class Api::V1::TaskEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::TaskEventRepresenter, include: [:writeable, :app])}
   EOS
   def create
-    event_create(TaskEvent)
+    event_create(TaskEvent) do |e|
+      e.person_id = Identifier.where(:token => params[:identifier])
+                              .first.try(:resource_owner_id)
+    end
   end
 
 end
