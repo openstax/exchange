@@ -25,6 +25,7 @@ class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
   api :POST, '/events/platforms/gradings', 'Creates a new GradingEvent.'
   description <<-EOS
     This API call must be used with the Client Credentials flow.
+    You must supply an identifier token in the URL, with the 'identifier' key.
 
     Creates an Event that records a user's work being graded.
 

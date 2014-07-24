@@ -38,6 +38,7 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
   api :POST, '/events/platforms/multiple_choices', 'Creates a new MultipleChoiceInputEvent.'
   description <<-EOS
     This API call must be used with the Client Credentials flow.
+    You must supply an identifier token in the URL, with the 'identifier' key.
 
     Creates an Event that records the user submitting a multiple choice answer.
 
@@ -56,6 +57,7 @@ class Api::V1::InputEventsController < OpenStax::Api::V1::ApiController
   api :POST, '/events/platforms/free_responses', 'Creates a new FreeResponseInputEvent.'
   description <<-EOS
     This API call must be used with the Client Credentials flow.
+    You must supply an identifier token in the URL, with the 'identifier' key.
 
     Creates an Event that records the user submitting a free response answer.
 
