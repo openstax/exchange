@@ -1,4 +1,4 @@
-def application_event_controller_spec(event_type)
+def application_event_controller_spec(event_type, create_method = :create)
   event_type_string = event_type.to_s
   event_name = "#{event_type_string}_event"
   event_symbol = event_name.to_sym
@@ -16,13 +16,13 @@ def application_event_controller_spec(event_type)
                                                       application: platform.application) }
     let!(:access_token) { FactoryGirl.create(:access_token) }
     let!(:event) { FactoryGirl.build(event_symbol, person: identifier.resource_owner) }
-    let!(:valid_json) { representer_class.new(event)
-                                         .to_json(requestor: platform.application) }
+    let!(:valid_json) { representer_class.new(event).to_json }
 
     context 'success' do
       it 'should be creatable by a platform app with a client credentials token if it has all required fields' do
         c = event_class.count
-        api_post :create, platform_access_token, raw_post_data: valid_json
+        api_post create_method, platform_access_token,
+                 raw_post_data: valid_json, parameters: {identifier: identifier.token}
         expect(response.status).to eq(201)
 
         expect(event_class.count).to eq(c + 1)
@@ -39,14 +39,16 @@ def application_event_controller_spec(event_type)
     context 'authorization error' do
       it 'should not be creatable by a user with an identifier' do
         c = event_class.count
-        expect{api_post :create, identifier, raw_post_data: valid_json}.to(
+        expect{api_post create_method, identifier,
+                        raw_post_data: valid_json, parameters: {identifier: identifier.token}}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
       end
 
       it 'should not be creatable by a non-platform app' do
         c = event_class.count
-        expect{api_post :create, access_token, raw_post_data: valid_json}.to(
+        expect{api_post create_method, access_token,
+                        raw_post_data: valid_json, parameters: {identifier: identifier.token}}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
       end
@@ -54,14 +56,16 @@ def application_event_controller_spec(event_type)
       it 'should not be creatable with an invalid access token' do
         identifier.token = '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF'
         c = event_class.count
-        expect{api_post :create, identifier, raw_post_data: valid_json}.to(
+        expect{api_post create_method, identifier,
+                        raw_post_data: valid_json, parameters: {identifier: identifier.token}}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
       end
 
       it 'should not be creatable without an access token' do
         c = event_class.count
-        expect{api_post :create, nil, raw_post_data: valid_json}.to(
+        expect{api_post create_method, nil,
+                        raw_post_data: valid_json, parameters: {identifier: identifier.token}}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
       end
@@ -71,9 +75,10 @@ def application_event_controller_spec(event_type)
       it 'should not be creatable without an attempt' do
         event.attempt = nil
         c = event_class.count
-        api_post :create, platform_access_token,
+        api_post create_method, platform_access_token,
                  raw_post_data: representer_class.new(event)
-                                                 .to_json(requestor: platform.application)
+                                                 .to_json(requestor: platform.application),
+                 parameters: {identifier: identifier.token}
         expect(response.status).to eq(422)
 
         expected_response = {attempt: ['can\'t be blank']}.stringify_keys
@@ -84,9 +89,10 @@ def application_event_controller_spec(event_type)
       it 'should not be creatable without a resource' do
         event.resource = nil
         c = event_class.count
-        api_post :create, platform_access_token,
+        api_post create_method, platform_access_token,
                  raw_post_data: representer_class.new(event)
-                                                 .to_json(requestor: platform.application)
+                                                 .to_json(requestor: platform.application),
+                 parameters: {identifier: identifier.token}
         expect(response.status).to eq(422)
 
         expected_response = {resource: ['can\'t be blank']}.stringify_keys
