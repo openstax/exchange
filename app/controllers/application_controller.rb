@@ -3,16 +3,10 @@ class ApplicationController < ActionController::Base
 
   respond_to :html
 
-  layout :layout
+  layout 'application_body_only'
 
   def current_user
     current_account
-  end
-
-  protected
-
-  def layout
-    "application_body_only"
   end
 
 end
