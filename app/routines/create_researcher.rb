@@ -1,7 +1,8 @@
 class CreateResearcher
+
   lev_routine
 
-protected
+  protected
 
   def exec(account, options={})
     
