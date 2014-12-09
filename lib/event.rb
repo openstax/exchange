@@ -18,6 +18,12 @@ module Event
           validates_presence_of :platform, :person, :resource, :attempt
 
           validate :consistency
+
+          after_create :call_event_listeners
+
+          def readonly?
+            persisted?
+          end
  
           protected
  
@@ -28,6 +34,10 @@ module Event
                       (resource.platform.nil? || resource.platform == platform)
             errors.add(:base, 'Event components refer to different platforms')
             false
+          end
+
+          def call_event_listeners
+            EventListener.call(self)
           end
         end
       end
@@ -106,7 +116,7 @@ module Event
                    decorator: Api::V1::PersonRepresenter,
                    writeable: false,
                    schema_info: {
-                     description: "The researh label for the #{attribute.to_s} associated with this Event; Visible only to Subscribers and Researchers"
+                     description: "The research label for the #{attribute.to_s} associated with this Event; Visible only to Subscribers and Researchers"
                    }
         }
 

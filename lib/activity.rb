@@ -9,6 +9,9 @@ module Activity
         relation_sym = name.tableize.to_sym
 
         class_exec do
+          cattr_accessor :event_map
+          self.event_map = {}
+
           belongs_to :platform, inverse_of: relation_sym
           belongs_to :person, inverse_of: relation_sym
           belongs_to :resource, inverse_of: relation_sym
@@ -19,6 +22,31 @@ module Activity
                                 :first_event_at, :last_event_at, :seconds_active
 
           validate :consistency
+
+          def self.process(*event_classes, &block)
+            event_classes.each do |event_class|
+              self.event_map[event_class.to_s] = block
+            end
+          end
+
+          def self.call(event)
+            #activity = find_or_initialize_by(platform_id: event.platform_id,
+            #                                 person_id: event.person_id,
+            #                                 resource_id: event.resource_id,
+            #                                 attempt: event.attempt)
+            activity = find_or_initialize_by_platform_id_and_person_id_and_resource_id_and_attempt(event.platform_id, event.person_id, event.resource_id, event.attempt)
+
+            activity.first_event_at ||= Time.now
+            activity.last_event_at = Time.now
+            activity.seconds_active ||= 0
+            activity.seconds_active += HeartbeatEvent::INTERVAL \
+              if event.is_a? HeartbeatEvent
+
+            block = self.event_map[event.class.name]
+            block.call(activity, event) unless block.nil?
+
+            activity.save!
+          end
  
           protected
  
