@@ -29,7 +29,7 @@ class Api::V1::HeartbeatEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::HeartbeatEventRepresenter, include: :writeable)}
   EOS
   def create
-    event_create(HeartbeatEvent)
+    create_event(HeartbeatEvent)
   end
 
 end

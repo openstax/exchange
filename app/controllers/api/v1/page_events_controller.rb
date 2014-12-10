@@ -32,7 +32,7 @@ class Api::V1::PageEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::PageEventRepresenter, include: [:writeable, :app])}
   EOS
   def create
-    event_create(PageEvent)
+    create_event(PageEvent)
   end
 
 end

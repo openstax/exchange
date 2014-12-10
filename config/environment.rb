@@ -9,7 +9,6 @@ require 'user'
 require 'app'
 require 'event'
 require 'eventful'
-require 'event_listener'
 require 'activity'
 require 'active'
 

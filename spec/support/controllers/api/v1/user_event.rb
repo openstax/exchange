@@ -92,8 +92,9 @@ def user_event_controller_spec(event_type, create_method = :create)
                  raw_post_data: representer_class.new(event).to_json
         expect(response.status).to eq(422)
 
-        expected_response = {attempt: ['can\'t be blank']}.stringify_keys
-        expect(JSON.parse(response.body)).to eq(expected_response)
+        errors = JSON.parse(response.body)
+        expect(errors.first['offending_inputs']).to eq(['event', 'attempt'])
+        expect(errors.first['code']).to eq('blank')
         expect(event_class.count).to eq(c)
       end
 
@@ -104,8 +105,9 @@ def user_event_controller_spec(event_type, create_method = :create)
                  raw_post_data: representer_class.new(event).to_json
         expect(response.status).to eq(422)
 
-        expected_response = {resource: ['can\'t be blank']}.stringify_keys
-        expect(JSON.parse(response.body)).to eq(expected_response)
+        errors = JSON.parse(response.body)
+        expect(errors.first['offending_inputs']).to eq(['event', 'resource'])
+        expect(errors.first['code']).to eq('blank')
         expect(event_class.count).to eq(c)
       end
     end

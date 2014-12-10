@@ -19,8 +19,6 @@ module Event
 
           validate :consistency
 
-          after_create :call_event_listeners
-
           def readonly?
             persisted?
           end
@@ -34,10 +32,6 @@ module Event
                       (resource.platform.nil? || resource.platform == platform)
             errors.add(:base, 'Event components refer to different platforms')
             false
-          end
-
-          def call_event_listeners
-            EventListener.call(self)
           end
         end
       end
@@ -135,24 +129,25 @@ module Event
   module ApiController
     protected
 
-    def event_create(event_class, options = {})
+    def create_event(event_class, options = {}, &block)
       options = {requestor: current_application}.merge(options)
-      @event = event_class.new
+      routine_class = "Event::Create#{event_class.to_s}".constantize
 
-      event_class.transaction do
-        @event = event_class.new
-        consume!(@event, options)
-        @event.platform = Platform.for(current_application)
+      routine = routine_class.call do |event|
+        consume!(event, options)
+        event.platform = Platform.for(current_application)
         resource_owner_id = doorkeeper_token.try(:resource_owner_id)
-        @event.person_id = resource_owner_id if resource_owner_id
-        yield @event if block_given?
-        OSU::AccessPolicy.require_action_allowed!(:create, current_api_user, @event)
+        event.person_id = resource_owner_id if resource_owner_id
+        block.call(event) unless block.nil?
+        OSU::AccessPolicy.require_action_allowed!(:create,
+                                                  current_api_user,
+                                                  event)
       end
 
-      if @event.save
-        respond_with @event, options.merge({status: :created})
+      if routine.errors.empty?
+        respond_with routine.outputs[:event], options.merge(status: :created)
       else
-        render json: @event.errors, status: :unprocessable_entity
+        render json: routine.errors, status: :unprocessable_entity
       end
     end
   end

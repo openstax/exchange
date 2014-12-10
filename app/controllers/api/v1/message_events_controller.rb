@@ -31,7 +31,7 @@ class Api::V1::MessageEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::MessageEventRepresenter, include: [:writeable, :app])}
   EOS
   def create
-    event_create(MessageEvent) do |e|
+    create_event(MessageEvent) do |e|
       e.person_id = Identifier.where(:token => params[:identifier])
                               .first.try(:resource_owner_id)
     end
