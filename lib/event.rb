@@ -1,69 +1,77 @@
 module Event
   module ActiveRecord
-    def self.included(base)
-      base.extend ClassMethods
-    end
+    module Base
+      def self.included(base)
+        base.extend ClassMethods
+      end
 
-    module ClassMethods
-      def acts_as_event
-        relation_sym = name.tableize.to_sym
+      module ClassMethods
+        def acts_as_event
+          relation_sym = name.tableize.to_sym
 
-        class_exec do
-          belongs_to :platform, inverse_of: relation_sym
-          belongs_to :person, inverse_of: relation_sym
-          belongs_to :resource, inverse_of: relation_sym
+          class_exec do
+            belongs_to :platform, inverse_of: relation_sym
+            belongs_to :person, inverse_of: relation_sym
+            belongs_to :resource, inverse_of: relation_sym
 
-          has_one :identifier, through: :person
+            has_one :identifier, through: :person
 
-          validates_presence_of :platform, :person, :resource, :attempt
+            validates_presence_of :platform, :person, :resource, :attempt
 
-          validate :consistency
+            validate :consistency
 
-          def readonly?
-            persisted?
-          end
- 
-          protected
- 
-          def consistency
-            # Skip this check if the presence check fails
-            return unless platform && person && resource
-            return if person.identifier.application == platform.application &&\
-                      (resource.platform.nil? || resource.platform == platform)
-            errors.add(:base, 'Event components refer to different platforms')
-            false
+            def readonly?
+              persisted?
+            end
+   
+            protected
+   
+            def consistency
+              # Skip this check if the presence check fails
+              return unless platform && person && resource
+              return if person.identifier.application == platform.application &&\
+                        (resource.platform.nil? || resource.platform == platform)
+              errors.add(:base, 'Event components refer to different platforms')
+              false
+            end
           end
         end
       end
     end
-  end
 
-  module TableDefinition
-    def event
-      integer :platform_id, null: false
-      integer :person_id, null: false
-      integer :resource_id, null: false
-      integer :attempt, null: false
-      string :selector
-      text :metadata
+    module ConnectionAdapters
+      module TableDefinition
+        def event
+          integer :platform_id, null: false
+          integer :person_id, null: false
+          integer :resource_id, null: false
+          integer :attempt, null: false
+          string :selector
+          text :metadata
+        end
+      end
+    end
+
+    module Migration
+      def add_event_index(table_name)
+        add_index table_name, :platform_id
+        add_index table_name, :person_id
+        add_index table_name, :resource_id
+        add_index table_name, :attempt
+        add_index table_name, :selector
+      end
     end
   end
 
-  module Migration
-    def add_event_index(table_name)
-      add_index table_name, :platform_id
-      add_index table_name, :person_id
-      add_index table_name, :resource_id
-      add_index table_name, :attempt
-      add_index table_name, :selector
-    end
-  end
-
-  module Routing
-    def event_routes(res, options = {})
-      resources res, {only: :create,
-                      controller: "#{res.to_s.singularize}_events".to_sym}
-                     .merge(options)
+  module ActionDispatch
+    module Routing
+      module Mapper
+        def event_routes(res, options = {})
+          resources res, {only: :create,
+                          controller: "#{res.to_s.singularize}_events".to_sym}
+                         .merge(options)
+        end
+      end
     end
   end
 
@@ -153,8 +161,9 @@ module Event
   end
 end
 
-ActiveRecord::Base.send :include, Event::ActiveRecord
-ActiveRecord::ConnectionAdapters::TableDefinition.send :include,
-                                                       Event::TableDefinition
-ActiveRecord::Migration.send :include, Event::Migration
-ActionDispatch::Routing::Mapper.send :include, Event::Routing
+ActiveRecord::Base.send :include, Event::ActiveRecord::Base
+ActiveRecord::ConnectionAdapters::TableDefinition.send(
+  :include, Event::ActiveRecord::ConnectionAdapters::TableDefinition)
+ActiveRecord::Migration.send :include, Event::ActiveRecord::Migration
+ActionDispatch::Routing::Mapper.send(
+  :include, Event::ActionDispatch::Routing::Mapper)
