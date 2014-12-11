@@ -6,13 +6,12 @@ class FindOrCreateActivityByEvent
 
   def exec(activity_class, event, options={})
 
-    #activity = activity_class.find_or_initialize_by(
-    #             platform_id: event.platform_id,
-    #             person_id: event.person_id,
-    #             resource_id: event.resource_id,
-    #             attempt: event.attempt
-    #           )
-    activity = activity_class.find_or_initialize_by_platform_id_and_person_id_and_resource_id_and_attempt(event.platform_id, event.person_id, event.resource_id, event.attempt)
+    activity = activity_class.find_or_initialize_by(
+                 platform_id: event.platform_id,
+                 person_id: event.person_id,
+                 resource_id: event.resource_id,
+                 attempt: event.attempt
+               )
 
     activity.first_event_at ||= Time.now
     activity.last_event_at = Time.now
