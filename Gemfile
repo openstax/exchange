@@ -49,7 +49,8 @@ gem 'openstax_utilities'
 gem 'whenever'
 
 # OpenStax Accounts integration
-gem 'openstax_accounts', path: '../accounts-rails'
+gem 'openstax_accounts', git: 'https://github.com/Dantemss/accounts-rails.git',
+                         ref: '8652f17db95c5b5fc561f4abd25735a6d36017c9'
 
 # Respond_with and respond_to methods
 gem 'responders', '~> 2.0'
@@ -71,7 +72,7 @@ gem 'lev'
 gem 'squeel'
 
 # Contract management
-gem 'fine_print', path: '../fine_print'
+gem 'fine_print'
 
 # Keyword search
 gem 'keyword_search'
