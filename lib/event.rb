@@ -139,9 +139,8 @@ module Event
 
     def create_event(event_class, options = {}, &block)
       options = {requestor: current_application}.merge(options)
-      routine_class = "Event::Create#{event_class.to_s}".constantize
 
-      routine = routine_class.call do |event|
+      routine = CreateEvent.call(event_class) do |event|
         consume!(event, options)
         event.platform = Platform.for(current_application)
         resource_owner_id = doorkeeper_token.try(:resource_owner_id)

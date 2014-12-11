@@ -1,4 +1,4 @@
-class FindOrCreateActivityByEvent
+class CreateOrUpdateActivityFromEvent
 
   lev_routine
 

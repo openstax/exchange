@@ -6,13 +6,12 @@ class StandardCreate
 
   def exec(klass, options={}, &block)
 
-    key = klass.name.underscore.to_sym
-    outputs[key] = klass.new(options)
+    outputs[:object] = klass.new(options)
 
-    block.call(outputs[key]) unless block.nil?
+    block.call(outputs[:object]) unless block.nil?
 
-    outputs[key].save
-    transfer_errors_from(outputs[key], {type: :verbatim})
+    outputs[:object].save
+    transfer_errors_from(outputs[:object], {type: :verbatim})
 
   end
 end
