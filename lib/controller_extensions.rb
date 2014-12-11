@@ -5,10 +5,7 @@ module ControllerExtensions
 
       layout "layouts/application_body_only"
 
-      protect_beta username: SECRET_SETTINGS[:beta_username], 
-                   password: SECRET_SETTINGS[:beta_password]
-
-      fine_print_get_signatures :general_terms_of_use, :privacy_policy
+      fine_print_require :general_terms_of_use, :privacy_policy
 
       rescue_from Exception, :with => :rescue_from_exception
 

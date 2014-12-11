@@ -1,11 +1,11 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Event do
 
   it 'adds event methods to relevant classes' do
     expect(ActiveRecord::Base).to respond_to(:acts_as_event)
-    expect(ActiveRecord::ConnectionAdapters::TableDefinition.new(:test)).to(
-      respond_to(:event))
+    expect(ActiveRecord::ConnectionAdapters::TableDefinition.new(
+      {}, :test, true, {})).to respond_to(:event)
     expect(ActiveRecord::Migration.new).to respond_to(:add_event_index)
     expect(ActionDispatch::Routing::Mapper.new(Exchange::Application.routes)).to(
       respond_to(:event_routes))

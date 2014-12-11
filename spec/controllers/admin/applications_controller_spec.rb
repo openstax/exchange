@@ -1,8 +1,8 @@
-require "spec_helper"
+require 'rails_helper'
 
 describe Admin::ApplicationsController do
 
-  it '' do
+  xit '' do
   end
 
 end

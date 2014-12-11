@@ -108,7 +108,7 @@ Exchange::Application.routes.draw do
   # Singular routes
   # Only for routes with unique names
 
-  resource :static_page, only: [], path: '', as: '' do
+  scope module: 'static_pages' do
     get 'api'
     get 'copyright'
     get 'about'

@@ -1,11 +1,11 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Activity do
 
   it 'adds activity methods to relevant classes' do
     expect(ActiveRecord::Base).to respond_to(:acts_as_activity)
-    expect(ActiveRecord::ConnectionAdapters::TableDefinition.new(:test)).to(
-      respond_to(:activity))
+    expect(ActiveRecord::ConnectionAdapters::TableDefinition.new(
+      {}, :test, true, {})).to respond_to(:activity)
     expect(ActiveRecord::Migration.new).to respond_to(:add_activity_index)
   end
 

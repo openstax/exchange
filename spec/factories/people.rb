@@ -6,7 +6,7 @@ FactoryGirl.define do
 
     after(:build) do |person, evaluator|
       person.identifier = FactoryGirl.build(:identifier,
-                                            resource_owner: person)\
+                                            resource_owner: person) \
         unless person.identifier
     end
   end
