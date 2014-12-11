@@ -1,3 +1,3 @@
-require 'spec_helper'
+require 'rails_helper'
 
 application_event_controller_spec :message

@@ -22,37 +22,51 @@ class SearchEvents
   def exec(query, requestor, options={})
 
     if Subscriber.for(requestor) || Researcher.for(requestor)
-      events = {:page => PageEvent.includes(
-                           [:platform, {person: :identifier}, :resource]),
-                :heartbeat => HeartbeatEvent.includes(
-                                [:platform, {person: :identifier}, :resource]),
-                :cursor => CursorEvent.includes(
-                             [:platform, {person: :identifier}, :resource]),
-                :input => InputEvent.includes(
-                            [:platform, {person: :identifier}, :resource]),
-                :message => MessageEvent.includes(
-                              [:platform, {person: :identifier}, :resource]),
-                :grading => GradingEvent.includes(
-                              [:platform, {person: :identifier}, :resource]),
-                :task => TaskEvent.includes(
-                           [:platform, {person: :identifier}, :resource])}
+      events = {:page => PageEvent
+                  .includes([:platform, {person: :identifier}, :resource])
+                  .references([{person: :identifier}, :resource]),
+                :heartbeat => HeartbeatEvent
+                  .includes([:platform, {person: :identifier}, :resource])
+                  .references([{person: :identifier}, :resource]),
+                :cursor => CursorEvent
+                  .includes([:platform, {person: :identifier}, :resource])
+                  .references([{person: :identifier}, :resource]),
+                :input => InputEvent
+                  .includes([:platform, {person: :identifier}, :resource])
+                  .references([{person: :identifier}, :resource]),
+                :message => MessageEvent
+                  .includes([:platform, {person: :identifier}, :resource])
+                  .references([{person: :identifier}, :resource]),
+                :grading => GradingEvent
+                  .includes([:platform, {person: :identifier}, :resource])
+                  .references([{person: :identifier}, :resource]),
+                :task => TaskEvent
+                  .includes([:platform, {person: :identifier}, :resource])
+                  .references([{person: :identifier}, :resource])}
     else
       platform = Platform.for(requestor)
       if platform
-        events = {:page => platform.page_events.includes(
-                             [{person: :identifier}, :resource]),
-                  :heartbeat => platform.heartbeat_events.includes(
-                             [{person: :identifier}, :resource]),
-                  :cursor => platform.cursor_events.includes(
-                             [{person: :identifier}, :resource]),
-                  :input => platform.input_events.includes(
-                             [{person: :identifier}, :resource]),
-                  :message => platform.message_events.includes(
-                             [{person: :identifier}, :resource]),
-                  :grading => platform.grading_events.includes(
-                             [{person: :identifier}, :resource]),
-                  :task => platform.task_events.includes(
-                             [{person: :identifier}, :resource])}
+        events = {:page => platform.page_events
+                    .includes([{person: :identifier}, :resource])
+                    .references([{person: :identifier}, :resource]),
+                  :heartbeat => platform.heartbeat_events
+                    .includes([{person: :identifier}, :resource])
+                    .references([{person: :identifier}, :resource]),
+                  :cursor => platform.cursor_events
+                    .includes([{person: :identifier}, :resource])
+                    .references([{person: :identifier}, :resource]),
+                  :input => platform.input_events
+                    .includes([{person: :identifier}, :resource])
+                    .references([{person: :identifier}, :resource]),
+                  :message => platform.message_events
+                    .includes([{person: :identifier}, :resource])
+                    .references([{person: :identifier}, :resource]),
+                  :grading => platform.grading_events
+                    .includes([{person: :identifier}, :resource])
+                    .references([{person: :identifier}, :resource]),
+                  :task => platform.task_events
+                    .includes([{person: :identifier}, :resource])
+                    .references([{person: :identifier}, :resource])}
       else
         outputs[:events] = {}
         return

@@ -4,7 +4,8 @@ FactoryGirl.define do
     expires_in 2.hours
 
     after(:build) do |identifier, evaluator|
-      identifier.resource_owner = FactoryGirl.build(:person, identifier: identifier)\
+      identifier.resource_owner = FactoryGirl.build(:person,
+                                                    identifier: identifier) \
         unless identifier.resource_owner
     end
   end

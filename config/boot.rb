@@ -7,14 +7,14 @@ require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
 
 require 'rails/commands/server'
 
+DEV_PORT = 3003
+DEV_HOST = "localhost:#{DEV_PORT}"
+
 module Rails
   class Server
-
-    DEV_PORT = 3003
-
-    alias :default_options_alias :default_options
+    alias :default_options_without_port :default_options
     def default_options
-      default_options_alias.merge!(:Port => DEV_PORT)
+      default_options_without_port.merge(:Port => DEV_PORT)
     end    
   end
 end

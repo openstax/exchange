@@ -1,11 +1,11 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe App do
 
   it 'adds app methods to relevant classes' do
     expect(ActiveRecord::Base).to respond_to(:acts_as_application)
-    expect(ActiveRecord::ConnectionAdapters::TableDefinition.new(:test)).to(
-      respond_to(:application))
+    expect(ActiveRecord::ConnectionAdapters::TableDefinition.new(
+      {}, :test, true, {})).to respond_to(:application)
     expect(ActiveRecord::Migration.new).to respond_to(:add_application_index)
     expect(ActionDispatch::Routing::Mapper.new(Exchange::Application.routes)).to(
       respond_to(:application_routes))

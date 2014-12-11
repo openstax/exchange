@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe CreateAdministrator do
-  it '' do
+  xit '' do
   end
 end

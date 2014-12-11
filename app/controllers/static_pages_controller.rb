@@ -5,8 +5,7 @@ class StaticPagesController < ApplicationController
 
   layout :resolve_layout
 
-  fine_print_skip_signatures :general_terms_of_use,
-                             :privacy_policy
+  fine_print_skip :general_terms_of_use, :privacy_policy
 
   def home
   end

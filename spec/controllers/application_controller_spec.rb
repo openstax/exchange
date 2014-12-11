@@ -1,8 +1,8 @@
-require "spec_helper"
+require 'rails_helper'
 
 describe ApplicationController do
 
-  it '' do
+  xit '' do
   end
 
 end

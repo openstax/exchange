@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AgreeToTerms do
-  it '' do
+  xit '' do
   end
 end

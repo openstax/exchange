@@ -5,7 +5,9 @@ Apipie.configure do |config|
   config.api_base_url            = "/api"
   config.doc_base_url            = "/api/docs"
   config.api_controllers_matcher = "#{Rails.root}/app/controllers/api/**/*.rb"
-  config.copyright               = Utilities.copyright_text
+  config.copyright               = OpenStax::Utilities::Text.copyright(
+                                     COPYRIGHT_START_YEAR, COPYRIGHT_HOLDER
+                                   )
   config.layout                  = 'application_body_api_docs'
   config.markup                  = MarkdownWrapper.new
   config.namespaced_resources    = false

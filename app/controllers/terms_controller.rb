@@ -1,6 +1,6 @@
 class TermsController < ApplicationController
   skip_interceptor :authenticate_user!, only: [:index, :show]
-  fine_print_skip_signatures :general_terms_of_use, :privacy_policy
+  fine_print_skip :general_terms_of_use, :privacy_policy
 
   layout "layouts/application_body_only"
 
