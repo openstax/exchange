@@ -7,8 +7,8 @@ class CreateEvent
                translations: { inputs: { scope: :event },
                                outputs: { map: { object: :event }}}
 
-  uses_routine EventListeners,
-               as: :listeners,
+  uses_routine ProcessEvent,
+               as: :process,
                translations: { inputs: { scope: :activities },
                                outputs: { type: :verbatim }}
 
@@ -18,7 +18,7 @@ class CreateEvent
 
     run(:create, event_class, options, &block)
 
-    run(:listeners, outputs[:event])
+    run(:process, outputs[:event])
 
   end
 end

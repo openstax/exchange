@@ -6,13 +6,13 @@ COPYRIGHT_HOLDER = 'Rice University'
 COPYRIGHT_START_YEAR = 2013
 
 require 'controller_extensions'
-require 'mapper_routine'
 require 'user'
 require 'app'
 require 'event'
 require 'eventful'
 require 'activity'
 require 'active'
+require 'lev/delegator'
 
 # Initialize the rails application
 Exchange::Application.initialize!
