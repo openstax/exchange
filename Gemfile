@@ -9,14 +9,11 @@ gem 'rails', '4.2.0.beta2'
 # Remove this when Squeel is updated to support Arel 6.0.0
 gem 'arel', '6.0.0.beta2'
 
-# Bootstrap front-end framework
+# Bootstrap
 gem 'bootstrap-sass', '~> 3.2.0'
 
 # SCSS stylesheets
-gem 'sass-rails', '~> 5.0.0.beta1'
-
-# Compass stylesheets
-gem 'compass-rails'
+gem 'sass-rails', '~> 5.0.0'
 
 # Automatically add browser-specific CSS prefixes
 gem 'autoprefixer-rails'
@@ -95,6 +92,9 @@ gem 'newrelic_rpm'
 
 # YAML database backups
 gem 'yaml_db'
+
+# Admin console
+gem 'rails_admin'
 
 group :development, :test do
   # Thin webserver

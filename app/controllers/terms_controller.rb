@@ -1,4 +1,5 @@
 class TermsController < ApplicationController
+  acts_as_interceptor
   skip_interceptor :authenticate_user!, only: [:index, :show]
   fine_print_skip :general_terms_of_use, :privacy_policy
 
@@ -17,6 +18,7 @@ class TermsController < ApplicationController
   end
 
   def pose
+    instance_exec(current_account, &FinePrint.can_sign_proc)
     @contracts = params['terms'].collect{|t| FinePrint.get_contract(t)}
   end
 

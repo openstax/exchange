@@ -1,8 +1,8 @@
 <div id="upper-corner-console">
 
-  <% if !Rails.env.production? %>
+  <% if !Rails.env.production? || current_administrator %>
     Current user: <%= current_account.username %><br/>
-    <%= link_to 'Dev Console', :admin %><br/>
+    <%= link_to 'Admin Console', rails_admin.dashboard_path %><br/>
   <% end %>
 
   <% clock_is_normally_enabled = @clock_enabled && signed_in? %>

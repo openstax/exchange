@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140702151603) do
+ActiveRecord::Schema.define(version: 20141214114523) do
 
   create_table "administrators", force: true do |t|
     t.integer  "account_id",  null: false
@@ -333,6 +333,49 @@ ActiveRecord::Schema.define(version: 20140702151603) do
   add_index "openstax_accounts_accounts", ["last_name"], name: "index_openstax_accounts_accounts_on_last_name"
   add_index "openstax_accounts_accounts", ["openstax_uid"], name: "index_openstax_accounts_accounts_on_openstax_uid", unique: true
   add_index "openstax_accounts_accounts", ["username"], name: "index_openstax_accounts_accounts_on_username", unique: true
+
+  create_table "openstax_accounts_group_members", force: true do |t|
+    t.integer  "group_id",   null: false
+    t.integer  "user_id",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "openstax_accounts_group_members", ["group_id", "user_id"], name: "index_openstax_accounts_group_members_on_group_id_and_user_id", unique: true
+  add_index "openstax_accounts_group_members", ["user_id"], name: "index_openstax_accounts_group_members_on_user_id"
+
+  create_table "openstax_accounts_group_nestings", force: true do |t|
+    t.integer  "member_group_id",    null: false
+    t.integer  "container_group_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "openstax_accounts_group_nestings", ["container_group_id"], name: "index_openstax_accounts_group_nestings_on_container_group_id"
+  add_index "openstax_accounts_group_nestings", ["member_group_id"], name: "index_openstax_accounts_group_nestings_on_member_group_id", unique: true
+
+  create_table "openstax_accounts_group_owners", force: true do |t|
+    t.integer  "group_id",   null: false
+    t.integer  "user_id",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "openstax_accounts_group_owners", ["group_id", "user_id"], name: "index_openstax_accounts_group_owners_on_group_id_and_user_id", unique: true
+  add_index "openstax_accounts_group_owners", ["user_id"], name: "index_openstax_accounts_group_owners_on_user_id"
+
+  create_table "openstax_accounts_groups", force: true do |t|
+    t.integer  "openstax_uid",                               null: false
+    t.boolean  "is_public",                  default: false, null: false
+    t.string   "name"
+    t.text     "cached_subtree_group_ids"
+    t.text     "cached_supertree_group_ids"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "openstax_accounts_groups", ["is_public"], name: "index_openstax_accounts_groups_on_is_public"
+  add_index "openstax_accounts_groups", ["openstax_uid"], name: "index_openstax_accounts_groups_on_openstax_uid", unique: true
 
   create_table "page_events", force: true do |t|
     t.integer  "platform_id", null: false

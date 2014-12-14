@@ -5,8 +5,6 @@ module ControllerExtensions
 
       layout "layouts/application_body_only"
 
-      fine_print_require :general_terms_of_use, :privacy_policy
-
       rescue_from Exception, :with => :rescue_from_exception
 
       helper_method :current_account
