@@ -47,7 +47,7 @@ gem 'whenever'
 
 # OpenStax Accounts integration
 gem 'openstax_accounts', git: 'https://github.com/Dantemss/accounts-rails.git',
-                         ref: '8652f17db95c5b5fc561f4abd25735a6d36017c9'
+                         ref: '14eea4c69bc8dae4a758ebdf6b244c0c47c9f012'
 
 # Respond_with and respond_to methods
 gem 'responders', '~> 2.0'

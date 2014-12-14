@@ -48,3 +48,11 @@ FinePrint.configure do |config|
   }
 
 end
+
+FinePrint::ApplicationController.class_exec do
+  helper ApplicationFooterHelper, ApplicationHelper, ApplicationTopNavHelper,
+         AlertHelper, OpenStax::Utilities::OsuHelper
+
+  layout 'application_body_only'
+end
+
