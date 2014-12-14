@@ -22,30 +22,46 @@ RailsAdmin.config do |config|
                             "Platform", "Subscriber"]
 
   config.model "Doorkeeper::Application" do
-    field :name
-    field :uid
-    field :secret
-    field :redirect_uri do
-      help 'Required. Use urn:ietf:wg:oauth:2.0:oob for local tests.'
+    edit do
+      field :name
+      field :uid
+      field :secret
+      field :redirect_uri do
+        help 'Required. Use urn:ietf:wg:oauth:2.0:oob for local tests.'
+      end
+      field :agents
     end
   end
 
   config.model "Administrator" do
-    field :account
+    edit do
+      field :account
+    end
   end
 
   config.model "Agent" do
-    field :account
-    field :application
+    edit do
+      field :account
+      field :application
+    end
   end
 
   config.model "Researcher" do
-    field :account
+    edit do
+      field :account
+    end
   end
 
   config.model "Platform" do
-    field :application
-    field :agents
+    edit do
+      field :application
+    end
+  end
+
+  config.model "Subscriber" do
+    edit do
+      field :application
+    end
   end
 
   config.actions do

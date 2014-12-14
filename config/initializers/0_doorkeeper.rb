@@ -65,5 +65,5 @@ Doorkeeper.configure do
 end
 
 Doorkeeper::Application.class_exec do
-  has_many :agents, inverse_of: :application
+  has_many :agents, dependent: :destroy, inverse_of: :application
 end

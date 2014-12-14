@@ -108,6 +108,12 @@ group :development, :test do
 
   # Mute asset pipeline log messages
   gem 'quiet_assets'
+
+  # Fixture replacement
+  gem 'factory_girl_rails'
+
+  # Lorem Ipsum
+  gem 'faker'
 end
 
 group :development do
@@ -140,12 +146,6 @@ end
 group :test do
   # Use RSpec for tests
   gem 'rspec-rails'
-
-  # Fixture replacement
-  gem 'factory_girl_rails'
-
-  # Lorem Ipsum
-  gem 'faker'
 
   # Spec helpers
   gem 'shoulda-matchers', require: false
