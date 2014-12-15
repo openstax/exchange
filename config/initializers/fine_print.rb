@@ -44,7 +44,7 @@ FinePrint.configure do |config|
   # Default: lambda { |user, contract_ids| redirect_to(
   #   fine_print.new_contract_signature_path(:contract_id => contract_ids.first)) }
   config.must_sign_proc = lambda { |user, contract_ids| redirect_to(
-    term_pose_path(:terms => contract_ids))
+    main_app.pose_terms_path(:terms => contract_ids))
   }
 
 end

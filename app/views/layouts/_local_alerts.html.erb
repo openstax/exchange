@@ -5,5 +5,5 @@
 <% convert_flash_notice %>
 
 <% self.now_local_alerts.each do |alert_info| %>
-  <%= render partial: "shared/alert", locals: { alert: alert_info } %>
+  <%= render partial: "layouts/alert", locals: { alert: alert_info } %>
 <% end %>

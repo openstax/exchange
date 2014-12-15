@@ -3,6 +3,9 @@
 
 module ApplicationHelper
 
+  include AlertHelper
+  include LayoutHelper
+
   def unless_errors(options={}, &block)
     errors = @handler_result.errors.each do |error|
       add_local_error_alert now: true, content: error.translate
@@ -15,7 +18,7 @@ module ApplicationHelper
 
   def js_refresh_alerts(options={})
     options[:alerts_html_id] ||= 'local-alerts'
-    options[:alerts_partial] ||= 'shared/local_alerts'
+    options[:alerts_partial] ||= 'layouts/local_alerts'
     options[:trigger] ||= 'alerts-updated'    
 
     "$('##{options[:alerts_html_id]}').html('#{ j(render options[:alerts_partial]) }').trigger('#{options[:trigger]}');".html_safe
@@ -76,7 +79,7 @@ module ApplicationHelper
     return if heading_text.blank?
     
     content_for :page_heading do
-      render(:partial => 'shared/page_heading', 
+      render(:partial => 'layouts/page_heading', 
              :locals => {:heading_text => heading_text, 
                          :sub_heading_text => options[:sub_heading_text]})
     end

@@ -13,7 +13,7 @@ module User
           validates_presence_of :account
 
           delegate :username, :first_name, :last_name, :full_name,
-                   :title, :name, :casual_name, to: :account
+                   :title, :name, :casual_name, to: :account, allow_nil: true
 
           def is_disabled?
             !disabled_at.nil?

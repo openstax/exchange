@@ -1,5 +1,5 @@
 <% signed_before = @contracts.any? do |c|
-     FinePrint.signed_any_contract_version?(current_account, c)
+     FinePrint.signed_any_version_of_contract?(current_account, c)
    end %>
 
 <%= page_heading "Welcome to #{SITE_NAME}" %>

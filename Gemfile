@@ -9,14 +9,11 @@ gem 'rails', '4.2.0.beta2'
 # Remove this when Squeel is updated to support Arel 6.0.0
 gem 'arel', '6.0.0.beta2'
 
-# Bootstrap front-end framework
+# Bootstrap
 gem 'bootstrap-sass', '~> 3.2.0'
 
 # SCSS stylesheets
-gem 'sass-rails', '~> 5.0.0.beta1'
-
-# Compass stylesheets
-gem 'compass-rails'
+gem 'sass-rails', '~> 5.0.0'
 
 # Automatically add browser-specific CSS prefixes
 gem 'autoprefixer-rails'
@@ -50,7 +47,7 @@ gem 'whenever'
 
 # OpenStax Accounts integration
 gem 'openstax_accounts', git: 'https://github.com/Dantemss/accounts-rails.git',
-                         ref: '8652f17db95c5b5fc561f4abd25735a6d36017c9'
+                         ref: '90aa108d902e51cc1f90025b78a6df22b977eebe'
 
 # Respond_with and respond_to methods
 gem 'responders', '~> 2.0'
@@ -96,6 +93,9 @@ gem 'newrelic_rpm'
 # YAML database backups
 gem 'yaml_db'
 
+# Admin console
+gem 'rails_admin'
+
 group :development, :test do
   # Thin webserver
   gem 'thin'
@@ -108,6 +108,12 @@ group :development, :test do
 
   # Mute asset pipeline log messages
   gem 'quiet_assets'
+
+  # Fixture replacement
+  gem 'factory_girl_rails'
+
+  # Lorem Ipsum
+  gem 'faker'
 end
 
 group :development do
@@ -140,12 +146,6 @@ end
 group :test do
   # Use RSpec for tests
   gem 'rspec-rails'
-
-  # Fixture replacement
-  gem 'factory_girl_rails'
-
-  # Lorem Ipsum
-  gem 'faker'
 
   # Spec helpers
   gem 'shoulda-matchers', require: false
