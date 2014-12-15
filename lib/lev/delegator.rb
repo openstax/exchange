@@ -25,7 +25,8 @@ module Lev
       def delegate(obj_class, *args)
         options = args.last.is_a?(Hash) ? args.pop : {}
         routines = [options[:to]].flatten.compact
-        raise ArgumentError, 'You must specify routines using the :to option' \
+        raise ArgumentError,
+              'You must specify delegate routines using the :to option' \
           if routines.empty?
 
         self.routine_map[obj_class.name] += routines
