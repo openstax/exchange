@@ -5,8 +5,3 @@ OpenStax::Accounts.configure do |config|
   config.logout_via = :delete
   config.enable_stubbing = true
 end
-
-OpenStax::Accounts::ApplicationController.class_exec do
-  helper ApplicationFooterHelper, ApplicationHelper, ApplicationTopNavHelper,
-         AlertHelper, OpenStax::Utilities::OsuHelper
-end

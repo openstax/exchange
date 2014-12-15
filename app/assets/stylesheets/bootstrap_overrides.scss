@@ -30,7 +30,6 @@ select, input[type='text'], input[type='search'] {
 button.standard, input[type='submit'].standard {
   @extend .btn;
   @extend .btn-primary;
-  @include border-radius(0px);
   &:hover, &:focus {
     color: white;
   }

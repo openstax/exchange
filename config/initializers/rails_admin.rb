@@ -7,7 +7,7 @@ RailsAdmin.config do |config|
       if Rails.env.production? && current_administrator.nil?
   end
 
-  config.current_user_method(&:current_account)
+  #config.current_user_method(&:current_account)
 
   config.included_models = ["OpenStax::Accounts::Account",
                             "Doorkeeper::Application",
