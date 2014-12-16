@@ -5,7 +5,6 @@ SITE_NAME = 'OpenStax Exchange'
 COPYRIGHT_HOLDER = 'Rice University'
 COPYRIGHT_START_YEAR = 2013
 
-require 'controller_extensions'
 require 'user'
 require 'app'
 require 'event'
