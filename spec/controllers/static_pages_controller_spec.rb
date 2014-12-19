@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe StaticPagesController do
+RSpec.describe StaticPagesController do
 
-  xit '' do
+  xit 'shows the static pages' do
   end
 
 end

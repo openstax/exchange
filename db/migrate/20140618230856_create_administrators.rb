@@ -3,9 +3,9 @@ class CreateAdministrators < ActiveRecord::Migration
     create_table :administrators do |t|
       t.user
 
-      t.timestamps
+      t.timestamps null: false
     end
 
-    add_user_index :administrators
+    add_user_indices :administrators
   end
 end

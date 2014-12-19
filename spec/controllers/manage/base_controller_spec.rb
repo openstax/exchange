@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe Manage::BaseController do
+RSpec.describe Manage::BaseController do
 
-  xit '' do
+  xit 'shows the manager dashboard' do
   end
 
 end

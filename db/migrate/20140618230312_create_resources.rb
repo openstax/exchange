@@ -4,7 +4,7 @@ class CreateResources < ActiveRecord::Migration
       t.string :reference, null: false
       t.integer :platform_id
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :resources, [:reference, :platform_id], unique: true

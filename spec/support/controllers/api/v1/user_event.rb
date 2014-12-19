@@ -11,11 +11,13 @@ def user_event_controller_spec(event_type, create_method = :create)
   describe controller_class, :type => :controller, :api => true, :version => :v1 do
 
     let!(:platform) { FactoryGirl.create(:platform) }
-    let!(:identifier) { FactoryGirl.create(:identifier, application: platform.application) }
+    let!(:identifier) { FactoryGirl.create(:identifier,
+                          application: platform.application) }
     let!(:platform_access_token) { FactoryGirl.create(:access_token,
-                                                      application: platform.application) }
+                                     application: platform.application) }
     let!(:access_token) { FactoryGirl.create(:access_token) }
-    let!(:event) { FactoryGirl.build(event_symbol, person: identifier.resource_owner) }
+    let!(:event) { FactoryGirl.build(event_symbol,
+                     person: identifier.resource_owner) }
     let!(:valid_json) { representer_class.new(event).to_json }
 
     context 'success' do
@@ -27,7 +29,7 @@ def user_event_controller_spec(event_type, create_method = :create)
         expect(event_class.count).to eq(c + 1)
         new_event = event_class.last
         expected_response = representer_class.new(new_event)
-                                             .to_json(requestor: platform.application)
+                                             .to_json(platform: platform)
         expect(response.body).to eq(expected_response)
         expect(new_event.resource.reference).to eq('MyResource')
         expect(new_event.attempt).to eq(42)
@@ -40,13 +42,13 @@ def user_event_controller_spec(event_type, create_method = :create)
         c = event_class.count
         api_post create_method, identifier,
                  raw_post_data: representer_class.new(event)
-                                                 .to_json(requestor: platform.application)
+                                                 .to_json(platform: platform)
         expect(response.status).to eq(201)
 
         expect(event_class.count).to eq(c + 1)
         new_event = event_class.last
         expected_response = representer_class.new(new_event)
-                              .to_json(requestor: platform.application)
+                              .to_json(platform: platform)
         expect(response.body).to eq(expected_response)
         expect(new_event.person).not_to eq(person_2)
         expect(new_event.person).to eq(identifier.resource_owner)

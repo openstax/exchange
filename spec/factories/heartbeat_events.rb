@@ -4,6 +4,6 @@ FactoryGirl.define do
   factory :heartbeat_event do
     extend Event::Factory
 
-    y_position 42
+    position 42
   end
 end

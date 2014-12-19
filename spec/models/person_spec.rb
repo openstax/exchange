@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Person, :type => :model do
+RSpec.describe Person, :type => :model do
 
   let!(:person_1) { FactoryGirl.create(:person) }
   let!(:person_2) { FactoryGirl.create(:person) }
@@ -16,14 +16,6 @@ describe Person, :type => :model do
     expect(person_1.save).to eq(false)
     expect(person_1.errors.messages).to eq(
       :label => ["has already been taken"])
-  end
-
-  it 'must have an identifier' do
-    person_1.save!
-    person_1.identifier = nil
-    expect(person_1.save).to eq(false)
-    expect(person_1.errors.messages).to eq(
-      :identifier => ["can't be blank"])
   end
 
   it 'generates a label on creation' do

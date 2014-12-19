@@ -6,7 +6,7 @@ class PageEvent < ActiveRecord::Base
   protected
 
   def from_or_to
-    return if from || to
+    return unless from.nil? && to.nil?
     errors.add(:base, 'must have either a "from" or "to" url')
     false
   end

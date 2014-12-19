@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Administrator, :type => :model do
+RSpec.describe Administrator, :type => :model do
 
   let!(:administrator_1) { FactoryGirl.create(:administrator) }
   let!(:administrator_2) { FactoryGirl.create(:administrator) }
@@ -15,11 +15,7 @@ describe Administrator, :type => :model do
     administrator_1.account = administrator_2.account
     expect(administrator_1.save).to eq(false)
     expect(administrator_1.errors.messages).to eq(
-      :account_id => ["has already been taken"])
-  end
-
-  it 'can return the administrator for a particular account' do
-    expect(Administrator.for(administrator_1.account)).to eq(administrator_1)
+      :account => ["has already been taken"])
   end
 
 end

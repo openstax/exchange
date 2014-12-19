@@ -3,9 +3,9 @@ class CreateReadingActivities < ActiveRecord::Migration
     create_table :reading_activities do |t|
       t.activity
 
-      t.timestamps
+      t.timestamps null: false
     end
 
-    add_activity_index :reading_activities
+    add_activity_indices :reading_activities
   end
 end

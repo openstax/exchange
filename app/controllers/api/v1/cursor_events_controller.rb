@@ -12,38 +12,23 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
       All events have the following fields in common: identifier (string),
       resource (string), attempt (integer), selector (string) and metadata (text).
 
-      Additionally, CursorEvents have the selector (string), action (string)
+      Additionally, CursorEvents have the href (string), action (string)
       x_position (integer) and y_position (integer) fields.
     EOS
   end
 
-  ###############################################################
-  # create
-  ###############################################################
-
-  api :POST, '/events/identifiers/cursors', 'Creates a new generic CursorEvent.'
-  description <<-EOS
-    This API call must be used with the Implicit flow.
-
-    Creates an Event that records the user doing some action with the cursor.
-
-    #{json_schema(Api::V1::CursorEventRepresenter, include: :writeable)}
-  EOS
-  def create
-    create_event(CursorEvent)
-  end
-
-  api :POST, '/events/identifiers/mouse_movements', 'Creates a new MouseMovementEvent.'
+  api :POST, '/events/identifiers/mouse_movements',
+             'Creates a new MouseMovementEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 
     Creates an Event that records the user moving the mouse over a tracked UI object.
 
-    #{json_schema(Api::V1::CursorEventRepresenter, include: :simple)}
+    #{json_schema(Api::V1::CursorEventRepresenter, include: :writeable)}
   EOS
   def create_mouse_movement
     create_event(CursorEvent) do |e|
-      e.action = 'mouse_movement'
+      e.action = 'mouse-movement'
     end
   end
 
@@ -53,11 +38,11 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records the user clicking on a tracked UI object.
 
-    #{json_schema(Api::V1::CursorEventRepresenter, include: :simple)}
+    #{json_schema(Api::V1::CursorEventRepresenter, include: :writeable)}
   EOS
   def create_mouse_click
     create_event(CursorEvent) do |e|
-      e.action = 'mouse_click'
+      e.action = 'mouse-click'
     end
   end
 

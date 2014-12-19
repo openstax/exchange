@@ -2,15 +2,13 @@ class CreateInputEvents < ActiveRecord::Migration
   def change
     create_table :input_events do |t|
       t.event
-      t.string :category
-      t.string :input_type
+      t.string :input_type, null: false
       t.text :value
 
-      t.timestamps
+      t.timestamps null: false
     end
 
-    add_event_index :input_events
-    add_index :input_events, :category
+    add_event_indices :input_events
     add_index :input_events, :input_type
   end
 end

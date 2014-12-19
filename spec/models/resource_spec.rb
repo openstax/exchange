@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Resource, :type => :model do
+RSpec.describe Resource, :type => :model do
 
   let!(:resource_1) { FactoryGirl.create(:resource) }
   let!(:resource_2) { FactoryGirl.create(:resource) }

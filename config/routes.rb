@@ -46,7 +46,7 @@ Exchange::Application.routes.draw do
   apipie
 
   api :v1, :default => true do
-    resources :identifiers, only: :create
+    resources :people, only: :create
 
     resources :events, only: :index
 
@@ -55,17 +55,14 @@ Exchange::Application.routes.draw do
         event_routes :pages
         event_routes :heartbeats
         event_routes :cursors
-        event_routes :mouse_movements, to: 'cursor_events#create_mouse_movement'
-        event_routes :mouse_clicks, to: 'cursor_events#create_mouse_click'
         event_routes :inputs
       end
 
       scope '/platforms' do
-        event_routes :multiple_choices, to: 'input_events#create_multiple_choice'
-        event_routes :free_responses, to: 'input_events#create_free_response'
-        event_routes :messages
+        event_routes :answers
         event_routes :gradings
-        event_routes :tasks
+        event_routes :messages
+        event_routes :taskings
       end
     end
 

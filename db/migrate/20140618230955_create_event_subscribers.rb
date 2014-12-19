@@ -5,7 +5,7 @@ class CreateEventSubscribers < ActiveRecord::Migration
       t.integer :subscriber_id, null: false
       t.boolean :read, null: false, default: false
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :event_subscribers, [:event_id, :subscriber_id], unique: true

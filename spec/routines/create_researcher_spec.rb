@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe CreateResearcher do
-  xit '' do
+RSpec.describe CreateResearcher do
+  xit 'creates a researcher' do
   end
 end

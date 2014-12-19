@@ -1,11 +1,13 @@
 class MessageEvent < ActiveRecord::Base
   acts_as_event
 
-  belongs_to :in_reply_to, class_name: 'MessageEvent', primary_key: :number,
-                           foreign_key: :in_reply_to_number, inverse_of: :replies
-  has_many :replies, class_name: 'MessageEvent', primary_key: :number,
-           foreign_key: :in_reply_to_number, inverse_of: :in_reply_to
+  validates :subject, presence: true
 
-  validates_presence_of :number
-  validates_uniqueness_of :number, scope: :platform_id
+  validate :to_or_cc_or_bcc
+
+  protected
+
+  def to_or_cc_or_bcc
+    # TODO
+  end
 end

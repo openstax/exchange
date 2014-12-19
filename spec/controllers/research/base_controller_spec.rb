@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe Research::BaseController do
+RSpec.describe Research::BaseController do
 
-  xit '' do
+  xit 'shows the researcher dashboard' do
   end
 
 end

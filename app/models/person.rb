@@ -1,10 +1,13 @@
 class Person < ActiveRecord::Base
+  LABEL_GENERATION_ATTEMPTS = 100
+
   acts_as_eventful
   acts_as_active
 
-  has_one :identifier, class_name: '::Identifier',
-                       foreign_key: :resource_owner_id,
-                       inverse_of: :resource_owner
+  has_many :identifiers, class_name: 'Doorkeeper::AccessToken',
+                         foreign_key: :resource_owner_id,
+                         dependent: :destroy,
+                         inverse_of: :resource_owner
 
   has_one :application, through: :identifier
 
@@ -13,10 +16,12 @@ class Person < ActiveRecord::Base
   has_many :superseded, class_name: 'Person',
            foreign_key: :superseder_id, inverse_of: :superseder
 
-  validates :label, presence: true, uniqueness: true
-  validates_presence_of :identifier
+  has_many :tasked_events, class_name: 'TaskingEvent',
+           foreign_key: :taskee_id, inverse_of: :taskee
 
-  before_validation :generate_label, on: :create
+  validates :label, presence: true, uniqueness: true
+
+  before_validation :generate_label, on: :create, unless: :label
 
   def superseded_labels
     superseded.collect{|p| p.label}
@@ -33,8 +38,9 @@ class Person < ActiveRecord::Base
   protected
 
   def generate_label
-    l = SecureRandom.hex(5)
-    l = SecureRandom.hex(5) while Person.where(:label => l).first
-    self.label = l
+    for i in 1..LABEL_GENERATION_ATTEMPTS
+      self.label = SecureRandom.hex(5)
+      return unless Person.where(:label => self.label).exists?
+    end
   end
 end

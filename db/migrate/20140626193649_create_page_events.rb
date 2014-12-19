@@ -5,10 +5,10 @@ class CreatePageEvents < ActiveRecord::Migration
       t.string :from
       t.string :to
 
-      t.timestamps
+      t.timestamps null: false
     end
 
-    add_event_index :page_events
+    add_event_indices :page_events
     add_index :page_events, :from
     add_index :page_events, :to
   end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe CreateAdministrator do
-  xit '' do
+RSpec.describe CreateAdministrator do
+  xit 'creates an administrator' do
   end
 end

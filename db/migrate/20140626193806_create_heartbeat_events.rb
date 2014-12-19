@@ -2,12 +2,11 @@ class CreateHeartbeatEvents < ActiveRecord::Migration
   def change
     create_table :heartbeat_events do |t|
       t.event
-      t.integer :y_position
+      t.integer :position
 
-      t.timestamps
+      t.timestamps null: false
     end
 
-    add_event_index :heartbeat_events
-    add_index :heartbeat_events, :y_position
+    add_event_indices :heartbeat_events
   end
 end

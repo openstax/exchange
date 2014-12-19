@@ -18,10 +18,6 @@ class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
     EOS
   end
 
-  ###############################################################
-  # create
-  ###############################################################
-
   api :POST, '/events/platforms/gradings', 'Creates a new GradingEvent.'
   description <<-EOS
     This API call must be used with the Client Credentials flow.
@@ -32,13 +28,11 @@ class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
     Note that the identifier here refers to the user that did the work,
     not the user that graded it.
 
-    #{json_schema(Api::V1::GradingEventRepresenter, include: [:writeable, :app])}
+    #{json_schema(Api::V1::GradingEventRepresenter, include: :writeable,
+                                                    platform: true)}
   EOS
   def create
-    create_event(GradingEvent) do |e|
-      e.person_id = Identifier.where(:token => params[:identifier])
-                              .first.try(:resource_owner_id)
-    end
+    create_event(GradingEvent)
   end
 
 end

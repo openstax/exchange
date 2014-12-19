@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PageEvent, :type => :model do
+RSpec.describe PageEvent, :type => :model do
 
   let!(:page_event) { FactoryGirl.build(:page_event) }
 

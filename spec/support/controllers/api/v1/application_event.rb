@@ -11,24 +11,27 @@ def application_event_controller_spec(event_type, create_method = :create)
   describe controller_class, :type => :controller, :api => true, :version => :v1 do
 
     let!(:platform) { FactoryGirl.create(:platform) }
-    let!(:identifier) { FactoryGirl.create(:identifier, application: platform.application) }
+    let!(:identifier) { FactoryGirl.create(:identifier,
+                          application: platform.application) }
     let!(:platform_access_token) { FactoryGirl.create(:access_token,
-                                                      application: platform.application) }
+                                     application: platform.application) }
     let!(:access_token) { FactoryGirl.create(:access_token) }
-    let!(:event) { FactoryGirl.build(event_symbol, person: identifier.resource_owner) }
-    let!(:valid_json) { representer_class.new(event).to_json }
+    let!(:event) { FactoryGirl.build(event_symbol,
+                     person: identifier.resource_owner) }
+    let!(:valid_json) { representer_class.new(event).to_json(
+                          platform: platform) }
 
     context 'success' do
       it 'should be creatable by a platform app with a client credentials token if it has all required fields' do
         c = event_class.count
         api_post create_method, platform_access_token,
-                 raw_post_data: valid_json, parameters: {identifier: identifier.token}
+                 raw_post_data: valid_json
         expect(response.status).to eq(201)
 
         expect(event_class.count).to eq(c + 1)
         new_event = event_class.last
         expected_response = representer_class.new(new_event)
-                              .to_json(requestor: platform.application)
+                              .to_json(platform: platform)
         expect(response.body).to eq(expected_response)
         expect(new_event.resource.reference).to eq('MyResource')
         expect(new_event.attempt).to eq(42)
@@ -40,7 +43,7 @@ def application_event_controller_spec(event_type, create_method = :create)
       it 'should not be creatable by a user with an identifier' do
         c = event_class.count
         expect{api_post create_method, identifier,
-                        raw_post_data: valid_json, parameters: {identifier: identifier.token}}.to(
+                        raw_post_data: valid_json}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
       end
@@ -48,7 +51,7 @@ def application_event_controller_spec(event_type, create_method = :create)
       it 'should not be creatable by a non-platform app' do
         c = event_class.count
         expect{api_post create_method, access_token,
-                        raw_post_data: valid_json, parameters: {identifier: identifier.token}}.to(
+                        raw_post_data: valid_json}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
       end
@@ -57,7 +60,7 @@ def application_event_controller_spec(event_type, create_method = :create)
         identifier.token = '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF'
         c = event_class.count
         expect{api_post create_method, identifier,
-                        raw_post_data: valid_json, parameters: {identifier: identifier.token}}.to(
+                        raw_post_data: valid_json}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
       end
@@ -65,7 +68,7 @@ def application_event_controller_spec(event_type, create_method = :create)
       it 'should not be creatable without an access token' do
         c = event_class.count
         expect{api_post create_method, nil,
-                        raw_post_data: valid_json, parameters: {identifier: identifier.token}}.to(
+                        raw_post_data: valid_json}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
       end
@@ -77,8 +80,7 @@ def application_event_controller_spec(event_type, create_method = :create)
         c = event_class.count
         api_post create_method, platform_access_token,
                  raw_post_data: representer_class.new(event)
-                                                 .to_json(requestor: platform.application),
-                 parameters: {identifier: identifier.token}
+                                                 .to_json(platform: platform)
         expect(response.status).to eq(422)
 
         errors = JSON.parse(response.body)
@@ -92,8 +94,7 @@ def application_event_controller_spec(event_type, create_method = :create)
         c = event_class.count
         api_post create_method, platform_access_token,
                  raw_post_data: representer_class.new(event)
-                                                 .to_json(requestor: platform.application),
-                 parameters: {identifier: identifier.token}
+                                                 .to_json(platform: platform)
         expect(response.status).to eq(422)
 
         errors = JSON.parse(response.body)

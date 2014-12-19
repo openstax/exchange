@@ -7,13 +7,11 @@ class CreateCursorEvents < ActiveRecord::Migration
       t.integer :x_position
       t.integer :y_position
 
-      t.timestamps
+      t.timestamps null: false
     end
 
-    add_event_index :cursor_events
+    add_event_indices :cursor_events
     add_index :cursor_events, :action
     add_index :cursor_events, :href
-    add_index :cursor_events, :x_position
-    add_index :cursor_events, :y_position
   end
 end

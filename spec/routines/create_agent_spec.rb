@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe CreateAgent do
-  xit '' do
+RSpec.describe CreateAgent do
+  xit 'creates an agent' do
   end
 end

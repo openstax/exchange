@@ -3,7 +3,7 @@ class CreatePlatforms < ActiveRecord::Migration
     create_table :platforms do |t|
       t.application
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_application_index :platforms

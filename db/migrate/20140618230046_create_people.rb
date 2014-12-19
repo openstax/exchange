@@ -4,7 +4,7 @@ class CreatePeople < ActiveRecord::Migration
       t.string :label, null: false
       t.integer :superseder_id
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :people, :label, unique: true

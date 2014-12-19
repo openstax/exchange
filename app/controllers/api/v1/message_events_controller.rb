@@ -17,10 +17,6 @@ class Api::V1::MessageEventsController < OpenStax::Api::V1::ApiController
     EOS
   end
 
-  ###############################################################
-  # create
-  ###############################################################
-
   api :POST, '/events/platforms/messages', 'Creates a new MessageEvent.'
   description <<-EOS
     This API call must be used with the Client Credentials flow.
@@ -28,13 +24,11 @@ class Api::V1::MessageEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records the user sending a message to other users.
 
-    #{json_schema(Api::V1::MessageEventRepresenter, include: [:writeable, :app])}
+    #{json_schema(Api::V1::MessageEventRepresenter, include: :writeable,
+                                                    platform: true)}
   EOS
   def create
-    create_event(MessageEvent) do |e|
-      e.person_id = Identifier.where(:token => params[:identifier])
-                              .first.try(:resource_owner_id)
-    end
+    create_event(MessageEvent)
   end
 
 end

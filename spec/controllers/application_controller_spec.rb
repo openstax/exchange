@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe ApplicationController do
+RSpec.describe ApplicationController do
 
-  xit '' do
+  xit 'returns the current user' do
   end
 
 end

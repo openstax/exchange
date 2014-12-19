@@ -1,22 +1,9 @@
 module Api::V1
   class MessageEventRepresenter < EventRepresenter
 
-    property :number,
-             type: Integer,
-             writeable: true,
-             schema_info: {
-               description: 'A unique number that identifies this message'
-             }
-
-    property :in_reply_to_number,
-             type: Integer,
-             writeable: true,
-             schema_info: {
-               description: 'The number of the message this is a reply to'
-             }
-
     property :to,
              type: String,
+             readable: false,
              writeable: true,
              schema_info: {
                required: true,
@@ -25,6 +12,7 @@ module Api::V1
 
     property :cc,
              type: String,
+             readable: false,
              writeable: true,
              schema_info: {
                description: 'The message\'s cc field'
@@ -32,6 +20,7 @@ module Api::V1
 
     property :bcc,
              type: String,
+             readable: false,
              writeable: true,
              schema_info: {
                description: 'The message\'s bcc field'
@@ -39,6 +28,7 @@ module Api::V1
 
     property :subject,
              type: String,
+             readable: true,
              writeable: true,
              schema_info: {
                required: true,
@@ -47,6 +37,7 @@ module Api::V1
 
     property :body,
              type: String,
+             readable: true,
              writeable: true,
              schema_info: {
                required: true,

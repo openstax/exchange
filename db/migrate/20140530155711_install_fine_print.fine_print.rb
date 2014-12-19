@@ -7,7 +7,7 @@ class InstallFinePrint < ActiveRecord::Migration
       t.string :title, :null => false
       t.text :content, :null => false
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :fine_print_contracts, [:name, :version], :unique => true
@@ -16,7 +16,7 @@ class InstallFinePrint < ActiveRecord::Migration
       t.belongs_to :contract, :null => false
       t.belongs_to :user, :polymorphic => true, :null => false
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :fine_print_signatures, :contract_id

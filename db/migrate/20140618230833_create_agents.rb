@@ -1,14 +1,12 @@
 class CreateAgents < ActiveRecord::Migration
   def change
     create_table :agents do |t|
-      t.user
-      t.integer :application_id, null: false
+      t.user(application_specific: true)
       t.boolean :is_manager, null: false, default: false
 
-      t.timestamps
+      t.timestamps null: false
     end
 
-    add_index :agents, [:account_id, :application_id], unique: true
-    add_index :agents, :disabled_at
+    add_user_indices :agents, application_specific: true
   end
 end

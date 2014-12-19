@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe TermsAgree do
+RSpec.describe TermsAgree do
 
-  xit '' do
+  xit 'lets users agree to multiple site terms at once' do
   end
 
 end

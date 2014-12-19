@@ -10,13 +10,14 @@ module Eventful
           relation_sym = name.underscore.to_sym
 
           class_exec do
-            has_many :page_events, inverse_of: relation_sym
+            has_many :page_events,      inverse_of: relation_sym
             has_many :heartbeat_events, inverse_of: relation_sym
-            has_many :cursor_events, inverse_of: relation_sym
-            has_many :input_events, inverse_of: relation_sym
-            has_many :task_events, inverse_of: relation_sym
-            has_many :grading_events, inverse_of: relation_sym
-            has_many :message_events, inverse_of: relation_sym
+            has_many :cursor_events,    inverse_of: relation_sym
+            has_many :input_events,     inverse_of: relation_sym
+            has_many :answer_events,    inverse_of: relation_sym
+            has_many :grading_events,   inverse_of: relation_sym
+            has_many :message_events,   inverse_of: relation_sym
+            has_many :tasking_events,   inverse_of: relation_sym
           end
         end
       end
