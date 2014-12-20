@@ -1,65 +1,77 @@
 module Event
   module ActiveRecord
-    def self.included(base)
-      base.extend ClassMethods
-    end
+    module Base
+      def self.included(base)
+        base.extend ClassMethods
+      end
 
-    module ClassMethods
-      def acts_as_event
-        relation_sym = name.tableize.to_sym
+      module ClassMethods
+        def acts_as_event
+          relation_sym = name.tableize.to_sym
 
-        class_exec do
-          belongs_to :platform, inverse_of: relation_sym
-          belongs_to :person, inverse_of: relation_sym
-          belongs_to :resource, inverse_of: relation_sym
+          class_exec do
+            belongs_to :platform, inverse_of: relation_sym
+            belongs_to :person, inverse_of: relation_sym
+            belongs_to :resource, inverse_of: relation_sym
 
-          has_one :identifier, through: :person
+            has_one :identifier, through: :person
 
-          validates_presence_of :platform, :person, :resource, :attempt
+            validates_presence_of :platform, :person, :resource, :attempt
 
-          validate :consistency
- 
-          protected
- 
-          def consistency
-            # Skip this check if the presence check fails
-            return unless platform && person && resource
-            return if person.identifier.application == platform.application &&\
-                      (resource.platform.nil? || resource.platform == platform)
-            errors.add(:base, 'Event components refer to different platforms')
-            false
+            validate :consistency
+
+            def readonly?
+              persisted?
+            end
+   
+            protected
+   
+            def consistency
+              # Skip this check if the presence check fails
+              return unless platform && person && resource
+              return if person.identifier.application == platform.application &&\
+                        (resource.platform.nil? || resource.platform == platform)
+              errors.add(:base, 'Event components refer to different platforms')
+              false
+            end
           end
         end
       end
     end
-  end
 
-  module TableDefinition
-    def event
-      integer :platform_id, null: false
-      integer :person_id, null: false
-      integer :resource_id, null: false
-      integer :attempt, null: false
-      string :selector
-      text :metadata
+    module ConnectionAdapters
+      module TableDefinition
+        def event
+          integer :platform_id, null: false
+          integer :person_id, null: false
+          integer :resource_id, null: false
+          integer :attempt, null: false
+          string :selector
+          text :metadata
+        end
+      end
+    end
+
+    module Migration
+      def add_event_index(table_name)
+        add_index table_name, :platform_id
+        add_index table_name, :person_id
+        add_index table_name, :resource_id
+        add_index table_name, :attempt
+        add_index table_name, :selector
+      end
     end
   end
 
-  module Migration
-    def add_event_index(table_name)
-      add_index table_name, :platform_id
-      add_index table_name, :person_id
-      add_index table_name, :resource_id
-      add_index table_name, :attempt
-      add_index table_name, :selector
-    end
-  end
-
-  module Routing
-    def event_routes(res, options = {})
-      resources res, {only: :create,
-                      controller: "#{res.to_s.singularize}_events".to_sym}
-                     .merge(options)
+  module ActionDispatch
+    module Routing
+      module Mapper
+        def event_routes(res, options = {})
+          resources res, {only: :create,
+                          controller: "#{res.to_s.singularize}_events".to_sym}
+                         .merge(options)
+        end
+      end
     end
   end
 
@@ -106,7 +118,7 @@ module Event
                    decorator: Api::V1::PersonRepresenter,
                    writeable: false,
                    schema_info: {
-                     description: "The researh label for the #{attribute.to_s} associated with this Event; Visible only to Subscribers and Researchers"
+                     description: "The research label for the #{attribute.to_s} associated with this Event; Visible only to Subscribers and Researchers"
                    }
         }
 
@@ -125,31 +137,32 @@ module Event
   module ApiController
     protected
 
-    def event_create(event_class, options = {})
+    def create_event(event_class, options = {}, &block)
       options = {requestor: current_application}.merge(options)
-      @event = event_class.new
 
-      event_class.transaction do
-        @event = event_class.new
-        consume!(@event, options)
-        @event.platform = Platform.for(current_application)
+      routine = CreateEvent.call(event_class) do |event|
+        consume!(event, options)
+        event.platform = Platform.for(current_application)
         resource_owner_id = doorkeeper_token.try(:resource_owner_id)
-        @event.person_id = resource_owner_id if resource_owner_id
-        yield @event if block_given?
-        OSU::AccessPolicy.require_action_allowed!(:create, current_api_user, @event)
+        event.person_id = resource_owner_id if resource_owner_id
+        block.call(event) unless block.nil?
+        OSU::AccessPolicy.require_action_allowed!(:create,
+                                                  current_api_user,
+                                                  event)
       end
 
-      if @event.save
-        respond_with @event, options.merge({status: :created})
+      if routine.errors.empty?
+        respond_with routine.outputs[:event], options.merge(status: :created)
       else
-        render json: @event.errors, status: :unprocessable_entity
+        render json: routine.errors, status: :unprocessable_entity
       end
     end
   end
 end
 
-ActiveRecord::Base.send :include, Event::ActiveRecord
-ActiveRecord::ConnectionAdapters::TableDefinition.send :include,
-                                                       Event::TableDefinition
-ActiveRecord::Migration.send :include, Event::Migration
-ActionDispatch::Routing::Mapper.send :include, Event::Routing
+ActiveRecord::Base.send :include, Event::ActiveRecord::Base
+ActiveRecord::ConnectionAdapters::TableDefinition.send(
+  :include, Event::ActiveRecord::ConnectionAdapters::TableDefinition)
+ActiveRecord::Migration.send :include, Event::ActiveRecord::Migration
+ActionDispatch::Routing::Mapper.send(
+  :include, Event::ActionDispatch::Routing::Mapper)

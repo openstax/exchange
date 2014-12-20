@@ -11,6 +11,7 @@ require 'event'
 require 'eventful'
 require 'activity'
 require 'active'
+require 'lev/delegator'
 
 # Initialize the rails application
 Exchange::Application.initialize!

@@ -30,7 +30,7 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::CursorEventRepresenter, include: :writeable)}
   EOS
   def create
-    event_create(CursorEvent)
+    create_event(CursorEvent)
   end
 
   api :POST, '/events/identifiers/mouse_movements', 'Creates a new MouseMovementEvent.'
@@ -42,7 +42,7 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::CursorEventRepresenter, include: :simple)}
   EOS
   def create_mouse_movement
-    event_create(CursorEvent) do |e|
+    create_event(CursorEvent) do |e|
       e.action = 'mouse_movement'
     end
   end
@@ -56,7 +56,7 @@ class Api::V1::CursorEventsController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::CursorEventRepresenter, include: :simple)}
   EOS
   def create_mouse_click
-    event_create(CursorEvent) do |e|
+    create_event(CursorEvent) do |e|
       e.action = 'mouse_click'
     end
   end
