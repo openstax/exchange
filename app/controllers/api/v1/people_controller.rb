@@ -10,10 +10,6 @@ class Api::V1::PeopleController < OpenStax::Api::V1::ApiController
     EOS
   end
 
-  ###############################################################
-  # create
-  ###############################################################
-
   api :POST, '/people', 'Creates a new Person.'
   description <<-EOS
     This API call must be used with the Client Credentials flow.

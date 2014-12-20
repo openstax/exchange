@@ -16,15 +16,36 @@ class Api::V1::AnswerEventsController < OpenStax::Api::V1::ApiController
     EOS
   end
 
-  api :POST, '/events/platforms/answers', 'Creates a new AnswerEvent.'
+  api :POST, '/events/platforms/multiple_choices', 'Creates a new MultipleChoiceInputEvent.'
   description <<-EOS
-    Creates an Event that records the user submitting an answer to an exercise.
+    This API call must be used with the Client Credentials flow.
+    You must supply an identifier token in the URL, with the 'identifier' key.
+
+    Creates an Event that records the user submitting a multiple choice answer.
 
     #{json_schema(Api::V1::AnswerEventRepresenter, include: :writeable,
                                                    platform: true)}
   EOS
-  def create
-    event_create(AnswerEvent)
+  def create_multiple_choice
+    create_event(AnswerEvent) do |e|
+      e.answer_type = 'multiple-choice'
+    end
+  end
+
+  api :POST, '/events/platforms/free_responses', 'Creates a new FreeResponseInputEvent.'
+  description <<-EOS
+    This API call must be used with the Client Credentials flow.
+    You must supply an identifier token in the URL, with the 'identifier' key.
+
+    Creates an Event that records the user submitting a free response answer.
+
+    #{json_schema(Api::V1::AnswerEventRepresenter, include: :writeable,
+                                                   platform: true)}
+  EOS
+  def create_free_response
+    create_event(AnswerEvent) do |e|
+      e.answer_type = 'free-response'
+    end
   end
 
 end

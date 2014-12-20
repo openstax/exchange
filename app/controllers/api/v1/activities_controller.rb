@@ -16,10 +16,6 @@ class Api::V1::ActivitiesController < OpenStax::Api::V1::ApiController
     EOS
   end
 
-  ###############################################################
-  # index
-  ###############################################################
-
   api :GET, '/activities',
             'Returns a set of Activities matching query terms'
   description <<-EOS

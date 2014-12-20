@@ -14,7 +14,7 @@ module Activity
 
       run(:activity, ExerciseActivity, event) do |activity|
         activity.answer = ''
-        activity.correct = false
+        activity.correctness = 0.0
         activity.free_response = ''
       end
 

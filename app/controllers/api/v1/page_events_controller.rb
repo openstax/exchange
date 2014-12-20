@@ -19,10 +19,6 @@ class Api::V1::PageEventsController < OpenStax::Api::V1::ApiController
     EOS
   end
 
-  ###############################################################
-  # create
-  ###############################################################
-
   api :POST, '/events/identifiers/pages', 'Creates a new PageEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.

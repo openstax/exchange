@@ -4,7 +4,7 @@ module Api::V1
     property :action,
              type: String,
              readable: true,
-             writeable: true,
+             writeable: false,
              schema_info: {
                description: 'The action performed by the user ' + \
                             'during this CursorEvent',

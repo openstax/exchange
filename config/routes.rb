@@ -54,12 +54,15 @@ Exchange::Application.routes.draw do
       scope '/identifiers' do
         event_routes :pages
         event_routes :heartbeats
-        event_routes :cursors
+        event_routes :mouse_movements, to: 'cursor_events#create_mouse_movement'
+        event_routes :mouse_clicks, to: 'cursor_events#create_mouse_click'
         event_routes :inputs
       end
 
       scope '/platforms' do
-        event_routes :answers
+        event_routes :multiple_choices,
+                     to: 'answer_events#create_multiple_choice'
+        event_routes :free_responses, to: 'answer_events#create_free_response'
         event_routes :gradings
         event_routes :messages
         event_routes :taskings

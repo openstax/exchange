@@ -4,9 +4,10 @@ module Api::V1
     property :answer_type,
              type: String,
              readable: true,
-             writeable: true,
+             writeable: false,
              schema_info: {
-               description: 'The type of answer'
+               description: 'The type of answer',
+               enum: [ 'multiple-choice', 'free-response' ]
              }
 
     property :answer,
