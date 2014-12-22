@@ -7,7 +7,7 @@ RSpec.describe TaskingEvent, :type => :model do
   it 'must have a taskee' do
     tasking_event.save!
     tasking_event.taskee = nil
-    expect(tasking_event.save).to eq(false)
+    expect(tasking_event).not_to be_valid
     expect(tasking_event.errors.messages).to eq(
       :taskee => ["can't be blank"])
   end

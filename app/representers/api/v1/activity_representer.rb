@@ -8,6 +8,7 @@ module Api::V1
              readable: true,
              writeable: false,
              schema_info: {
+               required: true,
                description: 'The id given to this Activity'
              }
 
@@ -17,6 +18,7 @@ module Api::V1
              readable: true,
              writeable: true,
              schema_info: {
+               required: true,
                description: 'The Person associated with this Activity'
              }
 
@@ -24,19 +26,20 @@ module Api::V1
              type: String,
              readable: true,
              writeable: false,
-             getter: lambda { |args| resource.try(:reference) },
+             getter: lambda { |args| resource.try(:url) },
              schema_info: {
                required: true,
-               description: 'The Resource String associated with this Activity'
+               description: 'The Resource URL associated with this Activity'
              }
 
-    property :attempt,
-             type: Integer,
+    property :trial,
+             type: String,
              readable: true,
-             writeable: false,
+             writeable: true,
              schema_info: {
                required: true,
-               description: 'The attempt number associated with this Activity'
+               description: 'A unique identifier for the trial ' + \
+                            'connected to this Activity'
              }
 
     property :seconds_active,
@@ -44,6 +47,7 @@ module Api::V1
              readable: true,
              writeable: false,
              schema_info: {
+               required: true,
                description: 'The number of seconds the user ' + \
                             'interacted with this Activity'
              }
@@ -53,6 +57,7 @@ module Api::V1
              readable: true,
              writeable: false,
              schema_info: {
+               required: true,
                description: 'The date and time of the first event ' + \
                             'in this Activity'
              }
@@ -62,6 +67,7 @@ module Api::V1
              readable: true,
              writeable: false,
              schema_info: {
+               required: true,
                description: 'The date and time of the last event ' + \
                             'in this Activity'
              }

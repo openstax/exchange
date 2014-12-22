@@ -2,7 +2,7 @@ class CreateHeartbeatEvents < ActiveRecord::Migration
   def change
     create_table :heartbeat_events do |t|
       t.event
-      t.integer :position
+      t.boolean :active, null: false
 
       t.timestamps null: false
     end

@@ -14,21 +14,9 @@ module Activity
             belongs_to :person, inverse_of: relation_sym
             belongs_to :resource, inverse_of: relation_sym
 
-            validates_presence_of :platform, :person, :resource, :attempt,
+            validates_presence_of :platform, :person, :resource, :trial,
                                   :seconds_active,
                                   :first_event_at, :last_event_at
-
-            validate :consistency
-   
-            protected
-   
-            def consistency
-              return if platform.nil? || resource.nil? || \
-                        resource.platform.nil? || resource.platform == platform
-              errors.add(:base,
-                         'Activity components refer to different platforms')
-              false
-            end
           end
         end
       end
@@ -40,7 +28,7 @@ module Activity
           references :platform, null: false
           references :person, null: false
           references :resource, null: false
-          integer :attempt, null: false
+          string :trial, null: false
           integer :seconds_active, null: false
           datetime :first_event_at, null: false
           datetime :last_event_at, null: false
@@ -50,12 +38,13 @@ module Activity
 
     module Migration
       def add_activity_indices(table_name)
-        add_index table_name, [:person_id, :platform_id, :resource_id, :attempt],
+        add_index table_name,
+                  [:person_id, :platform_id, :resource_id, :trial],
                   unique: true,
-                  name: "index_#{table_name}_on_p_id_and_p_id_and_r_id_and_a"
-        add_index table_name, [:platform_id, :resource_id, :attempt],
-                  name: "index_#{table_name}_on_p_id_and_r_id_and_a"
-        add_index table_name, [:resource_id, :attempt]
+                  name: "index_#{table_name}_on_p_id_and_p_id_and_r_id_and_t"
+        add_index table_name, [:platform_id, :resource_id, :trial],
+                  name: "index_#{table_name}_on_p_id_and_r_id_and_t"
+        add_index table_name, [:resource_id, :trial]
         add_index table_name, [:last_event_at, :first_event_at],
                   name: "index_#{table_name}_on_l_e_at_and_f_e_at"
         add_index table_name, :first_event_at
@@ -68,8 +57,8 @@ module Activity
       base.platform
       base.person { FactoryGirl.build(:identifier,
                       application: platform.application).resource_owner }
-      base.resource { FactoryGirl.build(:resource, platform: platform) }
-      base.attempt 42
+      base.resource { FactoryGirl.build(:resource) }
+      base.trial { "trial://#{SecureRandom.hex(32)}" }
       base.first_event_at { Time.now - 5.minutes }
       base.last_event_at { Time.now }
       base.seconds_active 150

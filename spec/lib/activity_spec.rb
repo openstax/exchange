@@ -16,8 +16,8 @@ RSpec.describe Activity do
     expect(reading_activity.resource).to be_an_instance_of(Resource)
 
     reading_activity.save!
-    [:person, :resource, :first_event_at,
-     :last_event_at, :seconds_active].each do |attr|
+    [:platform, :person, :resource, :trial,
+     :first_event_at, :last_event_at, :seconds_active].each do |attr|
       reading_activity.reload
       reading_activity.send("#{attr.to_s}=", nil)
       expect(reading_activity.save).to eq(false)
@@ -25,11 +25,6 @@ RSpec.describe Activity do
         include(attr => ["can't be blank"])
       )
     end
-    reading_activity.reload
-    reading_activity.resource.platform = FactoryGirl.create(:platform)
-    expect(reading_activity.save).to eq(false)
-    expect(reading_activity.errors.messages).to eq(
-      :base => ["Activity components refer to different platforms"])
   end
 
 end

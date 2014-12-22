@@ -10,7 +10,7 @@ module Doorkeeper
     it 'must have a resource_owner and a platform application or no resource_owner' do
       identifier_1.save!
       identifier_1.application = FactoryGirl.create(:application)
-      expect(identifier_1.save).to eq(false)
+      expect(identifier_1).not_to be_valid
       expect(identifier_1.errors.messages).to eq(
         :application => ['Only Platforms can obtain Identifiers'])
       identifier_1.resource_owner = nil

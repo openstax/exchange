@@ -5,15 +5,17 @@ RSpec.describe SearchActivities do
   let!(:platform)   { FactoryGirl.create :platform }
   let!(:subscriber) { FactoryGirl.create :subscriber }
 
-  let!(:identifier_1) { FactoryGirl.create(:identifier, application: platform.application) }
-  let!(:identifier_2) { FactoryGirl.create(:identifier, application: platform.application) }
+  let!(:identifier_1) { FactoryGirl.create(:identifier,
+                          application: platform.application) }
+  let!(:identifier_2) { FactoryGirl.create(:identifier,
+                          application: platform.application) }
 
-  let!(:resource_1) { FactoryGirl.create :resource, platform: platform }
-  let!(:resource_2) { FactoryGirl.create :resource, platform: nil,
-                                                    reference: 'Awesome Resource' }
+  let!(:resource_1) { FactoryGirl.create :resource }
+  let!(:resource_2) { FactoryGirl.create :resource, url: 'dummy://42' }
 
-  let!(:my_event_1) { FactoryGirl.create :heartbeat_event, resource: resource_2 }
-  let!(:my_event_2) { FactoryGirl.create :page_event, attempt: 4 }
+  let!(:my_event_1) { FactoryGirl.create :heartbeat_event,
+                                         resource: resource_2 }
+  let!(:my_event_2) { FactoryGirl.create :page_event }
 
   before(:each) do
     skip

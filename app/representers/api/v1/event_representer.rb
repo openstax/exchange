@@ -9,6 +9,7 @@ module Api::V1
              readable: true,
              writeable: true,
              schema_info: {
+               required: true,
                description: 'The Person associated with this Event'
              }
 
@@ -17,24 +18,23 @@ module Api::V1
              type: String,
              readable: true,
              writeable: true,
-             skip_parse: lambda { |fragment, args| !args[:platform] },
-             getter: lambda { |args| resource.try(:reference) },
+             getter: lambda { |args| resource.try(:url) },
              setter: lambda { |value, args|
-               self.resource = Resource.find_or_create_by(
-                 platform: args[:platform],
-                 reference: value) },
+               self.resource = Resource.find_or_create_by(url: value)
+             },
              schema_info: {
                required: true,
-               description: 'The Resource String associated with this Event'
+               description: 'The Resource URL associated with this Event'
              }
 
-    property :attempt,
-             type: Integer,
+    property :trial,
+             type: String,
              readable: true,
              writeable: true,
              schema_info: {
                required: true,
-               description: 'The attempt number associated with this Event'
+               description: 'A unique identifier for the trial ' + \
+                            'connected to this Event'
              }
 
     property :selector,

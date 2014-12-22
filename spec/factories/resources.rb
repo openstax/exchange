@@ -2,7 +2,6 @@
 
 FactoryGirl.define do
   factory :resource do
-    platform
-    reference "MyResource"
+    url { "resource://#{SecureRandom.hex(32)}" }
   end
 end

@@ -14,18 +14,7 @@ module Event
             belongs_to :person, inverse_of: relation_sym
             belongs_to :resource, inverse_of: relation_sym
 
-            validates_presence_of :platform, :person, :resource, :attempt
-
-            validate :consistency
-   
-            protected
-   
-            def consistency
-              return if platform.nil? || resource.nil? || \
-                        resource.platform.nil? || resource.platform == platform
-              errors.add(:base, 'Event components refer to different platforms')
-              false
-            end
+            validates_presence_of :platform, :person, :resource, :trial
           end
         end
       end
@@ -37,7 +26,7 @@ module Event
           references :platform, null: false
           references :person, null: false
           references :resource, null: false
-          integer :attempt, null: false
+          string :trial, null: false
           string :selector
         end
       end
@@ -46,13 +35,12 @@ module Event
     module Migration
       def add_event_indices(table_name)
         add_index table_name,
-                  [:person_id, :platform_id, :resource_id, :attempt],
-                  unique: true,
-                  name: "index_#{table_name}_on_p_id_and_p_id_and_r_id_and_a"
-        add_index table_name, [:platform_id, :resource_id, :attempt],
-                  name: "index_#{table_name}_on_p_id_and_r_id_and_a"
-        add_index table_name, [:resource_id, :attempt],
-                  name: "index_#{table_name}_on_r_id_and_a"
+                  [:person_id, :platform_id, :resource_id, :trial],
+                  name: "index_#{table_name}_on_p_id_and_p_id_and_r_id_and_t"
+        add_index table_name, [:platform_id, :resource_id, :trial],
+                  name: "index_#{table_name}_on_p_id_and_r_id_and_t"
+        add_index table_name, [:resource_id, :trial],
+                  name: "index_#{table_name}_on_r_id_and_t"
         add_index table_name, :selector
       end
     end
@@ -62,8 +50,9 @@ module Event
     module Routing
       module Mapper
         def event_routes(res, options = {})
-          resources res, { controller: "#{res.to_s.singularize}_events".to_sym,
-                           only: :create }.merge(options)
+          resources res,
+                    { controller: "#{res.to_s.singularize}_events".to_sym,
+                      only: :create }.merge(options)
         end
       end
     end
@@ -74,13 +63,13 @@ module Event
       base.platform
       base.person { FactoryGirl.build(:identifier,
                       application: platform.application).resource_owner }
-      base.resource { FactoryGirl.build(:resource, platform: platform) }
-      base.attempt 42
-      base.selector '#my_selector'
+      base.resource { FactoryGirl.build(:resource) }
+      base.trial { "trial://#{SecureRandom.hex(32)}" }
     end
   end
 
   module ApiController
+
     protected
 
     def create_event(event_class, options = {})
@@ -109,6 +98,7 @@ module Event
         render json: routine.errors, status: :unprocessable_entity
       end
     end
+
   end
 end
 

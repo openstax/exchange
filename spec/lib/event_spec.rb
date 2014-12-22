@@ -19,7 +19,7 @@ RSpec.describe Event do
     expect(heartbeat_event.resource).to be_an_instance_of(Resource)
 
     heartbeat_event.save!
-    [:platform, :person, :resource, :attempt].each do |attr|
+    [:platform, :person, :resource, :trial].each do |attr|
       heartbeat_event = FactoryGirl.build(:heartbeat_event)
       heartbeat_event.send("#{attr.to_s}=", nil)
       expect(heartbeat_event.save).to eq(false)
@@ -27,12 +27,6 @@ RSpec.describe Event do
         include(attr => ["can't be blank"])
       )
     end
-
-    heartbeat_event = FactoryGirl.build(:heartbeat_event)
-    heartbeat_event.resource.platform = FactoryGirl.create(:platform)
-    expect(heartbeat_event.save).to eq(false)
-    expect(heartbeat_event.errors.messages).to eq(
-      :base => ["Event components refer to different platforms"])
   end
 
 end

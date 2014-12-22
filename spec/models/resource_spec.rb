@@ -2,16 +2,15 @@ require 'rails_helper'
 
 RSpec.describe Resource, :type => :model do
 
-  let!(:resource_1) { FactoryGirl.create(:resource) }
-  let!(:resource_2) { FactoryGirl.create(:resource) }
+  let!(:resource_1) { FactoryGirl.create(:resource,
+                                         url: 'resource://some.url') }
+  let!(:resource_2) { FactoryGirl.build(:resource, url: resource_1.url) }
 
-  it 'must have a unique reference' do
-    resource_2.save!
-    resource_2.platform = resource_1.platform
-    expect(resource_2.save).to eq(false)
-    expect(resource_2.errors.messages).to eq(
-      :reference => ['has already been taken'])
-    resource_2.reference = 'Something else'
+  it 'must have a unique url' do
+    expect(resource_2).not_to be_valid
+    expect(resource_2.errors.messages).to(
+      eq(:url => ['has already been taken']))
+    resource_2.url = 'resource://another.url'
     resource_2.save!
   end
 

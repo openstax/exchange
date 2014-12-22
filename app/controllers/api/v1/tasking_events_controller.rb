@@ -8,11 +8,11 @@ class Api::V1::TaskingEventsController < OpenStax::Api::V1::ApiController
     description <<-EOS
       This controller uses a token obtained through the Client Credentials flow.
 
-      All events have the following fields in common: identifier (string),
-      resource (string), attempt (integer), selector (string) and metadata (text).
+      All events have the following fields in common: platform (object),
+      person (object), resource (string) and context (string).
 
-      Additionally, TaskingEvents have the task (string), assigner (string),
-      due_date (datetime) and status (string) fields.
+      Additionally, TaskingEvents have the assignee (string) and
+      due_date (datetime) fields.
     EOS
   end
 

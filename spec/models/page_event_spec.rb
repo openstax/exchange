@@ -15,7 +15,7 @@ RSpec.describe PageEvent, :type => :model do
     page_event = FactoryGirl.build(:page_event)
     page_event.to = nil
     page_event.from = nil
-    expect(page_event.save).to eq(false)
+    expect(page_event).not_to be_valid
     expect(page_event.errors.messages).to eq(
       :base => ['must have either a "from" or "to" url'])
   end

@@ -6,22 +6,24 @@ RSpec.describe Api::V1::ActivitiesController, :type => :controller,
   let!(:platform)   { FactoryGirl.create :platform }
   let!(:subscriber) { FactoryGirl.create :subscriber }
 
-  let!(:identifier_1) { FactoryGirl.create(:identifier, application: platform.application) }
-  let!(:identifier_2) { FactoryGirl.create(:identifier, application: platform.application) }
+  let!(:identifier_1) { FactoryGirl.create(:identifier,
+                          application: platform.application) }
+  let!(:identifier_2) { FactoryGirl.create(:identifier,
+                          application: platform.application) }
 
   let!(:platform_token)   { FactoryGirl.create :access_token, 
-                                               application: platform.application }
+                              application: platform.application }
   let!(:subscriber_token) { FactoryGirl.create :access_token, 
-                                               application: subscriber.application }
+                              application: subscriber.application }
 
-  let!(:resource_1) { FactoryGirl.create :resource, platform: platform }
-  let!(:resource_2) { FactoryGirl.create :resource, platform: nil,
-                                                    reference: 'Awesome Resource' }
+  let!(:resource_1) { FactoryGirl.create :resource }
+  let!(:resource_2) { FactoryGirl.create :resource, url: 'dummy://42' }
 
-  let!(:my_event_1) { FactoryGirl.create :heartbeat_event, resource: resource_2 }
+  let!(:my_event_1) { FactoryGirl.create :heartbeat_event,
+                                         resource: resource_2 }
   let!(:my_event_2) { FactoryGirl.create :heartbeat_event }
   let!(:my_event_json) { Api::V1::HeartbeatEventRepresenter.new(my_event_1)
-                           .to_json(requestor: subscriber.application) }
+                           .to_json(subscriber: subscriber) }
 
   before(:each) do
     skip

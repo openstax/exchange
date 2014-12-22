@@ -33,9 +33,8 @@ def application_event_controller_spec(event_type, create_method = :create)
         expected_response = representer_class.new(new_event)
                               .to_json(platform: platform)
         expect(response.body).to eq(expected_response)
-        expect(new_event.resource.reference).to eq('MyResource')
-        expect(new_event.attempt).to eq(42)
-        expect(new_event.selector).to eq('#my_selector')
+        expect(new_event.resource.url).to eq(event.resource.url)
+        expect(new_event.trial).to eq(event.trial)
       end
     end
 
@@ -75,8 +74,8 @@ def application_event_controller_spec(event_type, create_method = :create)
     end
 
     context 'validation error' do
-      it 'should not be creatable without an attempt' do
-        event.attempt = nil
+      it 'should not be creatable without a trial' do
+        event.trial = nil
         c = event_class.count
         api_post create_method, platform_access_token,
                  raw_post_data: representer_class.new(event)
@@ -84,7 +83,7 @@ def application_event_controller_spec(event_type, create_method = :create)
         expect(response.status).to eq(422)
 
         errors = JSON.parse(response.body)
-        expect(errors.first['offending_inputs']).to eq(['event', 'attempt'])
+        expect(errors.first['offending_inputs']).to eq(['event', 'trial'])
         expect(errors.first['code']).to eq('blank')
         expect(event_class.count).to eq(c)
       end

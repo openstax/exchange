@@ -4,5 +4,13 @@ class Resource < ActiveRecord::Base
 
   belongs_to :platform, inverse_of: :resources
 
-  validates_uniqueness_of :reference, scope: :platform_id
+  validates :url, presence: true, uniqueness: true
+
+  def http_url
+    UrlProtocolConverter.to_http(url)
+  end
+
+  def https_url
+    UrlProtocolConverter.to_https(url)
+  end
 end

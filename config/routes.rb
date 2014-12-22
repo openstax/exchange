@@ -54,8 +54,7 @@ Exchange::Application.routes.draw do
       scope '/identifiers' do
         event_routes :pages
         event_routes :heartbeats
-        event_routes :mouse_movements, to: 'cursor_events#create_mouse_movement'
-        event_routes :mouse_clicks, to: 'cursor_events#create_mouse_click'
+        event_routes :clicks
         event_routes :inputs
       end
 

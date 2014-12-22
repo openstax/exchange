@@ -8,12 +8,12 @@ RSpec.describe Person, :type => :model do
   it 'must have a unique label' do
     person_1.save!
     person_1.label = nil
-    expect(person_1.save).to eq(false)
+    expect(person_1).not_to be_valid
     expect(person_1.errors.messages).to eq(
       :label => ["can't be blank"])
 
     person_1.label = person_2.label
-    expect(person_1.save).to eq(false)
+    expect(person_1).not_to be_valid
     expect(person_1.errors.messages).to eq(
       :label => ["has already been taken"])
   end

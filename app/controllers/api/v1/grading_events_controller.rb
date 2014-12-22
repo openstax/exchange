@@ -10,8 +10,8 @@ class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
       The token is obtained by calling the oauth/token endpoint with the application uid,
       secret and a grant_type of "client_credentials."
 
-      All events have the following fields in common: identifier (string),
-      resource (string), attempt (integer), selector (string) and metadata (text).
+      All events have the following fields in common: platform (object),
+      person (object), resource (string) and context (string).
 
       Additionally, GradingEvents have the grader (string),
       grade (string) and feedback (text) fields.
