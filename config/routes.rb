@@ -77,9 +77,11 @@ Exchange::Application.routes.draw do
   # Resources
 
   resources :terms, only: [:index, :show] do
-    collection do
-      get 'pose'
-      post 'agree'
+    scope controller: 'signatures' do
+      collection do
+        get 'pose', action: :new
+        post 'agree', action: :create
+      end
     end
   end
 
@@ -87,7 +89,6 @@ Exchange::Application.routes.draw do
   # Only for routes with unique names
 
   scope module: 'static_pages' do
-    get 'api'
     get 'copyright'
     get 'about'
   end

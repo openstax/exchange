@@ -10,13 +10,10 @@ class StaticPagesController < ApplicationController
   def home
   end
 
-  def api
-  end
-
   def about
   end
 
-protected
+  protected
 
   def resolve_layout
     'home' == action_name ? 'application_home_page' : 'application_body_only'
