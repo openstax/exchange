@@ -7,7 +7,7 @@ class SignaturesController < ApplicationController
 
   def new
     instance_exec(current_account, &FinePrint.can_sign_proc)
-    @contracts = params['terms'].collect{|t| FinePrint.get_contract(t)}
+    @contracts = params[:terms].collect{|t| FinePrint.get_contract(t)}
   end
 
   def create
