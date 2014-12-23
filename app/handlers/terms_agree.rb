@@ -17,7 +17,7 @@ class TermsAgree
   def handle
     fatal_error(code: :did_not_agree,
                 message: 'You must agree to the terms to register',
-                offending_inputs: 'agreement[:i_agree]') \
+                offending_inputs: [:agreement, :i_agree]) \
       unless agreement_params.i_agree
 
     agreement_params.term_ids.each do |term_id|
