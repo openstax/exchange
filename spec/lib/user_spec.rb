@@ -13,7 +13,7 @@ RSpec.describe User do
 
   it 'modifies classes that call acts_as_user' do
     administrator_1 = FactoryGirl.create(:administrator)
-    administrator_2 = FactoryGirl.create(:administrator)
+    administrator_2 = FactoryGirl.create(:administrator, :terms_agreed)
     expect(administrator_1.account).to be_an_instance_of(OpenStax::Accounts::Account)
     administrator_1.save!
     administrator_1.account = nil

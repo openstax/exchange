@@ -9,7 +9,7 @@ RSpec.describe TermsAgree do
   it 'lets users agree to multiple site terms at once' do
     expect(FinePrint.signed_contract?(user, contract_1)).to eq false
     expect(FinePrint.signed_contract?(user, contract_2)).to eq false
-    errors = TermsAgree.call(
+    errors = TermsAgree.handle(
       caller: user,
       params: { agreement: { i_agree: true,
                              term_ids: [ contract_1.id,
@@ -23,7 +23,7 @@ RSpec.describe TermsAgree do
   it 'requires users to accept the agreement' do
     expect(FinePrint.signed_contract?(user, contract_1)).to eq false
     expect(FinePrint.signed_contract?(user, contract_2)).to eq false
-    errors = TermsAgree.call(
+    errors = TermsAgree.handle(
       caller: user,
       params: { agreement: { term_ids: [ contract_1.id,
                                          contract_2.id ] } }
