@@ -88,8 +88,8 @@ Exchange::Application.routes.draw do
   # Only for routes with unique names
 
   scope module: 'static_pages' do
-    get 'copyright'
     get 'about'
+    get 'copyright'
   end
 
 end

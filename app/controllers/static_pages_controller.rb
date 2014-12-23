@@ -13,6 +13,9 @@ class StaticPagesController < ApplicationController
   def about
   end
 
+  def copyright
+  end
+
   protected
 
   def resolve_layout

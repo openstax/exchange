@@ -7,6 +7,11 @@ RSpec.describe StaticPagesController do
     expect(response).to have_http_status(:success)
   end
 
+  it 'shows the about page' do
+    get :about
+    expect(response).to have_http_status(:success)
+  end
+
   it 'shows the copyright page' do
     get :copyright
     expect(response).to have_http_status(:success)
