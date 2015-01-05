@@ -2,19 +2,31 @@ require 'rails_helper'
 
 RSpec.describe StaticPagesController do
 
-  it 'shows the home page' do
-    get :home
-    expect(response).to have_http_status(:success)
+  context 'GET home' do
+
+    it 'renders the home page' do
+      get :home
+      expect(response).to have_http_status(:success)
+    end
+
   end
 
-  it 'shows the about page' do
-    get :about
-    expect(response).to have_http_status(:success)
+  context 'GET about' do
+
+    it 'renders the about page' do
+      get :about
+      expect(response).to have_http_status(:success)
+    end
+
   end
 
-  it 'shows the copyright page' do
-    get :copyright
-    expect(response).to have_http_status(:success)
+  context 'GET copyright' do
+
+    it 'renders the copyright page' do
+      get :copyright
+      expect(response).to have_http_status(:success)
+    end
+
   end
 
   it 'returns different layouts for home and other actions' do

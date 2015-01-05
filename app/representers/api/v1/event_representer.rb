@@ -20,7 +20,8 @@ module Api::V1
              writeable: true,
              getter: lambda { |args| resource.try(:url) },
              setter: lambda { |value, args|
-               self.resource = Resource.find_or_create_by(url: value)
+               self.resource = FindOrCreateResourceFromUrl.call(value)
+                                 .outputs[:resource]
              },
              schema_info: {
                required: true,
@@ -35,15 +36,6 @@ module Api::V1
                required: true,
                description: 'A unique identifier for the trial ' + \
                             'connected to this Event'
-             }
-
-    property :selector,
-             type: String,
-             readable: true,
-             writeable: true,
-             schema_info: {
-               description: 'The selector for the object ' + \
-                            'that triggered this Event'
              }
 
     property :created_at,

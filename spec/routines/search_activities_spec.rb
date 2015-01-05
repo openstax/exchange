@@ -13,15 +13,15 @@ RSpec.describe SearchActivities do
   let!(:resource_1) { FactoryGirl.create :resource }
   let!(:resource_2) { FactoryGirl.create :resource, url: 'dummy://42' }
 
-  let!(:my_event_1) { FactoryGirl.create :heartbeat_event,
-                                         resource: resource_2 }
-  let!(:my_event_2) { FactoryGirl.create :page_event }
+  let!(:my_activity_1) { FactoryGirl.create :reading_activity,
+                                            resource: resource_2 }
+  let!(:my_activity_2) { FactoryGirl.create :exercise_activity,
+                                            trial: 'some_trial' }
 
   before(:each) do
-    skip
-    [:page, :heartbeat, :cursor,
-     :input, :task, :grading, :message].each do |event_symbol|
-      factory_symbol = "#{event_symbol.to_s}_event".to_sym
+    [:exercise, :feedback, :interactive,
+     :peer_grading, :reading].each do |activity_symbol|
+      factory_symbol = "#{activity_symbol.to_s}_activity".to_sym
       [identifier_1, identifier_2].each do |identifier|
         (1..5).to_a.each do |i|
           FactoryGirl.create factory_symbol, platform: platform,
@@ -34,55 +34,50 @@ RSpec.describe SearchActivities do
 
   context 'filtering' do
 
-    it 'should return only platform-specific events for platforms' do
+    it 'should return only platform-specific activities for platforms' do
       outputs = SearchActivities.call('', platform.application).outputs
 
-      expect(outputs['num_matching_events']).to eq(70)
-      expect(outputs['order_by']).to eq 'created_at DESC'
-      expect(outputs['events'].values.flatten.count).to eq(70)
-      expect(outputs['events'][:heartbeat]).not_to include(my_event_1)
-      expect(outputs['events'][:page]).not_to include(my_event_2)
+      expect(outputs['total_count']).to eq(70)
+      expect(outputs['items'].values.flatten.count).to eq(70)
+      expect(outputs['items']['reading']).not_to include(my_activity_1)
+      expect(outputs['items']['exercise']).not_to include(my_activity_2)
     end
 
-    it 'should return all events for subscribers' do
+    it 'should return all activities for subscribers' do
       outputs = SearchActivities.call('', subscriber.application).outputs
 
-      expect(outputs['num_matching_events']).to eq(72)
-      expect(outputs['order_by']).to eq 'created_at DESC'
-      expect(outputs['events'].values.flatten.count).to eq(72)
-      expect(outputs['events'][:heartbeat]).to include(my_event_1)
-      expect(outputs['events'][:page]).to include(my_event_2)
+      expect(outputs['total_count']).to eq(72)
+      expect(outputs['items'].values.flatten.count).to eq(72)
+      expect(outputs['items']['reading']).to include(my_activity_1)
+      expect(outputs['items']['exercise']).to include(my_activity_2)
     end
 
-    it 'should partially match some fields' do
-      outputs = SearchActivities.call('resource:yRe', subscriber.application).outputs
+    it 'should partially match fields' do
+      outputs = SearchActivities.call('resource:yRe', subscriber.application)
+                                .outputs
 
-      expect(outputs['num_matching_events']).to eq(71)
-      expect(outputs['order_by']).to eq 'created_at DESC'
-      expect(outputs['events'].values.flatten.count).to eq(71)
-      expect(outputs['events'][:heartbeat]).not_to include(my_event_1)
-      expect(outputs['events'][:page]).to include(my_event_2)
-    end
+      expect(outputs['total_count']).to eq(71)
+      expect(outputs['items'].values.flatten.count).to eq(71)
+      expect(outputs['items']['reading']).not_to include(my_activity_1)
+      expect(outputs['items']['exercise']).to include(my_activity_2)
 
-    it 'should exactly match some fields' do
-      outputs = SearchActivities.call('attempt:4', subscriber.application).outputs
+      outputs = SearchActivities.call('trial:e_tri', subscriber.application)
+                                .outputs
 
-      expect(outputs['num_matching_events']).to eq(1)
-      expect(outputs['order_by']).to eq 'created_at DESC'
-      expect(outputs['events'].values.flatten.count).to eq(1)
-      expect(outputs['events'][:heartbeat]).not_to include(my_event_1)
-      expect(outputs['events'][:page]).to include(my_event_2)
+      expect(outputs['total_count']).to eq(1)
+      expect(outputs['items'].values.flatten.count).to eq(1)
+      expect(outputs['items']['reading']).not_to include(my_activity_1)
+      expect(outputs['items']['exercise']).to include(my_activity_2)
     end
 
     it 'should match type-specific fields' do
-      outputs = SearchActivities.call('y_position:42', subscriber.application).outputs
+      outputs = SearchActivities.call('answer_type:multiple_choice',
+                                      subscriber.application).outputs
 
-      expect(outputs['num_matching_events']).to eq(21)
-      expect(outputs['order_by']).to eq 'created_at DESC'
-      expect(outputs['events'].values.flatten.count).to eq(21)
-      expect(outputs['events'][:heartbeat]).to include(my_event_1)
-      expect(outputs['events'][:page]).to be_nil
-      expect(outputs['events'][:cursor]).not_to be_empty
+      expect(outputs['total_count']).to eq(21)
+      expect(outputs['items'].values.flatten.count).to eq(21)
+      expect(outputs['items']['reading']).to be_nil
+      expect(outputs['items']['exercise']).to include(my_event_1)
     end
 
   end
@@ -90,13 +85,13 @@ RSpec.describe SearchActivities do
   context 'sorting' do
 
     it 'should allow sort by multiple fields in different directions' do
-      outputs = SearchActivities.call('', subscriber.application,
-                                  order_by: 'resource ASC, created_at DESC').outputs
+      outputs = SearchActivities.call(
+        '', subscriber.application, order_by: 'resource ASC, created_at DESC'
+      ).outputs
 
-      expect(outputs['num_matching_events']).to eq(72)
-      expect(outputs['order_by']).to eq 'resource ASC, created_at DESC'
-      expect(outputs['events'].values.flatten.count).to eq(72)
-      expect(outputs['events']['heartbeat'].first).to eq(my_event_1)
+      expect(outputs['total_count']).to eq(72)
+      expect(outputs['items'].values.flatten.count).to eq(72)
+      expect(outputs['items']['reading'].first).to eq(my_activity_1)
     end
 
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141218171452) do
+ActiveRecord::Schema.define(version: 20150105170708) do
 
   create_table "administrators", force: true do |t|
     t.integer  "account_id",  null: false
@@ -40,7 +40,6 @@ ActiveRecord::Schema.define(version: 20141218171452) do
     t.integer  "person_id",   null: false
     t.integer  "resource_id", null: false
     t.string   "trial",       null: false
-    t.string   "selector"
     t.string   "answer_type", null: false
     t.string   "answer",      null: false
     t.datetime "created_at",  null: false
@@ -50,14 +49,12 @@ ActiveRecord::Schema.define(version: 20141218171452) do
   add_index "answer_events", ["person_id", "platform_id", "resource_id", "trial"], name: "index_answer_events_on_p_id_and_p_id_and_r_id_and_t"
   add_index "answer_events", ["platform_id", "resource_id", "trial"], name: "index_answer_events_on_p_id_and_r_id_and_t"
   add_index "answer_events", ["resource_id", "trial"], name: "index_answer_events_on_r_id_and_t"
-  add_index "answer_events", ["selector"], name: "index_answer_events_on_selector"
 
   create_table "click_events", force: true do |t|
     t.integer  "platform_id", null: false
     t.integer  "person_id",   null: false
     t.integer  "resource_id", null: false
     t.string   "trial",       null: false
-    t.string   "selector"
     t.string   "href"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -67,26 +64,6 @@ ActiveRecord::Schema.define(version: 20141218171452) do
   add_index "click_events", ["person_id", "platform_id", "resource_id", "trial"], name: "index_click_events_on_p_id_and_p_id_and_r_id_and_t"
   add_index "click_events", ["platform_id", "resource_id", "trial"], name: "index_click_events_on_p_id_and_r_id_and_t"
   add_index "click_events", ["resource_id", "trial"], name: "index_click_events_on_r_id_and_t"
-  add_index "click_events", ["selector"], name: "index_click_events_on_selector"
-
-  create_table "communication_activities", force: true do |t|
-    t.integer  "platform_id",    null: false
-    t.integer  "person_id",      null: false
-    t.integer  "resource_id",    null: false
-    t.string   "trial",          null: false
-    t.integer  "seconds_active", null: false
-    t.datetime "first_event_at", null: false
-    t.datetime "last_event_at",  null: false
-    t.text     "subject",        null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-  end
-
-  add_index "communication_activities", ["first_event_at"], name: "index_communication_activities_on_first_event_at"
-  add_index "communication_activities", ["last_event_at", "first_event_at"], name: "index_communication_activities_on_l_e_at_and_f_e_at"
-  add_index "communication_activities", ["person_id", "platform_id", "resource_id", "trial"], name: "index_communication_activities_on_p_id_and_p_id_and_r_id_and_t", unique: true
-  add_index "communication_activities", ["platform_id", "resource_id", "trial"], name: "index_communication_activities_on_p_id_and_r_id_and_t"
-  add_index "communication_activities", ["resource_id", "trial"], name: "index_communication_activities_on_resource_id_and_trial"
 
   create_table "event_subscribers", force: true do |t|
     t.integer  "event_id",                      null: false
@@ -107,7 +84,7 @@ ActiveRecord::Schema.define(version: 20141218171452) do
     t.integer  "seconds_active", null: false
     t.datetime "first_event_at", null: false
     t.datetime "last_event_at",  null: false
-    t.string   "question_type"
+    t.string   "answer_type"
     t.string   "answer"
     t.decimal  "correctness"
     t.text     "free_response"
@@ -115,11 +92,11 @@ ActiveRecord::Schema.define(version: 20141218171452) do
     t.datetime "updated_at",     null: false
   end
 
+  add_index "exercise_activities", ["answer_type"], name: "index_exercise_activities_on_answer_type"
   add_index "exercise_activities", ["first_event_at"], name: "index_exercise_activities_on_first_event_at"
   add_index "exercise_activities", ["last_event_at", "first_event_at"], name: "index_exercise_activities_on_l_e_at_and_f_e_at"
   add_index "exercise_activities", ["person_id", "platform_id", "resource_id", "trial"], name: "index_exercise_activities_on_p_id_and_p_id_and_r_id_and_t", unique: true
   add_index "exercise_activities", ["platform_id", "resource_id", "trial"], name: "index_exercise_activities_on_p_id_and_r_id_and_t"
-  add_index "exercise_activities", ["question_type"], name: "index_exercise_activities_on_question_type"
   add_index "exercise_activities", ["resource_id", "trial"], name: "index_exercise_activities_on_resource_id_and_trial"
 
   create_table "feedback_activities", force: true do |t|
@@ -170,24 +147,23 @@ ActiveRecord::Schema.define(version: 20141218171452) do
     t.integer  "person_id",   null: false
     t.integer  "resource_id", null: false
     t.string   "trial",       null: false
-    t.string   "selector"
+    t.string   "grader",      null: false
     t.string   "grade",       null: false
     t.text     "feedback"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
 
+  add_index "grading_events", ["grader"], name: "index_grading_events_on_grader"
   add_index "grading_events", ["person_id", "platform_id", "resource_id", "trial"], name: "index_grading_events_on_p_id_and_p_id_and_r_id_and_t"
   add_index "grading_events", ["platform_id", "resource_id", "trial"], name: "index_grading_events_on_p_id_and_r_id_and_t"
   add_index "grading_events", ["resource_id", "trial"], name: "index_grading_events_on_r_id_and_t"
-  add_index "grading_events", ["selector"], name: "index_grading_events_on_selector"
 
   create_table "heartbeat_events", force: true do |t|
     t.integer  "platform_id", null: false
     t.integer  "person_id",   null: false
     t.integer  "resource_id", null: false
     t.string   "trial",       null: false
-    t.string   "selector"
     t.boolean  "active",      null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -196,14 +172,12 @@ ActiveRecord::Schema.define(version: 20141218171452) do
   add_index "heartbeat_events", ["person_id", "platform_id", "resource_id", "trial"], name: "index_heartbeat_events_on_p_id_and_p_id_and_r_id_and_t"
   add_index "heartbeat_events", ["platform_id", "resource_id", "trial"], name: "index_heartbeat_events_on_p_id_and_r_id_and_t"
   add_index "heartbeat_events", ["resource_id", "trial"], name: "index_heartbeat_events_on_r_id_and_t"
-  add_index "heartbeat_events", ["selector"], name: "index_heartbeat_events_on_selector"
 
   create_table "input_events", force: true do |t|
     t.integer  "platform_id", null: false
     t.integer  "person_id",   null: false
     t.integer  "resource_id", null: false
     t.string   "trial",       null: false
-    t.string   "selector"
     t.string   "input_type",  null: false
     t.text     "value"
     t.datetime "created_at",  null: false
@@ -214,7 +188,6 @@ ActiveRecord::Schema.define(version: 20141218171452) do
   add_index "input_events", ["person_id", "platform_id", "resource_id", "trial"], name: "index_input_events_on_p_id_and_p_id_and_r_id_and_t"
   add_index "input_events", ["platform_id", "resource_id", "trial"], name: "index_input_events_on_p_id_and_r_id_and_t"
   add_index "input_events", ["resource_id", "trial"], name: "index_input_events_on_r_id_and_t"
-  add_index "input_events", ["selector"], name: "index_input_events_on_selector"
 
   create_table "interactive_activities", force: true do |t|
     t.integer  "platform_id",    null: false
@@ -234,6 +207,17 @@ ActiveRecord::Schema.define(version: 20141218171452) do
   add_index "interactive_activities", ["person_id", "platform_id", "resource_id", "trial"], name: "index_interactive_activities_on_p_id_and_p_id_and_r_id_and_t", unique: true
   add_index "interactive_activities", ["platform_id", "resource_id", "trial"], name: "index_interactive_activities_on_p_id_and_r_id_and_t"
   add_index "interactive_activities", ["resource_id", "trial"], name: "index_interactive_activities_on_resource_id_and_trial"
+
+  create_table "links", force: true do |t|
+    t.integer  "resource_id", null: false
+    t.string   "href",        null: false
+    t.string   "rel",         null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "links", ["href", "rel"], name: "index_links_on_href_and_rel", unique: true
+  add_index "links", ["resource_id"], name: "index_links_on_resource_id"
 
   create_table "oauth_access_grants", force: true do |t|
     t.integer  "resource_owner_id", null: false
@@ -340,7 +324,6 @@ ActiveRecord::Schema.define(version: 20141218171452) do
     t.integer  "person_id",   null: false
     t.integer  "resource_id", null: false
     t.string   "trial",       null: false
-    t.string   "selector"
     t.string   "from"
     t.string   "to"
     t.datetime "created_at",  null: false
@@ -351,7 +334,6 @@ ActiveRecord::Schema.define(version: 20141218171452) do
   add_index "page_events", ["person_id", "platform_id", "resource_id", "trial"], name: "index_page_events_on_p_id_and_p_id_and_r_id_and_t"
   add_index "page_events", ["platform_id", "resource_id", "trial"], name: "index_page_events_on_p_id_and_r_id_and_t"
   add_index "page_events", ["resource_id", "trial"], name: "index_page_events_on_r_id_and_t"
-  add_index "page_events", ["selector"], name: "index_page_events_on_selector"
   add_index "page_events", ["to"], name: "index_page_events_on_to"
 
   create_table "peer_grading_activities", force: true do |t|
@@ -422,12 +404,9 @@ ActiveRecord::Schema.define(version: 20141218171452) do
   add_index "researchers", ["disabled_at"], name: "index_researchers_on_disabled_at"
 
   create_table "resources", force: true do |t|
-    t.string   "url",        null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
-
-  add_index "resources", ["url"], name: "index_resources_on_url", unique: true
 
   create_table "subscribers", force: true do |t|
     t.integer  "application_id", null: false
@@ -442,8 +421,7 @@ ActiveRecord::Schema.define(version: 20141218171452) do
     t.integer  "person_id",   null: false
     t.integer  "resource_id", null: false
     t.string   "trial",       null: false
-    t.string   "selector"
-    t.integer  "taskee_id",   null: false
+    t.string   "tasker",      null: false
     t.datetime "due_date"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -453,7 +431,6 @@ ActiveRecord::Schema.define(version: 20141218171452) do
   add_index "tasking_events", ["person_id", "platform_id", "resource_id", "trial"], name: "index_tasking_events_on_p_id_and_p_id_and_r_id_and_t"
   add_index "tasking_events", ["platform_id", "resource_id", "trial"], name: "index_tasking_events_on_p_id_and_r_id_and_t"
   add_index "tasking_events", ["resource_id", "trial"], name: "index_tasking_events_on_r_id_and_t"
-  add_index "tasking_events", ["selector"], name: "index_tasking_events_on_selector"
-  add_index "tasking_events", ["taskee_id"], name: "index_tasking_events_on_taskee_id"
+  add_index "tasking_events", ["tasker"], name: "index_tasking_events_on_tasker"
 
 end

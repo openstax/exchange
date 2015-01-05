@@ -7,7 +7,7 @@ describe SignaturesController do
   let!(:contract_2) { FactoryGirl.create :fine_print_contract, :published }
 
   context 'GET new' do
-    it 'asks user to agree to the terms of use' do
+    it 'asks user to agree to some terms' do
       controller.sign_in user
       get :new, terms: [contract_1.id, contract_2.id]
       expect(response).to have_http_status(:success)
@@ -15,7 +15,7 @@ describe SignaturesController do
   end
 
   context 'POST create' do
-    it 'allows user to agree to the terms of use' do
+    it 'allows user to agree to the terms' do
       controller.sign_in user
       expect { post :create,
                     agreement: { i_agree: true,

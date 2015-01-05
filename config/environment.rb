@@ -11,7 +11,8 @@ require 'event'
 require 'eventful'
 require 'activity'
 require 'active'
-require 'url_protocol_converter'
+require 'url_scheme_converter'
+require 'simple_url_converter'
 require 'lev/delegator'
 
 # Initialize the rails application

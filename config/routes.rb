@@ -1,5 +1,7 @@
 Exchange::Application.routes.draw do
 
+  resources :links
+
   # Root
 
   root :to => "static_pages#home"

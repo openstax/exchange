@@ -27,7 +27,6 @@ module Event
           references :person, null: false
           references :resource, null: false
           string :trial, null: false
-          string :selector
         end
       end
     end
@@ -41,7 +40,6 @@ module Event
                   name: "index_#{table_name}_on_p_id_and_r_id_and_t"
         add_index table_name, [:resource_id, :trial],
                   name: "index_#{table_name}_on_r_id_and_t"
-        add_index table_name, :selector
       end
     end
   end

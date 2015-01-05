@@ -2,7 +2,7 @@ class Api::V1::ActivitiesController < OpenStax::Api::V1::ApiController
 
   resource_description do
     api_versions "v1"
-    short_description 'Represents a collection of Events (user actions)'
+    short_description 'Represents a collection of Events'
     description <<-EOS
       This controller uses the Client Credentials flow.
 

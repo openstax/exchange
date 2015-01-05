@@ -4,13 +4,10 @@ class Resource < ActiveRecord::Base
 
   belongs_to :platform, inverse_of: :resources
 
-  validates :url, presence: true, uniqueness: true
+  has_many :links, dependent: :destroy, inverse_of: :resource
 
-  def http_url
-    UrlProtocolConverter.to_http(url)
-  end
-
-  def https_url
-    UrlProtocolConverter.to_https(url)
+  def url
+    links.where(rel: 'canonical').first.try(:href) || \
+      links.first.try(:href)
   end
 end

@@ -4,14 +4,22 @@ describe TermsController do
 
   let!(:contract) { FactoryGirl.create :fine_print_contract, :published }
 
-  it 'shows a list of site terms' do
-    get :index
-    expect(response).to have_http_status(:success)
+  context 'GET index' do
+
+    it 'renders a list of site terms' do
+      get :index
+      expect(response).to have_http_status(:success)
+    end
+
   end
 
-  it 'shows a single site term' do
-    get :show, id: contract.id
-    expect(response).to have_http_status(:success)
+  context 'GET show' do
+
+    it 'renders a single site term' do
+      get :show, id: contract.id
+      expect(response).to have_http_status(:success)
+    end
+
   end
 
 end
