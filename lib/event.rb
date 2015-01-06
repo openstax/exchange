@@ -36,17 +36,12 @@ module Event
     protected
 
     def create_event(event_class, options = {})
-      options = {
-                  platform: current_application.try(:platform),
-                  subscriber: current_application.try(:subscriber),
-                  researcher: current_human_user.try(:researcher)
-                }.merge(options)
-
       routine = CreateEvent.call(event_class) do |event|
+        event.task.platform = current_application.try(:platform)
         consume!(event, options)
-        event.task.platform = options[:platform]
-        resource_owner = doorkeeper_token.try(:resource_owner)
-        event.task.person = resource_owner unless resource_owner.nil?
+        person = doorkeeper_token.try(:resource_owner)
+        event.task.person = person unless person.nil?
+        event.task = Task.find_or_initialize_by(event.task.attributes)
 
         yield event if block_given?
 

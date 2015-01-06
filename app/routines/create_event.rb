@@ -10,10 +10,6 @@ class CreateEvent
                translations: { inputs: { scope: :event },
                                outputs: { map: { object: :event }}}
 
-  uses_routine CreateTask,
-               as: :task,
-               translations: { inputs: { scope: :task }}
-
   uses_routine ProcessEvent,
                as: :process,
                translations: { inputs: { scope: :activities },
@@ -24,9 +20,14 @@ class CreateEvent
   def exec(event_class, options={}, &block)
 
     options = options.with_indifferent_access
-    run(:create, event_class, options.except(*TASK_OPTIONS)) do |event|
-      event.task = run(:task, options.slice(*TASK_OPTIONS)).outputs[:task]
+    event_options = options.except(*TASK_OPTIONS)
+    task_options = options.slice(*TASK_OPTIONS)
+    run(:create, event_class, event_options) do |event|
+      event.task = task_options.empty? ? \
+                     Task.new : Task.find_or_initialize_by(task_options)
       block.call(event) unless block.nil?
+      transfer_errors_from(event.task, {type: :verbatim}, true) \
+        unless event.task.valid?
     end
 
     run(:process, outputs[:event])

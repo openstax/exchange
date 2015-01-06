@@ -17,10 +17,10 @@ def application_event_controller_spec(event_type, create_method = :create)
                                      application: platform.application) }
     let!(:access_token) { FactoryGirl.create(:access_token) }
     let!(:task)  { FactoryGirl.build(:task,
-                                     person: identifier.resource_owner) }
+                                     person: identifier.resource_owner,
+                                     platform: platform) }
     let!(:event) { FactoryGirl.build(event_symbol, task: task) }
-    let!(:valid_json) { representer_class.new(event).to_json(
-                          platform: platform) }
+    let!(:valid_json) { representer_class.new(event).to_json }
 
     context 'success' do
       it 'should be creatable by a platform app with a client credentials token if it has all required fields' do
@@ -31,11 +31,12 @@ def application_event_controller_spec(event_type, create_method = :create)
 
         expect(event_class.count).to eq(c + 1)
         new_event = event_class.last
-        expected_response = representer_class.new(new_event)
-                              .to_json(platform: platform)
+        expected_response = representer_class.new(new_event).to_json
         expect(response.body).to eq(expected_response)
-        expect(new_event.resource.url).to eq(event.resource.url)
-        expect(new_event.trial).to eq(event.trial)
+        expect(new_event.task.platform).to eq(event.task.platform)
+        expect(new_event.task.person).to eq(event.task.person)
+        expect(new_event.task.resource.url).to eq(event.task.resource.url)
+        expect(new_event.task.trial).to eq(event.task.trial)
       end
     end
 
@@ -75,16 +76,28 @@ def application_event_controller_spec(event_type, create_method = :create)
     end
 
     context 'validation error' do
-      it 'should not be creatable without a task' do
-        event.task = nil
+      it 'should not be creatable without a resource' do
+        event.task.resource = nil
         c = event_class.count
         api_post create_method, platform_access_token,
-                 raw_post_data: representer_class.new(event)
-                                                 .to_json(platform: platform)
+                 raw_post_data: representer_class.new(event).to_json
         expect(response.status).to eq(422)
 
         errors = JSON.parse(response.body)
-        expect(errors.first['offending_inputs']).to eq(['event', 'task'])
+        expect(errors.first['offending_inputs']).to eq('resource')
+        expect(errors.first['code']).to eq('blank')
+        expect(event_class.count).to eq(c)
+      end
+
+      it 'should not be creatable without a trial' do
+        event.task.trial = nil
+        c = event_class.count
+        api_post create_method, platform_access_token,
+                 raw_post_data: representer_class.new(event).to_json
+        expect(response.status).to eq(422)
+
+        errors = JSON.parse(response.body)
+        expect(errors.first['offending_inputs']).to eq('trial')
         expect(errors.first['code']).to eq('blank')
         expect(event_class.count).to eq(c)
       end

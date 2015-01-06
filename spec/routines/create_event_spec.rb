@@ -2,17 +2,20 @@ require 'rails_helper'
 
 RSpec.describe CreateEvent do
 
-  let!(:task) { FactoryGirl.build :task }
+  let!(:platform) { FactoryGirl.build :platform }
+  let!(:resource) { FactoryGirl.build(:resource) }
+  let!(:person)   { FactoryGirl.build :person }
+  let!(:trial)    { SecureRandom.hex(32).to_s }
 
   it 'creates an event and processes it' do
     ProcessEvent.delegate HeartbeatEvent, to: TestProcessor
-    out = CreateEvent.call(HeartbeatEvent,
-                           task.attributes.except('due_at')).outputs
+    out = CreateEvent.call(
+      HeartbeatEvent, platform: platform, resource: resource,
+                      person: person, trial: trial
+    ).outputs
     event = out[:event]
-    test = out[:test]
     expect(event).to be_a(HeartbeatEvent)
     expect(event).to be_persisted
-    expect(test).to eq :successful
   end
 
 end

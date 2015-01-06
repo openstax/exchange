@@ -13,14 +13,12 @@ module Api::V1
              }
 
     property :person,
-             class: Person,
-             decorator: PersonRepresenter,
+             type: String,
              readable: true,
              writeable: false,
-             getter: lambda { |args| task.try(:person) },
+             getter: lambda { |args| task.person.label },
              schema_info: {
-               required: true,
-               description: 'The Person associated with this Activity'
+               description: 'The research label for the Person associated with this Activity'
              }
 
 
