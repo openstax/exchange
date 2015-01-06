@@ -10,10 +10,10 @@ RSpec.describe StandardCreate do
   end
 
   it 'reports creation errors' do
-    heartbeat_event.resource = nil
+    heartbeat_event.task = nil
     errors = StandardCreate.call(HeartbeatEvent,
                                  heartbeat_event.attributes).errors
-    expect(errors.first.offending_inputs).to eq(:resource)
+    expect(errors.first.offending_inputs).to eq(:task)
     expect(errors.first.code).to eq(:blank)
   end
 

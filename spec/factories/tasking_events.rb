@@ -2,10 +2,8 @@
 
 FactoryGirl.define do
   factory :tasking_event do
-    extend Event::Factory
-
-    taskee { FactoryGirl.build(:identifier, application: platform.application)
-                        .resource_owner }
+    task
+    tasker { SecureRandom.hex(32).to_s }
     due_date { Time.now + 5.minutes }
   end
 end

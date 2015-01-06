@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :link do
     resource
-    href { "https://#{SecureRandom.hex}" }
+    href { "https://www.example.org/#{SecureRandom.hex(32)}" }
     rel "alternate"
   end
 end

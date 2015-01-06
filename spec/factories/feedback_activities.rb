@@ -3,8 +3,6 @@
 FactoryGirl.define do
   factory :feedback_activity do
     extend Activity::Factory
-
     grade "A+"
-    feedback "This is my feedback."
   end
 end

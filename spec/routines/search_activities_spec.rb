@@ -13,12 +13,14 @@ RSpec.describe SearchActivities do
   let!(:resource_1) { FactoryGirl.create :resource }
   let!(:resource_2) { FactoryGirl.create :resource, url: 'dummy://42' }
 
-  let!(:my_activity_1) { FactoryGirl.create :reading_activity,
-                                            resource: resource_2 }
-  let!(:my_activity_2) { FactoryGirl.create :exercise_activity,
-                                            trial: 'some_trial' }
+  let!(:task_1) { FactoryGirl.create :task, resource: resource_2 }
+  let!(:task_2) { FactoryGirl.create :task, trial: 'some_trial' }
+
+  let!(:my_activity_1) { FactoryGirl.create :reading_activity, task: task_1 }
+  let!(:my_activity_2) { FactoryGirl.create :exercise_activity, task: task_2 }
 
   before(:each) do
+    skip
     [:exercise, :feedback, :interactive,
      :peer_grading, :reading].each do |activity_symbol|
       factory_symbol = "#{activity_symbol.to_s}_activity".to_sym

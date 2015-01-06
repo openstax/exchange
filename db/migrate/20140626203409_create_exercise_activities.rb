@@ -11,6 +11,5 @@ class CreateExerciseActivities < ActiveRecord::Migration
     end
 
     add_activity_indices :exercise_activities
-    add_index :exercise_activities, :answer_type
   end
 end

@@ -5,10 +5,10 @@ require_relative 'doorkeeper'
 # OSU::AccessPolicy.register(Model, ModelAccessPolicy)
 OSU::AccessPolicy.register(Person, PersonAccessPolicy)
 
+OSU::AccessPolicy.register(LoadEvent, UserEventAccessPolicy)
 OSU::AccessPolicy.register(HeartbeatEvent, UserEventAccessPolicy)
-OSU::AccessPolicy.register(ClickEvent, UserEventAccessPolicy)
-OSU::AccessPolicy.register(InputEvent, UserEventAccessPolicy)
-OSU::AccessPolicy.register(PageEvent, UserEventAccessPolicy)
+OSU::AccessPolicy.register(LinkEvent, UserEventAccessPolicy)
+OSU::AccessPolicy.register(UnloadEvent, UserEventAccessPolicy)
 
 OSU::AccessPolicy.register(TaskingEvent, ApplicationEventAccessPolicy)
 OSU::AccessPolicy.register(AnswerEvent, ApplicationEventAccessPolicy)

@@ -10,36 +10,11 @@ module Event
           relation_sym = name.tableize.to_sym
 
           class_exec do
-            belongs_to :platform, inverse_of: relation_sym
-            belongs_to :person, inverse_of: relation_sym
-            belongs_to :resource, inverse_of: relation_sym
+            belongs_to :task, inverse_of: relation_sym
 
-            validates_presence_of :platform, :person, :resource, :trial
+            validates :task, presence: true
           end
         end
-      end
-    end
-
-    module ConnectionAdapters
-      module TableDefinition
-        def event
-          references :platform, null: false
-          references :person, null: false
-          references :resource, null: false
-          string :trial, null: false
-        end
-      end
-    end
-
-    module Migration
-      def add_event_indices(table_name)
-        add_index table_name,
-                  [:person_id, :platform_id, :resource_id, :trial],
-                  name: "index_#{table_name}_on_p_id_and_p_id_and_r_id_and_t"
-        add_index table_name, [:platform_id, :resource_id, :trial],
-                  name: "index_#{table_name}_on_p_id_and_r_id_and_t"
-        add_index table_name, [:resource_id, :trial],
-                  name: "index_#{table_name}_on_r_id_and_t"
       end
     end
   end
@@ -56,16 +31,6 @@ module Event
     end
   end
 
-  module Factory
-    def self.extended(base)
-      base.platform
-      base.person { FactoryGirl.build(:identifier,
-                      application: platform.application).resource_owner }
-      base.resource { FactoryGirl.build(:resource) }
-      base.trial { "trial://#{SecureRandom.hex(32)}" }
-    end
-  end
-
   module ApiController
 
     protected
@@ -79,9 +44,9 @@ module Event
 
       routine = CreateEvent.call(event_class) do |event|
         consume!(event, options)
-        event.platform = options[:platform]
+        event.task.platform = options[:platform]
         resource_owner = doorkeeper_token.try(:resource_owner)
-        event.person = resource_owner unless resource_owner.nil?
+        event.task.person = resource_owner unless resource_owner.nil?
 
         yield event if block_given?
 
@@ -101,8 +66,5 @@ module Event
 end
 
 ActiveRecord::Base.send :include, Event::ActiveRecord::Base
-ActiveRecord::ConnectionAdapters::TableDefinition.send(
-  :include, Event::ActiveRecord::ConnectionAdapters::TableDefinition)
-ActiveRecord::Migration.send :include, Event::ActiveRecord::Migration
 ActionDispatch::Routing::Mapper.send(
   :include, Event::ActionDispatch::Routing::Mapper)

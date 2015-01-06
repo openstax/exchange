@@ -8,6 +8,10 @@ module Api::V1
              decorator: PersonRepresenter,
              readable: true,
              writeable: true,
+             getter: lambda { |args| task.try(:person) },
+             setter: lambda { |value, args|
+               task.person = value
+             },
              schema_info: {
                required: true,
                description: 'The Person associated with this Event'
@@ -18,9 +22,9 @@ module Api::V1
              type: String,
              readable: true,
              writeable: true,
-             getter: lambda { |args| resource.try(:url) },
+             getter: lambda { |args| task.try(:resource).try(:url) },
              setter: lambda { |value, args|
-               self.resource = FindOrCreateResourceFromUrl.call(value)
+               task.resource = FindOrCreateResourceFromUrl.call(value)
                                  .outputs[:resource]
              },
              schema_info: {
@@ -32,6 +36,10 @@ module Api::V1
              type: String,
              readable: true,
              writeable: true,
+             getter: lambda { |args| task.try(:trial) },
+             setter: lambda { |value, args|
+               task.trial = value
+             },
              schema_info: {
                required: true,
                description: 'A unique identifier for the trial ' + \

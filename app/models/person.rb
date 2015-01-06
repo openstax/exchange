@@ -1,9 +1,6 @@
 class Person < ActiveRecord::Base
   LABEL_GENERATION_ATTEMPTS = 100
 
-  acts_as_eventful
-  acts_as_active
-
   has_many :identifiers, class_name: 'Doorkeeper::AccessToken',
                          foreign_key: :resource_owner_id,
                          dependent: :destroy,
@@ -11,13 +8,12 @@ class Person < ActiveRecord::Base
 
   has_one :application, through: :identifier
 
+  has_many :tasks, dependent: :destroy, inverse_of: :person
+
   belongs_to :superseder, class_name: 'Person', inverse_of: :superseded
 
   has_many :superseded, class_name: 'Person',
            foreign_key: :superseder_id, inverse_of: :superseder
-
-  has_many :tasked_events, class_name: 'TaskingEvent',
-           foreign_key: :taskee_id, inverse_of: :taskee
 
   validates :label, presence: true, uniqueness: true
 

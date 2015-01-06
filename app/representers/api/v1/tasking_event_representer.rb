@@ -1,13 +1,12 @@
 module Api::V1
   class TaskingEventRepresenter < EventRepresenter
 
-    property :taskee,
-             class: Person,
-             decorator: PersonRepresenter,
+    property :tasker,
+             type: String,
              readable: true,
              writeable: true,
              schema_info: {
-               description: 'The Person the associated task was assigned to'
+               description: 'Who assigned this Task'
              }
 
     property :due_date,
@@ -15,7 +14,7 @@ module Api::V1
              readable: true,
              writeable: true,
              schema_info: {
-               description: 'The due date for the associated task'
+               description: 'The due date for the associated Task'
              }
 
   end

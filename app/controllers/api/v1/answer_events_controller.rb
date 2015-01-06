@@ -10,7 +10,7 @@ class Api::V1::AnswerEventsController < OpenStax::Api::V1::ApiController
       The token is obtained by the platform by creating an Identifier object.
 
       All events have the following fields in common: platform (object),
-      person (object), resource (string) and context (string).
+      person (object), resource (string) and trial (string).
 
       Additionally, AnswerEvents have the answer_type (string) and
       answer (text) fields.

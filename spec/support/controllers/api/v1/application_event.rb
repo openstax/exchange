@@ -16,8 +16,9 @@ def application_event_controller_spec(event_type, create_method = :create)
     let!(:platform_access_token) { FactoryGirl.create(:access_token,
                                      application: platform.application) }
     let!(:access_token) { FactoryGirl.create(:access_token) }
-    let!(:event) { FactoryGirl.build(event_symbol,
-                     person: identifier.resource_owner) }
+    let!(:task)  { FactoryGirl.build(:task,
+                                     person: identifier.resource_owner) }
+    let!(:event) { FactoryGirl.build(event_symbol, task: task) }
     let!(:valid_json) { representer_class.new(event).to_json(
                           platform: platform) }
 
@@ -74,8 +75,8 @@ def application_event_controller_spec(event_type, create_method = :create)
     end
 
     context 'validation error' do
-      it 'should not be creatable without a trial' do
-        event.trial = nil
+      it 'should not be creatable without a task' do
+        event.task = nil
         c = event_class.count
         api_post create_method, platform_access_token,
                  raw_post_data: representer_class.new(event)
@@ -83,21 +84,7 @@ def application_event_controller_spec(event_type, create_method = :create)
         expect(response.status).to eq(422)
 
         errors = JSON.parse(response.body)
-        expect(errors.first['offending_inputs']).to eq(['event', 'trial'])
-        expect(errors.first['code']).to eq('blank')
-        expect(event_class.count).to eq(c)
-      end
-
-      it 'should not be creatable without a resource' do
-        event.resource = nil
-        c = event_class.count
-        api_post create_method, platform_access_token,
-                 raw_post_data: representer_class.new(event)
-                                                 .to_json(platform: platform)
-        expect(response.status).to eq(422)
-
-        errors = JSON.parse(response.body)
-        expect(errors.first['offending_inputs']).to eq(['event', 'resource'])
+        expect(errors.first['offending_inputs']).to eq(['event', 'task'])
         expect(errors.first['code']).to eq('blank')
         expect(event_class.count).to eq(c)
       end

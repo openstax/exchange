@@ -1,7 +1,5 @@
 Exchange::Application.routes.draw do
 
-  resources :links
-
   # Root
 
   root :to => "static_pages#home"
@@ -54,19 +52,18 @@ Exchange::Application.routes.draw do
 
     scope '/events' do
       scope '/identifiers' do
-        event_routes :pages
+        event_routes :loads
         event_routes :heartbeats
-        event_routes :clicks
-        event_routes :inputs
+        event_routes :links
+        event_routes :unloads
       end
 
       scope '/platforms' do
+        event_routes :taskings
         event_routes :multiple_choices,
                      to: 'answer_events#create_multiple_choice'
         event_routes :free_responses, to: 'answer_events#create_free_response'
         event_routes :gradings
-        event_routes :messages
-        event_routes :taskings
       end
     end
 

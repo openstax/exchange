@@ -16,17 +16,19 @@ module Api::V1
              class: Person,
              decorator: PersonRepresenter,
              readable: true,
-             writeable: true,
+             writeable: false,
+             getter: lambda { |args| task.try(:person) },
              schema_info: {
                required: true,
                description: 'The Person associated with this Activity'
              }
 
+
     property :resource,
              type: String,
              readable: true,
              writeable: false,
-             getter: lambda { |args| resource.try(:url) },
+             getter: lambda { |args| task.try(:resource).try(:url) },
              schema_info: {
                required: true,
                description: 'The Resource URL associated with this Activity'
@@ -35,7 +37,8 @@ module Api::V1
     property :trial,
              type: String,
              readable: true,
-             writeable: true,
+             writeable: false,
+             getter: lambda { |args| task.try(:trial) },
              schema_info: {
                required: true,
                description: 'A unique identifier for the trial ' + \

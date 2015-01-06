@@ -9,7 +9,7 @@ class Api::V1::TaskingEventsController < OpenStax::Api::V1::ApiController
       This controller uses a token obtained through the Client Credentials flow.
 
       All events have the following fields in common: platform (object),
-      person (object), resource (string) and context (string).
+      person (object), resource (string) and trial (string).
 
       Additionally, TaskingEvents have the assignee (string) and
       due_date (datetime) fields.

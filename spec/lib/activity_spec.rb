@@ -11,16 +11,13 @@ RSpec.describe Activity do
 
   it 'modifies classes that call acts_as_activity' do
     reading_activity = FactoryGirl.create(:reading_activity)
-    expect(reading_activity.platform).to be_an_instance_of(Platform)
-    expect(reading_activity.person).to be_an_instance_of(Person)
-    expect(reading_activity.resource).to be_an_instance_of(Resource)
+    expect(reading_activity.task).to be_an_instance_of(Task)
 
     reading_activity.save!
-    [:platform, :person, :resource, :trial,
-     :first_event_at, :last_event_at, :seconds_active].each do |attr|
+    [:task, :first_event_at, :last_event_at, :seconds_active].each do |attr|
       reading_activity.reload
       reading_activity.send("#{attr.to_s}=", nil)
-      expect(reading_activity.save).to eq(false)
+      expect(reading_activity).not_to be_valid
       expect(reading_activity.errors.messages).to(
         include(attr => ["can't be blank"])
       )

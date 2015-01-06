@@ -1,10 +1,8 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :input_event do
-    extend Event::Factory
-
-    input_type "text"
-    value "MyFreeResponse"
+  factory :load_event do
+    task
+    referer "http://my.referer.org"
   end
 end

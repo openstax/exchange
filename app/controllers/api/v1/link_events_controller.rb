@@ -1,4 +1,4 @@
-class Api::V1::ClickEventsController < OpenStax::Api::V1::ApiController
+class Api::V1::LinkEventsController < OpenStax::Api::V1::ApiController
 
   include Event::ApiController
 
@@ -10,23 +10,22 @@ class Api::V1::ClickEventsController < OpenStax::Api::V1::ApiController
       This token is obtained by the platform by creating an Identifier object.
 
       All events have the following fields in common: platform (object),
-      person (object), resource (string) and context (string).
+      person (object), resource (string) and trial (string).
 
-      Additionally, ClickEvents have the href (string), action (string)
-      x_position (integer) and y_position (integer) fields.
+      Additionally, LinkEvents have the href (string) field.
     EOS
   end
 
-  api :POST, '/events/identifiers/clicks', 'Creates a new MouseClickEvent.'
+  api :POST, '/events/identifiers/links', 'Creates a new LinkEvent.'
   description <<-EOS
     This API call must be used with the Implicit flow.
 
-    Creates an Event that records the user clicking on a tracked UI object.
+    Creates an Event that records the user clicking on a link.
 
-    #{json_schema(Api::V1::ClickEventRepresenter, include: :writeable)}
+    #{json_schema(Api::V1::LinkEventRepresenter, include: :writeable)}
   EOS
   def create
-    create_event(ClickEvent)
+    create_event(LinkEvent)
   end
 
 end
