@@ -11,22 +11,24 @@ RSpec.describe SearchActivities do
   let!(:resource_1) { FactoryGirl.create :resource }
   let!(:resource_2) { FactoryGirl.create :resource, url: 'dummy://42' }
 
-  let!(:task_1) { FactoryGirl.create :task, resource: resource_2 }
-  let!(:task_2) { FactoryGirl.create :task, trial: 'some_trial' }
+  let!(:task) { FactoryGirl.create :task, identifier: identifier_1,
+                                          resource: resource_1,
+                                          trial: 'some_trial' }
 
-  let!(:my_activity_1) { FactoryGirl.create :reading_activity, task: task_1 }
-  let!(:my_activity_2) { FactoryGirl.create :exercise_activity, task: task_2 }
+  let!(:my_task_1) { FactoryGirl.create :task, resource: resource_2 }
+  let!(:my_task_2) { FactoryGirl.create :task, trial: 'another_trial' }
+
+  let!(:my_activity_1) { FactoryGirl.create :reading_activity,
+                                            task: my_task_1 }
+  let!(:my_activity_2) { FactoryGirl.create :exercise_activity,
+                                            task: my_task_2 }
 
   before(:each) do
-    skip
-    [:exercise, :feedback, :interactive,
-     :peer_grading, :reading].each do |activity_symbol|
+    [:reading, :exercise, :peer_grading, :feedback].each do |activity_symbol|
       factory_symbol = "#{activity_symbol.to_s}_activity".to_sym
       [identifier_1, identifier_2].each do |identifier|
         (1..5).to_a.each do |i|
-          FactoryGirl.create factory_symbol, platform: platform,
-                             person: identifier.resource_owner,
-                             resource: resource_1
+          FactoryGirl.create factory_symbol, task: task
         end
       end
     end
@@ -34,50 +36,31 @@ RSpec.describe SearchActivities do
 
   context 'filtering' do
 
-    it 'should return only platform-specific activities for platforms' do
-      outputs = SearchActivities.call('', platform.application).outputs
+    it 'should return all activities' do
+      outputs = SearchActivities.call(query: '').outputs
 
-      expect(outputs['total_count']).to eq(70)
-      expect(outputs['items'].values.flatten.count).to eq(70)
-      expect(outputs['items']['reading']).not_to include(my_activity_1)
-      expect(outputs['items']['exercise']).not_to include(my_activity_2)
-    end
-
-    it 'should return all activities for subscribers' do
-      outputs = SearchActivities.call('', subscriber.application).outputs
-
-      expect(outputs['total_count']).to eq(72)
-      expect(outputs['items'].values.flatten.count).to eq(72)
-      expect(outputs['items']['reading']).to include(my_activity_1)
-      expect(outputs['items']['exercise']).to include(my_activity_2)
+      expect(outputs['total_count']).to eq(42)
+      expect(outputs['items'].values.flatten.count).to eq(42)
+      expect(outputs['items']['reading_activities']).to include(my_activity_1)
+      expect(outputs['items']['exercise_activities']).to include(my_activity_2)
     end
 
     it 'should partially match fields' do
-      outputs = SearchActivities.call('resource:yRe', subscriber.application)
-                                .outputs
-
-      expect(outputs['total_count']).to eq(71)
-      expect(outputs['items'].values.flatten.count).to eq(71)
-      expect(outputs['items']['reading']).not_to include(my_activity_1)
-      expect(outputs['items']['exercise']).to include(my_activity_2)
-
-      outputs = SearchActivities.call('trial:e_tri', subscriber.application)
-                                .outputs
+      outputs = SearchActivities.call(query: 'resource:"ummy://4"').outputs
 
       expect(outputs['total_count']).to eq(1)
       expect(outputs['items'].values.flatten.count).to eq(1)
-      expect(outputs['items']['reading']).not_to include(my_activity_1)
-      expect(outputs['items']['exercise']).to include(my_activity_2)
-    end
+      expect(outputs['items']['reading_activities']).to include(my_activity_1)
+      expect(outputs['items']['exercise_activities']).not_to(
+        include(my_activity_2))
 
-    it 'should match type-specific fields' do
-      outputs = SearchActivities.call('answer_type:multiple_choice',
-                                      subscriber.application).outputs
+      outputs = SearchActivities.call(query: 'trial:other_tri').outputs
 
-      expect(outputs['total_count']).to eq(21)
-      expect(outputs['items'].values.flatten.count).to eq(21)
-      expect(outputs['items']['reading']).to be_nil
-      expect(outputs['items']['exercise']).to include(my_event_1)
+      expect(outputs['total_count']).to eq(1)
+      expect(outputs['items'].values.flatten.count).to eq(1)
+      expect(outputs['items']['reading_activities']).not_to(
+        include(my_activity_1))
+      expect(outputs['items']['exercise_activities']).to include(my_activity_2)
     end
 
   end
@@ -86,12 +69,12 @@ RSpec.describe SearchActivities do
 
     it 'should allow sort by multiple fields in different directions' do
       outputs = SearchActivities.call(
-        '', subscriber.application, order_by: 'resource ASC, created_at DESC'
+        query: '', order_by: 'resource ASC, created_at DESC'
       ).outputs
 
-      expect(outputs['total_count']).to eq(72)
-      expect(outputs['items'].values.flatten.count).to eq(72)
-      expect(outputs['items']['reading'].first).to eq(my_activity_1)
+      expect(outputs['total_count']).to eq(42)
+      expect(outputs['items'].values.flatten.count).to eq(42)
+      expect(outputs['items']['reading_activities'].first).to eq(my_activity_1)
     end
 
   end

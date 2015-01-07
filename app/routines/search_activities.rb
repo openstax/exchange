@@ -5,242 +5,113 @@
 
 class SearchActivities
 
-  SORTABLE_FIELDS = { 'created_at' => :created_at,
-                      'platform' => :platform_id,
-                      'identifier' => ['Identifier', :token],
-                      'resource' => ['Resource', :reference],
-                      'attempt' => :attempt,
-                      'selector' => :selector }
+  ACTIVITY_CLASSES = [ ReadingActivity, ExerciseActivity,
+                       PeerGradingActivity, FeedbackActivity ]
+
+  SORTABLE_FIELDS = {
+    'created_at' => :created_at,
+    'identifier' => Doorkeeper::AccessToken.arel_table[:token],
+    'platform' => Identifier.arel_table[:platform_id],
+    'resource' => Link.arel_table[:href],
+    'trial' => Task.arel_table[:trial]
+  }
+
+  INCLUDES_HASH = {task: [{identifier: :access_token}, {resource: :links}]}
+  JOINS_HASH = {task: [:identifier, {resource: :links}]}
+  REFERENCES_HASH = {task: {identifier: :access_token}} 
 
   lev_routine transaction: :no_transaction
 
-  uses_routine OSU::SearchAndOrganizeRelation, as: :search,
-               translations: { outputs: { type: :verbatim } }
+  uses_routine OSU::SearchRelation, as: :search
+
+  uses_routine OSU::OrderRelation, as: :order
+
+  uses_routine OSU::LimitAndPaginateRelation, as: :paginate
 
   protected
 
-  def exec(requestor, params = {})
+  def exec(params = {})
 
-    if Subscriber.for(requestor) || Researcher.for(requestor)
-      events = {:page => PageEvent
-                  .includes([:platform, {person: :identifier}, :resource])
-                  .references([{person: :identifier}, :resource]),
-                :heartbeat => HeartbeatEvent
-                  .includes([:platform, {person: :identifier}, :resource])
-                  .references([{person: :identifier}, :resource]),
-                :cursor => CursorEvent
-                  .includes([:platform, {person: :identifier}, :resource])
-                  .references([{person: :identifier}, :resource]),
-                :input => InputEvent
-                  .includes([:platform, {person: :identifier}, :resource])
-                  .references([{person: :identifier}, :resource]),
-                :message => MessageEvent
-                  .includes([:platform, {person: :identifier}, :resource])
-                  .references([{person: :identifier}, :resource]),
-                :grading => GradingEvent
-                  .includes([:platform, {person: :identifier}, :resource])
-                  .references([{person: :identifier}, :resource]),
-                :task => TaskEvent
-                  .includes([:platform, {person: :identifier}, :resource])
-                  .references([{person: :identifier}, :resource])}
-    else
-      platform = Platform.for(requestor)
-      if platform
-        events = {:page => platform.page_events
-                    .includes([{person: :identifier}, :resource])
-                    .references([{person: :identifier}, :resource]),
-                  :heartbeat => platform.heartbeat_events
-                    .includes([{person: :identifier}, :resource])
-                    .references([{person: :identifier}, :resource]),
-                  :cursor => platform.cursor_events
-                    .includes([{person: :identifier}, :resource])
-                    .references([{person: :identifier}, :resource]),
-                  :input => platform.input_events
-                    .includes([{person: :identifier}, :resource])
-                    .references([{person: :identifier}, :resource]),
-                  :message => platform.message_events
-                    .includes([{person: :identifier}, :resource])
-                    .references([{person: :identifier}, :resource]),
-                  :grading => platform.grading_events
-                    .includes([{person: :identifier}, :resource])
-                    .references([{person: :identifier}, :resource]),
-                  :task => platform.task_events
-                    .includes([{person: :identifier}, :resource])
-                    .references([{person: :identifier}, :resource])}
-      else
-        outputs[:total_count] = 0
-        outputs[:items] = []
-        return
-      end
+    activities = {}
+    ACTIVITY_CLASSES.each do |klass|
+      type = klass.name.tableize
+      activities[type] = klass.includes(INCLUDES_HASH)
+                              .joins(JOINS_HASH)
+                              .references(REFERENCES_HASH)
     end
 
-    run(:search) do |with|
+    # Filtering
 
-      with.default_keyword :any
+    activities = run(:search, relation: activities,
+                              query: params[:query] || params[:q]) do |with|
 
-      # Event keywords
+      with.default_keyword :resource
 
       with.keyword :type do |types|
-        events = events.slice(types)
+        stypes = to_string_array(types)
+        next @items = @items.none if stypes.empty?
+        @items = @items.slice(*stypes)
       end
 
-      [:id, :identifier, :attempt].each do |keyword|
+      [:id, :task_id, :created_at].each do |keyword|
         with.keyword keyword do |terms, positive|
           method = positive ? :in : :not_in
-          events = Hash[events.collect{|k,v| [k, v.where{
-            __send__(keyword).send(method, terms)}]}]
+          sterms = to_string_array(terms)
+          next @items = @items.none if sterms.empty?
+          @items = Hash[@items.collect{|k,v| [k, v.where{
+            __send__(keyword).send(method, sterms)}]}]
         end
       end
 
-      [:selector, :created_at, :metadata].each do |keyword|
-        with.keyword keyword do |terms, positive|
-          method = positive ? :like_any : :not_like_any
-          terms = like_strings(terms)
-          events = Hash[events.collect{|k,v| [k, v.where{
-            __send__(keyword).send(method, terms)}]}]
-        end
+      with.keyword :identifier do |identifiers, positive|
+        method = positive ? :in : :not_in
+        sidentifiers = to_integer_array(identifiers)
+        next @items = @items.none if sidentifiers.empty?
+        @items = Hash[@items.collect{|k,v| [k, v.where{
+          task.identifier.access_token.token.send(method, sidentifiers)}]}]
+      end
+
+      with.keyword :platform do |platforms, positive|
+        method = positive ? :in : :not_in
+        splatforms = to_integer_array(platforms)
+        next @items = @items.none if splatforms.empty?
+        @items = Hash[@items.collect{|k,v| [k, v.where{
+          task.identifier.platform_id.send(method, splatforms)}]}]
       end
 
       with.keyword :resource do |resources, positive|
         method = positive ? :like_any : :not_like_any
-        resources = like_strings(resources)
-        events = Hash[events.collect{|k,v| [k, v.joins(:resource).where{
-          resource.reference.send(method, resources)}]}]
+        sresources = to_string_array(resources, append_wildcard: true,
+                                                prepend_wildcard: true)
+        next @items = @items.none if sresources.empty?
+        @items = Hash[@items.collect{|k,v| [k, v.where{
+          task.resource.links.href.send(method, sresources)}]}]
       end
 
-      # BrowsingEvent keywords
-
-      with.keyword :referer do |referers, positive|
-        events = events.slice(:browsing)
-
+      with.keyword :trial do |trials, positive|
         method = positive ? :like_any : :not_like_any
-        referers = like_strings(referers)
-        events = Hash[events.collect{|k,v| [k, v.where{
-          referer.send(method, referers)}]}]
+        strials = to_string_array(trials, append_wildcard: true,
+                                          prepend_wildcard: true)
+        next @items = @items.none if strials.empty?
+        @items = Hash[@items.collect{|k,v| [k, v.where{
+          task.trial.send(method, strials)}]}]
       end
 
-      # CursorEvent keywords
+    end.outputs[:items]
 
-      with.keyword :action do |actions, positive|
-        events = events.slice(:cursor)
+    # Ordering
 
-        method = positive ? :like_any : :not_like_any
-        actions = like_strings(actions)
-        events = Hash[events.collect{|k,v| [k, v.where{
-          action.send(method, actions)}]}]
-      end
+    outputs[:items] = Hash[activities.collect do |k,v|
+      [k, run(:order, relation: v,
+                      sortable_fields: SORTABLE_FIELDS,
+                      order_by: params[:order_by] || params[:ob])
+            .outputs[:items]]
+    end]
 
-      with.keyword :x_position do |x_positions, positive|
-        events = events.slice(:cursor)
+    # Pagination
 
-        method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.where{
-          x_position.send(method, x_positions)}]}]
-      end
-
-      # HeartbeatEvent and CursorEvent keywords
-
-      with.keyword :y_position do |y_positions, positive|
-        events = events.slice(:heartbeat, :cursor)
-
-        method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.where{
-          y_position.send(method, y_positions)}]}]
-      end
-
-      # InputEvent keywords
-
-      [:category, :input_type, :value].each do |keyword|
-        with.keyword keyword do |terms, positive|
-          events = events.slice(:input)
-
-          method = positive ? :like_any : :not_like_any
-          terms = like_strings(terms)
-          events = Hash[events.collect{|k,v| [k, v.where{
-            __send__(keyword).send(method, terms)}]}]
-        end
-      end
-
-      # TaskEvent keywords
-
-      [:due_date, :status].each do |keyword|
-        with.keyword keyword do |terms, positive|
-          events = events.slice(:task)
-
-          method = positive ? :like_any : :not_like_any
-          terms = like_strings(terms)
-          events = Hash[events.collect{|k,v| [k, v.where{
-            __send__(keyword).send(method, terms)}]}]
-        end
-      end
-
-      with.keyword :assigner do |assigners, positive|
-        events = events.slice(:task)
-
-        method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.joins(:assigner).where{
-          assigner.token.send(method, assigners)}]}]
-      end
-
-      # GradingEvent keywords
-
-      with.keyword :grader do |graders, positive|
-        events = events.slice(:grading)
-
-        method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.joins(:grader).where{
-          grader.token.send(method, graders)}]}]
-      end
-
-      [:grade, :feedback].each do |keyword|
-        with.keyword keyword do |terms, positive|
-          events = events.slice(:grading)
-
-          method = positive ? :like_any : :not_like_any
-          terms = like_strings(terms)
-          events = Hash[events.collect{|k,v| [k, v.where{
-            __send__(keyword).send(method, terms)}]}]
-        end
-      end
-
-      # MessageEvent keywords
-
-      [:to, :cc, :bcc, :subject, :body].each do |keyword|
-        with.keyword keyword do |terms, positive|
-          events = events.slice(:message)
-
-          method = positive ? :like_any : :not_like_any
-          terms = like_strings(terms)
-          events = Hash[events.collect{|k,v| [k, v.where{
-            __send__(keyword).send(method, terms)}]}]
-        end
-      end
-
-      with.keyword :in_reply_to_number do |numbers, positive|
-        events = events.slice(:message)
-
-        method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.where{
-          in_reply_to_number.send(method, numbers)}]}]
-      end
-
-      # TaskEvent and MessageEvent keyword
-      with.keyword :number do |numbers, positive|
-        events = events.slice(:task, :message)
-
-        method = positive ? :in : :not_in
-        events = Hash[events.collect{|k,v| [k, v.where{
-          number.send(method, numbers)}]}]
-      end
-
-      # No keyword
-      with.keyword :any do |terms, positive|
-        outputs[:total_count] = 0
-        outputs[:items] = []
-        return
-      end
-
-    end
+    # TODO: Pagination
+    outputs[:total_count] = outputs[:items].values.flatten.count
 
   end
 

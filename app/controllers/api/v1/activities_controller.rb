@@ -87,14 +87,15 @@ class Api::V1::ActivitiesController < OpenStax::Api::V1::ApiController
     `occurred_at ASC, resource` &ndash; sorts by Activity date ascending, then by resource descending 
   EOS
   def index
-    # Can't use AccessPolicy, since Activity is a Module, not a Class
-    app = doorkeeper_token.try(:application)
-    raise SecurityTransgression unless app && \
-                                       doorkeeper_token.resource_owner_id.nil?
+    # Can't use require_action_allowed!, since Activity is a Module
+    user = current_api_user.human_user.nil? ? current_api_user.application : \
+                                              current_api_user.human_user
+    raise SecurityTransgression unless ActivityAccessPolicy.action_allowed?(
+      :search, user, Activity
+    )
 
-    outputs = SearchActivities.call(app, params).outputs
-    respond_with outputs, represent_with: Api::V1::ActivitySearchRepresenter,
-                          requestor: app
+    outputs = SearchActivities.call(params).outputs
+    respond_with outputs, represent_with: Api::V1::ActivitySearchRepresenter
   end
 
 end

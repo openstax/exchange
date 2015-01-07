@@ -13,14 +13,18 @@ RSpec.describe Api::V1::ActivitiesController, :type => :controller,
                               application: platform.application }
   let!(:subscriber_token) { FactoryGirl.create :access_token, 
                               application: subscriber.application }
+  let!(:account)            { FactoryGirl.create :openstax_accounts_account }
+  let!(:researcher_account) { FactoryGirl.create(:researcher).account }
 
   let!(:resource_1) { FactoryGirl.create :resource }
   let!(:resource_2) { FactoryGirl.create :resource, url: 'dummy://42' }
 
-  let!(:my_task_1) { FactoryGirl.create :task,
-                                        resource: resource_2 }
-  let!(:my_task_2) { FactoryGirl.create :task,
-                                        trial: 'some_trial' }
+  let!(:task) { FactoryGirl.create :task, identifier: identifier_1,
+                                          resource: resource_1,
+                                          trial: 'some_trial' }
+
+  let!(:my_task_1) { FactoryGirl.create :task, resource: resource_2 }
+  let!(:my_task_2) { FactoryGirl.create :task, trial: 'another_trial' }
 
   let!(:my_activity_1) { FactoryGirl.create :reading_activity,
                                             task: my_task_1 }
@@ -30,15 +34,12 @@ RSpec.describe Api::V1::ActivitiesController, :type => :controller,
                               .to_json(subscriber: subscriber) }
 
   before(:each) do
-    skip
     [:exercise, :feedback, :interactive,
      :peer_grading, :reading].each do |activity_symbol|
       factory_symbol = "#{activity_symbol.to_s}_activity".to_sym
       [identifier_1, identifier_2].each do |identifier|
         (1..5).to_a.each do |i|
-          FactoryGirl.create factory_symbol, platform: platform,
-                             person: identifier.resource_owner,
-                             resource: resource_1
+          FactoryGirl.create factory_symbol, task: task
         end
       end
     end
@@ -46,37 +47,41 @@ RSpec.describe Api::V1::ActivitiesController, :type => :controller,
 
   context 'success' do
 
-    it 'should allow platforms to search their own activities' do
-      api_get :index, platform_token, parameters: {q: ''}
-      expect(response).to have_http_status(:success)
-
-      output = JSON.parse(response.body)
-      expect(output['total_count']).to eq(70)
-      expect(output['items'].values.flatten.count).to eq(70)
-
-      api_get :index, platform_token, parameters: {q: 'resource:me'}
-      expect(response).to have_http_status(:success)
-
-      output = JSON.parse(response.body)
-      expect(output['total_count']).to eq(0)
-      expect(output['items'].values.flatten).to be_empty
-    end
-
-    it 'should allow subscribers to search all activities' do
+    it 'should allow subscriber apps to search all activities' do
       api_get :index, subscriber_token, parameters: {q: ''}
       expect(response).to have_http_status(:success)
 
       output = JSON.parse(response.body)
-      expect(output['total_count']).to eq(72)
-      expect(output['items'].values.flatten.count).to eq(72)
+      expect(output['total_count']).to eq(42)
+      expect(output['items'].values.flatten.count).to eq(42)
 
-      api_get :index, subscriber_token, parameters: {q: 'resource:me'}
+      api_get :index, subscriber_token, parameters: {q: 'resource:dummy'}
       expect(response).to have_http_status(:success)
 
       output = JSON.parse(response.body)
       expect(output['total_count']).to eq(1)
       expect(output['items'].values.flatten.count).to eq(1)
-      expect(output['items']['reading'].first.to_json).to eq(my_activity_json)
+      expect(output['items']['reading_activities'].first.to_json).to(
+        eq(my_activity_json))
+    end
+
+    it 'should allow researchers to search all activities' do
+      controller.sign_in researcher_account
+      api_get :index, nil, parameters: {q: ''}
+      expect(response).to have_http_status(:success)
+
+      output = JSON.parse(response.body)
+      expect(output['total_count']).to eq(42)
+      expect(output['items'].values.flatten.count).to eq(42)
+
+      api_get :index, nil, parameters: {q: 'resource:dummy'}
+      expect(response).to have_http_status(:success)
+
+      output = JSON.parse(response.body)
+      expect(output['total_count']).to eq(1)
+      expect(output['items'].values.flatten.count).to eq(1)
+      expect(output['items']['reading_activities'].first.to_json).to(
+        eq(my_activity_json))
     end
 
     it 'should allow sort by multiple fields in different directions' do
@@ -85,23 +90,35 @@ RSpec.describe Api::V1::ActivitiesController, :type => :controller,
 
       output = JSON.parse(response.body)
 
-      expect(output['total_count']).to eq(72)
-      expect(output['items'].values.flatten.count).to eq(72)
-      expect(output['items']['reading'].first.to_json).to eq(my_event_json)
+      expect(output['total_count']).to eq(42)
+      expect(output['items'].values.flatten.count).to eq(42)
+      expect(output['items']['reading_activities'].first.to_json).to(
+        eq(my_activity_json))
     end
 
   end
 
   context 'authorization error' do
 
-    it 'should not allow activities to be searched with identifiers' do
-      expect{api_get :index, identifier_1, parameters: {q: ''}}.to(
-        raise_error(SecurityTransgression))
+    it 'should not allow activities to be searched by non-researcher users' do
+      controller.sign_in account
+      expect{api_get :index, nil, parameters: {q: ''}}
+        .to(raise_error(SecurityTransgression))
     end
 
-    it 'should not allow activities to be searched without a token' do
-      expect{api_get :index, nil, parameters: {q: ''}}.to(
-        raise_error(SecurityTransgression))
+    it 'should not allow activities to be searched by non-subscriber apps' do
+      expect{api_get :index, platform_token, parameters: {q: ''}}
+        .to(raise_error(SecurityTransgression))
+    end
+
+    it 'should not allow activities to be searched with identifiers' do
+      expect{api_get :index, identifier_1.access_token, parameters: {q: ''}}
+        .to(raise_error(SecurityTransgression))
+    end
+
+    it 'should not allow activities to be searched by anonymous' do
+      expect{api_get :index, nil, parameters: {q: ''}}
+        .to(raise_error(SecurityTransgression))
     end
 
   end
@@ -109,8 +126,8 @@ RSpec.describe Api::V1::ActivitiesController, :type => :controller,
   context 'validation error' do
 
     it 'requires the q param' do
-      expect{api_get :index, identifier_1}.to(
-        raise_error(Apipie::ParamMissing))
+      expect{api_get :index, identifier_1.access_token}
+        .to(raise_error(Apipie::ParamMissing))
     end
 
   end

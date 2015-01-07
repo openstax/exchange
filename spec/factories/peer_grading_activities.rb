@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :peer_grading_activity do
     extend Activity::Factory
-    grader { SecureRandom.hex(32).to_s }
+    association :grader, factory: :identifier
     grade "A+"
     feedback "This is my feedback."
   end

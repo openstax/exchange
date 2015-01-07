@@ -291,6 +291,7 @@ ActiveRecord::Schema.define(version: 20150105230553) do
     t.integer  "seconds_active", null: false
     t.datetime "first_event_at", null: false
     t.datetime "last_event_at",  null: false
+    t.integer  "grader_id",      null: false
     t.string   "grade"
     t.text     "feedback"
     t.datetime "created_at",     null: false
@@ -298,6 +299,7 @@ ActiveRecord::Schema.define(version: 20150105230553) do
   end
 
   add_index "peer_grading_activities", ["first_event_at"], name: "index_peer_grading_activities_on_first_event_at"
+  add_index "peer_grading_activities", ["grader_id"], name: "index_peer_grading_activities_on_grader_id"
   add_index "peer_grading_activities", ["last_event_at", "first_event_at"], name: "index_peer_grading_activities_on_l_e_at_and_f_e_at"
   add_index "peer_grading_activities", ["task_id"], name: "index_peer_grading_activities_on_task_id"
 
