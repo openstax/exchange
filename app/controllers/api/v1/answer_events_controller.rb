@@ -10,7 +10,7 @@ class Api::V1::AnswerEventsController < OpenStax::Api::V1::ApiController
       The token is obtained by the platform by creating an Identifier object.
 
       All events have the following fields in common: platform (object),
-      person (object), resource (string) and trial (string).
+      identifier (string), resource (string) and trial (string).
 
       Additionally, AnswerEvents have the answer_type (string) and
       answer (text) fields.
@@ -24,8 +24,7 @@ class Api::V1::AnswerEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records the user submitting a multiple choice answer.
 
-    #{json_schema(Api::V1::AnswerEventRepresenter, include: :writeable,
-                                                   platform: true)}
+    #{json_schema(Api::V1::AnswerEventRepresenter, include: :writeable)}
   EOS
   def create_multiple_choice
     create_event(AnswerEvent) do |e|
@@ -40,8 +39,7 @@ class Api::V1::AnswerEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records the user submitting a free response answer.
 
-    #{json_schema(Api::V1::AnswerEventRepresenter, include: :writeable,
-                                                   platform: true)}
+    #{json_schema(Api::V1::AnswerEventRepresenter, include: :writeable)}
   EOS
   def create_free_response
     create_event(AnswerEvent) do |e|

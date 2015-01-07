@@ -6,10 +6,8 @@ RSpec.describe Api::V1::ActivitiesController, :type => :controller,
   let!(:platform)   { FactoryGirl.create :platform }
   let!(:subscriber) { FactoryGirl.create :subscriber }
 
-  let!(:identifier_1) { FactoryGirl.create(:identifier,
-                          application: platform.application) }
-  let!(:identifier_2) { FactoryGirl.create(:identifier,
-                          application: platform.application) }
+  let!(:identifier_1) { FactoryGirl.create(:identifier, platform: platform) }
+  let!(:identifier_2) { FactoryGirl.create(:identifier, platform: platform) }
 
   let!(:platform_token)   { FactoryGirl.create :access_token, 
                               application: platform.application }

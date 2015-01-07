@@ -46,7 +46,7 @@ Exchange::Application.routes.draw do
   apipie
 
   api :v1, :default => true do
-    resources :people, only: :create
+    resources :identifiers, only: :create
 
     resources :events, only: :index
 

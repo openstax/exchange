@@ -10,9 +10,7 @@ class Api::V1::HeartbeatEventsController < OpenStax::Api::V1::ApiController
       This token is obtained by the platform by creating an Identifier object.
 
       All events have the following fields in common: platform (object),
-      person (object), resource (string) and trial (string).
-
-      Additionally, HeartbeatEvents have the and y_position (integer) field.
+      identifier (object), resource (string) and trial (string).
     EOS
   end
 

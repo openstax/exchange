@@ -9,9 +9,9 @@ class Api::V1::TaskingEventsController < OpenStax::Api::V1::ApiController
       This controller uses a token obtained through the Client Credentials flow.
 
       All events have the following fields in common: platform (object),
-      person (object), resource (string) and trial (string).
+      identifier (string), resource (string) and trial (string).
 
-      Additionally, TaskingEvents have the assignee (string) and
+      Additionally, TaskingEvents have the assigner (string) and
       due_date (datetime) fields.
     EOS
   end
@@ -23,8 +23,7 @@ class Api::V1::TaskingEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records or updates a task assignment.
 
-    #{json_schema(Api::V1::TaskingEventRepresenter, include: :writeable,
-                                                    platform: true)}
+    #{json_schema(Api::V1::TaskingEventRepresenter, include: :writeable)}
   EOS
   def create
     create_event(TaskingEvent)

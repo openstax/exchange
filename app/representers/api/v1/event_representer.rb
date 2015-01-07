@@ -3,18 +3,16 @@ module Api::V1
 
     include Roar::Representer::JSON
 
-    property :person,
+    property :identifier,
              type: String,
              readable: true,
              writeable: true,
              getter: lambda { |args|
-               task.person.identifiers
-                          .where(application: task.platform.try(:application))
-                          .take.try(:token)
+               task.identifier.access_token.try(:token)
              },
              setter: lambda { |value, args|
-               task.person = Doorkeeper::AccessToken.find_by(token: value)
-                                                    .try(:resource_owner)
+               task.identifier = Doorkeeper::AccessToken.find_by(token: value)
+                                                        .try(:resource_owner)
              },
              schema_info: {
                description: 'The Identifier for the Person associated with this Event'

@@ -12,15 +12,23 @@ module Api::V1
                description: 'The id given to this Activity'
              }
 
-    property :person,
+    property :platform,
              type: String,
              readable: true,
              writeable: false,
-             getter: lambda { |args| task.person.label },
+             getter: lambda { |args| task.identifier.platform },
+             schema_info: {
+               description: 'The Platform associated with this Activity'
+             }
+
+    property :research_label,
+             type: String,
+             readable: true,
+             writeable: false,
+             getter: lambda { |args| task.identifier.research_label },
              schema_info: {
                description: 'The research label for the Person associated with this Activity'
              }
-
 
     property :resource,
              type: String,

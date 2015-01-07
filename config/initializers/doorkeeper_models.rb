@@ -8,15 +8,6 @@ Doorkeeper::Application.class_exec do
 end
 
 Doorkeeper::AccessToken.class_exec do
-  belongs_to :resource_owner, class_name: 'Person', inverse_of: :identifiers
-
-  validate :client_credentials_or_platform
-
-  protected
-
-  def client_credentials_or_platform
-    return if resource_owner.nil? || application.platform
-    errors.add(:application, 'Only Platforms can obtain Identifiers')
-    false
-  end
+  belongs_to :resource_owner, class_name: 'Identifier',
+                              inverse_of: :access_token
 end

@@ -130,6 +130,17 @@ ActiveRecord::Schema.define(version: 20150105230553) do
 
   add_index "heartbeat_events", ["task_id"], name: "index_heartbeat_events_on_task_id"
 
+  create_table "identifiers", force: true do |t|
+    t.integer  "platform_id",    null: false
+    t.integer  "person_id",      null: false
+    t.string   "research_label", null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "identifiers", ["person_id", "platform_id"], name: "index_identifiers_on_person_id_and_platform_id"
+  add_index "identifiers", ["research_label"], name: "index_identifiers_on_research_label", unique: true
+
   create_table "interactive_activities", force: true do |t|
     t.integer  "task_id",        null: false
     t.integer  "seconds_active", null: false
@@ -291,14 +302,9 @@ ActiveRecord::Schema.define(version: 20150105230553) do
   add_index "peer_grading_activities", ["task_id"], name: "index_peer_grading_activities_on_task_id"
 
   create_table "people", force: true do |t|
-    t.string   "label",         null: false
-    t.integer  "superseder_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
-
-  add_index "people", ["label"], name: "index_people_on_label", unique: true
-  add_index "people", ["superseder_id"], name: "index_people_on_superseder_id"
 
   create_table "platforms", force: true do |t|
     t.integer  "application_id", null: false
@@ -357,19 +363,17 @@ ActiveRecord::Schema.define(version: 20150105230553) do
   add_index "tasking_events", ["tasker"], name: "index_tasking_events_on_tasker"
 
   create_table "tasks", force: true do |t|
-    t.integer  "person_id",   null: false
-    t.integer  "resource_id", null: false
-    t.integer  "platform_id", null: false
-    t.string   "trial",       null: false
+    t.integer  "identifier_id", null: false
+    t.integer  "resource_id",   null: false
+    t.string   "trial",         null: false
     t.datetime "due_at"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   add_index "tasks", ["due_at"], name: "index_tasks_on_due_at"
-  add_index "tasks", ["person_id", "resource_id", "platform_id", "trial"], name: "index_tasks_on_p_id_and_r_id_and_p_id_and_trial", unique: true
-  add_index "tasks", ["platform_id"], name: "index_tasks_on_platform_id"
-  add_index "tasks", ["resource_id", "platform_id", "trial"], name: "index_tasks_on_resource_id_and_platform_id_and_trial"
+  add_index "tasks", ["identifier_id", "resource_id", "trial"], name: "index_tasks_on_identifier_id_and_resource_id_and_trial", unique: true
+  add_index "tasks", ["resource_id", "trial"], name: "index_tasks_on_resource_id_and_trial"
 
   create_table "unload_events", force: true do |t|
     t.integer  "task_id",     null: false

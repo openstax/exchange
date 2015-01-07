@@ -8,7 +8,8 @@ class ApplicationEventAccessPolicy
                         !requestor.platform.nil?
 
     # The only action for these Events is create
-    action == :create && requestor.platform == application_event.task.platform
+    action == :create && \
+    requestor.platform == application_event.task.identifier.platform
   end
 
 end

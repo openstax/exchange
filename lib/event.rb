@@ -37,10 +37,9 @@ module Event
 
     def create_event(event_class, options = {})
       routine = CreateEvent.call(event_class) do |event|
-        event.task.platform = current_application.try(:platform)
         consume!(event, options)
-        person = doorkeeper_token.try(:resource_owner)
-        event.task.person = person unless person.nil?
+        identifier = doorkeeper_token.try(:resource_owner)
+        event.task.identifier = identifier unless identifier.nil?
         event.task = Task.find_or_initialize_by(event.task.attributes)
 
         yield event if block_given?

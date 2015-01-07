@@ -1,7 +1,6 @@
 class CreateEvent
 
-  TASK_OPTIONS = [:person, :person_id, :platform, :platform_id,
-                  :resource, :resource_id, :trial]
+  TASK_OPTIONS = [:identifier, :identifier_id, :resource, :resource_id, :trial]
 
   lev_routine
 

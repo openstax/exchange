@@ -2,6 +2,14 @@
 
 FactoryGirl.define do
   factory :person do
-    label nil
+    transient do
+      identifiers_count 3
+    end
+
+    after(:build) do |person, evaluator|
+      evaluator.identifiers_count.times do
+        person.identifiers << FactoryGirl.build(:identifier, person: person)
+      end
+    end
   end
 end

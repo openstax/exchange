@@ -11,14 +11,11 @@ def application_event_controller_spec(event_type, create_method = :create)
   describe controller_class, :type => :controller, :api => true, :version => :v1 do
 
     let!(:platform) { FactoryGirl.create(:platform) }
-    let!(:identifier) { FactoryGirl.create(:identifier,
-                          application: platform.application) }
+    let!(:identifier) { FactoryGirl.create(:identifier, platform: platform) }
     let!(:platform_access_token) { FactoryGirl.create(:access_token,
                                      application: platform.application) }
     let!(:access_token) { FactoryGirl.create(:access_token) }
-    let!(:task)  { FactoryGirl.build(:task,
-                                     person: identifier.resource_owner,
-                                     platform: platform) }
+    let!(:task)  { FactoryGirl.build(:task, identifier: identifier) }
     let!(:event) { FactoryGirl.build(event_symbol, task: task) }
     let!(:valid_json) { representer_class.new(event).to_json }
 
@@ -33,8 +30,7 @@ def application_event_controller_spec(event_type, create_method = :create)
         new_event = event_class.last
         expected_response = representer_class.new(new_event).to_json
         expect(response.body).to eq(expected_response)
-        expect(new_event.task.platform).to eq(event.task.platform)
-        expect(new_event.task.person).to eq(event.task.person)
+        expect(new_event.task.identifier).to eq(event.task.identifier)
         expect(new_event.task.resource.url).to eq(event.task.resource.url)
         expect(new_event.task.trial).to eq(event.task.trial)
       end
@@ -43,7 +39,7 @@ def application_event_controller_spec(event_type, create_method = :create)
     context 'authorization error' do
       it 'should not be creatable by a user with an identifier' do
         c = event_class.count
-        expect{api_post create_method, identifier,
+        expect{api_post create_method, identifier.access_token,
                         raw_post_data: valid_json}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
@@ -58,9 +54,9 @@ def application_event_controller_spec(event_type, create_method = :create)
       end
 
       it 'should not be creatable with an invalid access token' do
-        identifier.token = '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF'
+        identifier.access_token.token = '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF'
         c = event_class.count
-        expect{api_post create_method, identifier,
+        expect{api_post create_method, identifier.access_token,
                         raw_post_data: valid_json}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)

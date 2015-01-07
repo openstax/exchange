@@ -11,38 +11,35 @@ def user_event_controller_spec(event_type, create_method = :create)
   describe controller_class, :type => :controller, :api => true, :version => :v1 do
 
     let!(:platform) { FactoryGirl.create(:platform) }
-    let!(:identifier) { FactoryGirl.create(:identifier,
-                          application: platform.application) }
+    let!(:identifier) { FactoryGirl.create(:identifier, platform: platform) }
     let!(:platform_access_token) { FactoryGirl.create(:access_token,
                                      application: platform.application) }
     let!(:access_token) { FactoryGirl.create(:access_token) }
-    let!(:task)  { FactoryGirl.build(:task,
-                                     person: identifier.resource_owner,
-                                     platform: platform) }
+    let!(:task)  { FactoryGirl.build(:task, identifier: identifier) }
     let!(:event) { FactoryGirl.build(event_symbol, task: task) }
     let!(:valid_json) { representer_class.new(event).to_json }
 
     context 'success' do
       it 'should be creatable by a user with an identifier if it has all required fields' do
         c = event_class.count
-        api_post create_method, identifier, raw_post_data: valid_json
+        api_post create_method, identifier.access_token,
+                                raw_post_data: valid_json
         expect(response.status).to eq(201)
 
         expect(event_class.count).to eq(c + 1)
         new_event = event_class.last
         expected_response = representer_class.new(new_event).to_json
         expect(response.body).to eq(expected_response)
-        expect(new_event.task.platform).to eq(event.task.platform)
-        expect(new_event.task.person).to eq(event.task.person)
+        expect(new_event.task.identifier).to eq(event.task.identifier)
         expect(new_event.task.resource.url).to eq(event.task.resource.url)
         expect(new_event.task.trial).to eq(event.task.trial)
       end
 
       it 'does not allow the identifier to be set' do
-        person_2 = FactoryGirl.create(:person)
-        event.task.person = person_2
+        identifier_2 = FactoryGirl.create(:identifier)
+        event.task.identifier = identifier_2
         c = event_class.count
-        api_post create_method, identifier,
+        api_post create_method, identifier.access_token,
                  raw_post_data: representer_class.new(event).to_json
         expect(response.status).to eq(201)
 
@@ -50,8 +47,8 @@ def user_event_controller_spec(event_type, create_method = :create)
         new_event = event_class.last
         expected_response = representer_class.new(new_event).to_json
         expect(response.body).to eq(expected_response)
-        expect(new_event.task.person).not_to eq(person_2)
-        expect(new_event.task.person).to eq(identifier.resource_owner)
+        expect(new_event.task.identifier).not_to eq(identifier_2)
+        expect(new_event.task.identifier).to eq(identifier)
       end
     end
 
@@ -71,9 +68,10 @@ def user_event_controller_spec(event_type, create_method = :create)
       end
 
       it 'should not be creatable with an invalid access token' do
-        identifier.token = '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF'
+        identifier.access_token.token = '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF'
         c = event_class.count
-        expect{api_post create_method, identifier, raw_post_data: valid_json}.to(
+        expect{api_post create_method, identifier.access_token,
+                                       raw_post_data: valid_json}.to(
           raise_error(SecurityTransgression))
         expect(event_class.count).to eq(c)
       end
@@ -90,7 +88,7 @@ def user_event_controller_spec(event_type, create_method = :create)
       it 'should not be creatable without a resource' do
         event.task.resource = nil
         c = event_class.count
-        api_post create_method, identifier,
+        api_post create_method, identifier.access_token,
                  raw_post_data: representer_class.new(event).to_json
         expect(response.status).to eq(422)
 
@@ -103,7 +101,7 @@ def user_event_controller_spec(event_type, create_method = :create)
       it 'should not be creatable without a trial' do
         event.task.trial = nil
         c = event_class.count
-        api_post create_method, identifier,
+        api_post create_method, identifier.access_token,
                  raw_post_data: representer_class.new(event).to_json
         expect(response.status).to eq(422)
 

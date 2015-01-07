@@ -3,7 +3,7 @@ require_relative 'doorkeeper'
 # Register access policies, e.g.:
 #
 # OSU::AccessPolicy.register(Model, ModelAccessPolicy)
-OSU::AccessPolicy.register(Person, PersonAccessPolicy)
+OSU::AccessPolicy.register(Identifier, IdentifierAccessPolicy)
 
 OSU::AccessPolicy.register(LoadEvent, UserEventAccessPolicy)
 OSU::AccessPolicy.register(HeartbeatEvent, UserEventAccessPolicy)

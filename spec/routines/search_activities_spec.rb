@@ -5,10 +5,8 @@ RSpec.describe SearchActivities do
   let!(:platform)   { FactoryGirl.create :platform }
   let!(:subscriber) { FactoryGirl.create :subscriber }
 
-  let!(:identifier_1) { FactoryGirl.create(:identifier,
-                          application: platform.application) }
-  let!(:identifier_2) { FactoryGirl.create(:identifier,
-                          application: platform.application) }
+  let!(:identifier_1) { FactoryGirl.create(:identifier, platform: platform) }
+  let!(:identifier_2) { FactoryGirl.create(:identifier, platform: platform) }
 
   let!(:resource_1) { FactoryGirl.create :resource }
   let!(:resource_2) { FactoryGirl.create :resource, url: 'dummy://42' }

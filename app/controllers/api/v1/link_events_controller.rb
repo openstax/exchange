@@ -10,7 +10,7 @@ class Api::V1::LinkEventsController < OpenStax::Api::V1::ApiController
       This token is obtained by the platform by creating an Identifier object.
 
       All events have the following fields in common: platform (object),
-      person (object), resource (string) and trial (string).
+      identifier (string), resource (string) and trial (string).
 
       Additionally, LinkEvents have the href (string) field.
     EOS

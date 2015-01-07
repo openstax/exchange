@@ -10,9 +10,9 @@ class Api::V1::UnloadEventsController < OpenStax::Api::V1::ApiController
       This token is obtained by the platform by creating an Identifier object.
 
       All events have the following fields in common: platform (object),
-      person (object), resource (string) and trial (string).
+      identifier (string), resource (string) and trial (string).
 
-      Additionally, UnloadEvents have the referer (string) field.
+      Additionally, UnloadEvents have the destination (string) field.
     EOS
   end
 
@@ -22,7 +22,7 @@ class Api::V1::UnloadEventsController < OpenStax::Api::V1::ApiController
 
     Creates an Event that records the user opening a Resource page in their browser.
 
-    #{json_schema(Api::V1::UnloadEventRepresenter, include: [:writeable, :app])}
+    #{json_schema(Api::V1::UnloadEventRepresenter, include: :writeable)}
   EOS
   def create
     create_event(UnloadEvent)

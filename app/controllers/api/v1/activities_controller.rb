@@ -7,7 +7,7 @@ class Api::V1::ActivitiesController < OpenStax::Api::V1::ApiController
       This controller uses the Client Credentials flow.
 
       All Activities have the following fields in common: platform (object),
-      person (object), resource (string), context (string),
+      identifier (string), resource (string), trial (string),
       seconds_active (integer), first_event_at (datetime)
       and last_event_at (datetime).
 

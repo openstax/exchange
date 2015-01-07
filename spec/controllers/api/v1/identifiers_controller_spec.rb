@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::PeopleController, :type => :controller,
-                                          :api => true, :version => :v1 do
+RSpec.describe Api::V1::IdentifiersController, :type => :controller,
+                                               :api => true, :version => :v1 do
 
   let!(:application) { FactoryGirl.create(:application) }
   let!(:platform) { FactoryGirl.create(:platform) }
@@ -34,7 +34,7 @@ RSpec.describe Api::V1::PeopleController, :type => :controller,
 
     it 'should not be creatable by a user with an access token' do
       c = Doorkeeper::AccessToken.count
-      expect{api_post :create, identifier}.to raise_error(SecurityTransgression)
+      expect{api_post :create, identifier.access_token}.to raise_error(SecurityTransgression)
       expect(Doorkeeper::AccessToken.count).to eq(c)
     end
 

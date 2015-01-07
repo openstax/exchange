@@ -11,7 +11,7 @@ class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
       secret and a grant_type of "client_credentials."
 
       All events have the following fields in common: platform (object),
-      person (object), resource (string) and trial (string).
+      identifier (string), resource (string) and trial (string).
 
       Additionally, GradingEvents have the grader (string),
       grade (string) and feedback (text) fields.
@@ -28,8 +28,7 @@ class Api::V1::GradingEventsController < OpenStax::Api::V1::ApiController
     Note that the identifier here refers to the user that did the work,
     not the user that graded it.
 
-    #{json_schema(Api::V1::GradingEventRepresenter, include: :writeable,
-                                                    platform: true)}
+    #{json_schema(Api::V1::GradingEventRepresenter, include: :writeable)}
   EOS
   def create
     create_event(GradingEvent)
