@@ -9,8 +9,13 @@ class UrlSchemeConverter
 
   def self.convert(url, to: :https)
     return if url.nil?
-    scheme = URI(url).scheme
-    converters[scheme].try(:call, url, to) || url.gsub(scheme, to.to_s)
+    uri = URI(url)
+
+    converter = converters[uri.scheme]
+    return converter.call(url, to) unless converter.nil?
+
+    uri.scheme = to.to_s
+    uri.to_s
   end
 
 end
