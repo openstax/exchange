@@ -10,7 +10,7 @@ class CreateOrUpdateActivityFromEvent
                  platform_id: event.platform_id,
                  person_id: event.person_id,
                  resource_id: event.resource_id,
-                 attempt: event.attempt
+                 trial: event.trial
                )
 
     activity.first_event_at ||= Time.now

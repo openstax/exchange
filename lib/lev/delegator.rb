@@ -24,13 +24,15 @@ module Lev
     module ClassMethods
       def delegate(obj_class, *args)
         options = args.last.is_a?(Hash) ? args.pop : {}
-        routines = [options[:to]].flatten.compact
+        routines = [options.delete(:to)].flatten.compact
         raise ArgumentError,
               'You must specify delegate routines using the :to option' \
           if routines.empty?
 
+        options[:translations] ||= { inputs: { type: :verbatim },
+                                     outputs: { type: :verbatim } }
         self.routine_map[obj_class.name] += routines
-        routines.each { |routine| uses_routine routine }
+        routines.each { |routine| uses_routine routine, options }
       end
     end
   end

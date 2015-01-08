@@ -1,7 +1,9 @@
 require 'rails_helper'
 
-describe Api::V1::IdentifiersController, :type => :controller, :api => true, :version => :v1 do
+RSpec.describe Api::V1::IdentifiersController, :type => :controller,
+                                               :api => true, :version => :v1 do
 
+  let!(:application) { FactoryGirl.create(:application) }
   let!(:platform) { FactoryGirl.create(:platform) }
   let!(:platform_access_token) { FactoryGirl.create(:access_token,
                                                     application: platform.application) }
@@ -15,7 +17,7 @@ describe Api::V1::IdentifiersController, :type => :controller, :api => true, :ve
       expect(response.status).to eq(201)
 
       expected_response = {
-        :identifier => Identifier.last.token
+        :identifier => Doorkeeper::AccessToken.last.token
       }.to_json
       expect(response.body).to eq(expected_response)
     end
@@ -25,21 +27,21 @@ describe Api::V1::IdentifiersController, :type => :controller, :api => true, :ve
   context 'authorization error' do
 
     it 'should not be creatable by a non-platform app' do
-      c = Identifier.count
+      c = Doorkeeper::AccessToken.count
       expect{api_post :create, access_token}.to raise_error(SecurityTransgression)
-      expect(Identifier.count).to eq(c)
+      expect(Doorkeeper::AccessToken.count).to eq(c)
     end
 
     it 'should not be creatable by a user with an access token' do
-      c = Identifier.count
-      expect{api_post :create, identifier}.to raise_error(SecurityTransgression)
-      expect(Identifier.count).to eq(c)
+      c = Doorkeeper::AccessToken.count
+      expect{api_post :create, identifier.access_token}.to raise_error(SecurityTransgression)
+      expect(Doorkeeper::AccessToken.count).to eq(c)
     end
 
     it 'should not be creatable without an access token' do
-      c = Identifier.count
+      c = Doorkeeper::AccessToken.count
       expect{api_post :create, nil}.to raise_error(SecurityTransgression)
-      expect(Identifier.count).to eq(c)
+      expect(Doorkeeper::AccessToken.count).to eq(c)
     end
 
   end

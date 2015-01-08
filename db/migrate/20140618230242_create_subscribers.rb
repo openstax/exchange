@@ -3,7 +3,7 @@ class CreateSubscribers < ActiveRecord::Migration
     create_table :subscribers do |t|
       t.application
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_application_index :subscribers

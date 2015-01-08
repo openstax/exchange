@@ -2,10 +2,9 @@
 
 FactoryGirl.define do
   factory :grading_event do
-    extend Event::Factory
-
-    association :grader, factory: :person
-    grade "A"
-    feedback "MyFeedback"
+    task
+    grader { SecureRandom.hex(32).to_s }
+    grade "A+"
+    feedback "This is my feedback."
   end
 end

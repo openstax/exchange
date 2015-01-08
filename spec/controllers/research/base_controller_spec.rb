@@ -1,8 +1,17 @@
 require 'rails_helper'
 
-describe Research::BaseController do
+RSpec.describe Research::BaseController do
 
-  xit '' do
+  let!(:user) { FactoryGirl.create(:researcher).account }
+
+  context 'GET index' do
+
+    it 'shows the researcher dashboard' do
+      controller.sign_in user
+      get :index
+      expect(response).to have_http_status(:success)
+    end
+
   end
 
 end

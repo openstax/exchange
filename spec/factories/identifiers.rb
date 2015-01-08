@@ -1,12 +1,17 @@
+# Read about factories at https://github.com/thoughtbot/factory_girl
+
 FactoryGirl.define do
   factory :identifier do
-    application { FactoryGirl.build(:platform).application }
-    expires_in 2.hours
+    platform
+    person
+    research_label { SecureRandom.hex(32) }
 
-    after(:build) do |identifier, evaluator|
-      identifier.resource_owner = FactoryGirl.build(:person,
-                                                    identifier: identifier) \
-        unless identifier.resource_owner
+    after(:build) do |identifier|
+      identifier.access_token ||= FactoryGirl.build(
+        :access_token,
+        application: identifier.platform.application,
+        resource_owner: identifier
+      )
     end
   end
 end

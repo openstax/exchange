@@ -1,13 +1,14 @@
 class IdentifierAccessPolicy
-  # Contains all the rules for which requestors can do what with which Identifier objects.
+  # Contains all the rules for which requestors can do what with which
+  # Identifier objects.
 
   def self.action_allowed?(action, requestor, identifier)
     # Client Credentials flow
     return false unless requestor.is_a?(Doorkeeper::Application) &&\
-                        Platform.for(requestor)
+                        !requestor.platform.nil?
 
-    # The only action on Identifier is create
-    action == :create && identifier.application == requestor
+    # The only action on Person is create
+    action == :create && identifier.platform.application == requestor
   end
 
 end

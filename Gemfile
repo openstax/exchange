@@ -39,6 +39,9 @@ gem 'turbolinks'
 # Rails 5 HTML sanitizer
 gem 'rails-html-sanitizer', '~> 1.0'
 
+# Allow OpenURI to follow HTTP -> HTTPS redirections
+gem 'open_uri_redirections'
+
 # Utilities for OpenStax websites
 gem 'openstax_utilities'
 

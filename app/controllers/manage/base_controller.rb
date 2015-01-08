@@ -6,6 +6,7 @@ module Manage
     before_filter :authenticate_agent!
 
     def index
+      render 'manage/index'
     end
 
   end

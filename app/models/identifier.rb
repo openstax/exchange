@@ -1,16 +1,35 @@
-Identifier = Doorkeeper::AccessToken
+class Identifier < ActiveRecord::Base
+  has_one :access_token, class_name: 'Doorkeeper::AccessToken',
+                         foreign_key: :resource_owner_id,
+                         dependent: :destroy,
+                         inverse_of: :resource_owner
 
-Identifier.class_exec do
-  belongs_to :resource_owner, class_name: 'Person', inverse_of: :identifier
+  has_many :tasks, dependent: :destroy, inverse_of: :identifier
 
-  validates_uniqueness_of :resource_owner_id, allow_nil: true
-  validate :client_credentials_or_platform
+  belongs_to :platform, inverse_of: :identifiers
+  belongs_to :person, inverse_of: :identifiers
+
+  validates :platform, presence: true
+  validates :person, presence: true
+  validates :research_label, presence: true, uniqueness: true
+  validate  :same_platform, if: :platform
+
+  before_validation :generate_research_label, on: :create,
+                                              unless: :research_label
+
+  def truncated_research_label
+    research_label.truncate(13)
+  end
 
   protected
 
-  def client_credentials_or_platform
-    return if resource_owner_id.nil? || Platform.for(application)
-    errors.add(:application, 'Only Platforms can obtain Identifiers')
+  def same_platform
+    return if access_token.try(:application) == platform.application
+    errors.add(:platform, "must match the access token's application")
     false
+  end
+
+  def generate_research_label
+    self.research_label = SecureRandom.hex(32)
   end
 end

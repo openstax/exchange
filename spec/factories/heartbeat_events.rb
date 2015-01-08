@@ -2,8 +2,7 @@
 
 FactoryGirl.define do
   factory :heartbeat_event do
-    extend Event::Factory
-
-    y_position 42
+    task
+    active true
   end
 end

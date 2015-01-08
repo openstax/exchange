@@ -1,59 +1,58 @@
 module Api::V1
   class EventRepresenter < Roar::Decorator
+
     include Roar::Representer::JSON
-    include Event::Decorator
 
-    property :id,
-             type: Integer,
-             writeable: false,
-             schema_info: {
-               description: 'The id given to this Event'
-             }
-
-    identifier_or_person_property
-
-    property :selector,
+    property :identifier,
              type: String,
+             readable: true,
              writeable: true,
-             simple: true,
+             getter: lambda { |args|
+               task.identifier.access_token.try(:token)
+             },
+             setter: lambda { |value, args|
+               task.identifier = Doorkeeper::AccessToken.find_by(token: value)
+                                                        .try(:resource_owner)
+             },
              schema_info: {
-               description: 'The selector for the object that triggered this Event'
+               description: 'The Identifier for the Person associated with this Event'
              }
 
     property :resource,
-             getter: lambda { |args| resource.try(:reference) },
-             setter: lambda { |val, args| self.resource = Resource.find_or_create(
-                                Platform.for(args[:requestor]), val) },
              type: String,
+             readable: true,
              writeable: true,
-             simple: true,
+             getter: lambda { |args| task.try(:resource).try(:url) },
+             setter: lambda { |value, args|
+               task.resource = FindOrCreateResourceFromUrl.call(value)
+                                 .outputs[:resource]
+             },
              schema_info: {
                required: true,
-               description: 'The Resource associated with this Event'
+               description: 'The Resource URL associated with this Event'
              }
 
-    property :attempt,
-             type: Integer,
+    property :trial,
+             type: String,
+             readable: true,
              writeable: true,
-             simple: true,
+             getter: lambda { |args| task.try(:trial) },
+             setter: lambda { |value, args|
+               task.trial = value
+             },
              schema_info: {
                required: true,
-               description: 'The attempt number associated with this Event'
-             }
-
-    property :metadata,
-             type: String,
-             writeable: true,
-             simple: true,
-             schema_info: {
-               description: 'The metadata associated with this Event'
+               description: 'A unique identifier for the trial ' + \
+                            'connected to this Event'
              }
 
     property :created_at,
              type: String,
+             readable: true,
              writeable: false,
              schema_info: {
-               description: 'The date and time when this Event was sent to Exchange'
+               description: 'The date and time when this Event ' + \
+                            'received by Exchange'
              }
 
   end

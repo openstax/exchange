@@ -1,19 +1,19 @@
 require 'rails_helper'
 
-describe User do
+RSpec.describe User do
 
   it 'adds user methods to relevant classes' do
     expect(ActiveRecord::Base).to respond_to(:acts_as_user)
     expect(ActiveRecord::ConnectionAdapters::TableDefinition.new(
       {}, :test, true, {})).to respond_to(:user)
-    expect(ActiveRecord::Migration.new).to respond_to(:add_user_index)
+    expect(ActiveRecord::Migration.new).to respond_to(:add_user_indices)
     expect(ActionDispatch::Routing::Mapper.new(Exchange::Application.routes)).to(
       respond_to(:user_routes))
   end
 
   it 'modifies classes that call acts_as_user' do
     administrator_1 = FactoryGirl.create(:administrator)
-    administrator_2 = FactoryGirl.create(:administrator)
+    administrator_2 = FactoryGirl.create(:administrator, :terms_agreed)
     expect(administrator_1.account).to be_an_instance_of(OpenStax::Accounts::Account)
     administrator_1.save!
     administrator_1.account = nil

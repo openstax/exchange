@@ -3,9 +3,9 @@ class CreateResearchers < ActiveRecord::Migration
     create_table :researchers do |t|
       t.user
 
-      t.timestamps
+      t.timestamps null: false
     end
 
-    add_user_index :researchers
+    add_user_indices :researchers
   end
 end

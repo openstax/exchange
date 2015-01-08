@@ -1,16 +1,15 @@
 class CreateGradingEvents < ActiveRecord::Migration
   def change
     create_table :grading_events do |t|
-      t.event
-      t.integer :grader_id
-      t.string :grade
+      t.references :task, null: false
+      t.string :grader, null: false
+      t.string :grade, null: false
       t.text :feedback
 
-      t.timestamps
+      t.timestamps null: false
     end
 
-    add_event_index :grading_events
-    add_index :grading_events, :grader_id
-    add_index :grading_events, :grade
+    add_index :grading_events, :task_id
+    add_index :grading_events, :grader
   end
 end

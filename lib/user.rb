@@ -6,15 +6,27 @@ module User
       end
 
       module ClassMethods
-        def acts_as_user
+        def acts_as_user(application_specific: false)
           class_exec do
-            belongs_to :account,
+            belongs_to :account, 
                        class_name: "OpenStax::Accounts::Account"
 
-            validates_presence_of :account
+            validates :account, presence: true
 
             delegate :username, :first_name, :last_name, :full_name,
                      :title, :name, :casual_name, to: :account, allow_nil: true
+
+            if application_specific
+              belongs_to :application, class_name: 'Doorkeeper::Application',
+                         inverse_of: name.tableize.to_sym
+
+              validates :application, presence: true
+
+              validates :account, uniqueness: { scope: :application_id }
+
+            else
+              validates :account, uniqueness: true
+            end
 
             def is_disabled?
               !disabled_at.nil?
@@ -34,16 +46,21 @@ module User
 
     module ConnectionAdapters
       module TableDefinition
-        def user
-          integer :account_id, null: false
+        def user(application_specific: false)
+          references :account, null: false
+          (references :application, null: false) if application_specific
           datetime :disabled_at
         end
       end
     end
 
     module Migration
-      def add_user_index(table_name)
-        add_index table_name, :account_id, unique: true
+      def add_user_indices(table_name, application_specific: false)
+        if application_specific
+          add_index table_name, [:account_id, :application_id], unique: true
+        else
+          add_index table_name, :account_id, unique: true
+        end
         add_index table_name, :disabled_at
       end
     end
@@ -60,8 +77,10 @@ module User
   end
 
   module Factory
-    def self.extended(base)
+    def self.extended(base, application_specific: false)
       base.association :account, factory: :openstax_accounts_account
+
+      base.application if application_specific
 
       base.trait :terms_agreed do
         base.after(:create) do |user, evaluator|

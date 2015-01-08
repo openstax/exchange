@@ -8,18 +8,13 @@ module App
       module ClassMethods
         def acts_as_application
           class_exec do
-            belongs_to :application,
-                       class_name: "Doorkeeper::Application"
+            belongs_to :application, 
+                       class_name: "Doorkeeper::Application",
+                       inverse_of: name.underscore.to_sym
 
             has_many :agents, through: :application
 
-            validates_presence_of :application
-            validates_uniqueness_of :application_id
-
-            def self.for(app)
-              return nil unless app.is_a? Doorkeeper::Application
-              where(application_id: app.id).first
-            end
+            validates :application, presence: true, uniqueness: true
           end
         end
       end
@@ -28,7 +23,7 @@ module App
     module ConnectionAdapters
       module TableDefinition
         def application
-          integer :application_id, null: false
+          references :application, null: false
         end
       end
     end

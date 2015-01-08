@@ -10,30 +10,10 @@ module Activity
           relation_sym = name.tableize.to_sym
 
           class_exec do
-            belongs_to :platform, inverse_of: relation_sym
-            belongs_to :person, inverse_of: relation_sym
-            belongs_to :resource, inverse_of: relation_sym
+            belongs_to :task, inverse_of: relation_sym
 
-            has_one :identifier, through: :person
-
-            validates_presence_of :platform, :person, :resource,
-                                  :attempt, :first_event_at,
-                                  :last_event_at, :seconds_active
-
-            validate :consistency
-
-            protected
-   
-            def consistency
-              # Skip this check if the presence check fails
-              return unless platform && person && resource
-              return \
-                if person.identifier.application == platform.application &&\
-                   (resource.platform.nil? || resource.platform == platform)
-              errors.add(:base,
-                         'Activity components refer to different platforms')
-              false
-            end
+            validates_presence_of :task, :seconds_active,
+                                  :first_event_at, :last_event_at
           end
         end
       end
@@ -42,37 +22,27 @@ module Activity
     module ConnectionAdapters
       module TableDefinition
         def activity
-          integer :platform_id, null: false
-          integer :person_id, null: false
-          integer :resource_id, null: false
-          integer :attempt, null: false
+          references :task, null: false
+          integer :seconds_active, null: false
           datetime :first_event_at, null: false
           datetime :last_event_at, null: false
-          integer :seconds_active, null: false
         end
       end
     end
 
     module Migration
-      def add_activity_index(table_name)
-        add_index table_name, :platform_id
-        add_index table_name, :person_id
-        add_index table_name, :resource_id
-        add_index table_name, :attempt
+      def add_activity_indices(table_name)
+        add_index table_name, :task_id
+        add_index table_name, [:last_event_at, :first_event_at],
+                  name: "index_#{table_name}_on_l_e_at_and_f_e_at"
         add_index table_name, :first_event_at
-        add_index table_name, :last_event_at
-        add_index table_name, :seconds_active
       end
     end
   end
 
   module Factory
     def self.extended(base)
-      base.platform
-      base.person { FactoryGirl.build(:identifier,
-                      application: platform.application).resource_owner }
-      base.resource { FactoryGirl.build(:resource, platform: platform) }
-      base.attempt 42
+      base.task
       base.first_event_at { Time.now - 5.minutes }
       base.last_event_at { Time.now }
       base.seconds_active 150

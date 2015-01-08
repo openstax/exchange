@@ -1,4 +1,5 @@
 class TermsAgree
+
   lev_handler
 
   paramify :agreement do
@@ -7,21 +8,21 @@ class TermsAgree
     validates :term_ids, presence: true
   end
 
-  uses_routine AgreeToTerms
-
-protected
+  protected
 
   def authorized?
-    true
+    !caller.nil? && !caller.is_anonymous?
   end
 
   def handle
-    if !agreement_params.i_agree
-      fatal_error(code: :did_not_agree, message: 'You must agree to the terms to register') 
-    end
+    fatal_error(code: :did_not_agree,
+                message: 'You must agree to the terms to register',
+                offending_inputs: [:agreement, :i_agree]) \
+      unless agreement_params.i_agree
 
     agreement_params.term_ids.each do |term_id|
-      run(AgreeToTerms, term_id, caller)
+      FinePrint.sign_contract(caller, term_id)
     end
   end
+
 end

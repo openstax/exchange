@@ -4,10 +4,10 @@ class UserEventAccessPolicy
 
   def self.action_allowed?(action, requestor, user_event)
     # Implicit flow
-    return false unless requestor.is_a? Person
+    return false unless requestor.is_a? Identifier
 
     # The only action on these Events is create
-    action == :create && requestor == user_event.person
+    action == :create && requestor == user_event.task.identifier
   end
 
 end

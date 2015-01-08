@@ -1,14 +1,16 @@
 module Api::V1
   class IdentifierRepresenter < Roar::Decorator
+
     include Roar::Representer::JSON
 
-    property :token,
-             as: :identifier,
+    property :identifier,
              type: String,
+             readable: true,
              writeable: false,
+             getter: lambda { |args| access_token.token },
              schema_info: {
-               required: true,
-               description: 'Bearer OAuth token to be used to record Events by this user'
+               description: 'The Identifier for this Person; ' + \
+                            'Visible only to the Platform that requested it'
              }
 
   end

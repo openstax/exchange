@@ -52,20 +52,18 @@ Exchange::Application.routes.draw do
 
     scope '/events' do
       scope '/identifiers' do
-        event_routes :pages
+        event_routes :loads
         event_routes :heartbeats
-        event_routes :cursors
-        event_routes :mouse_movements, to: 'cursor_events#create_mouse_movement'
-        event_routes :mouse_clicks, to: 'cursor_events#create_mouse_click'
-        event_routes :inputs
+        event_routes :links
+        event_routes :unloads
       end
 
       scope '/platforms' do
-        event_routes :multiple_choices, to: 'input_events#create_multiple_choice'
-        event_routes :free_responses, to: 'input_events#create_free_response'
-        event_routes :messages
+        event_routes :taskings
+        event_routes :multiple_choices,
+                     to: 'answer_events#create_multiple_choice'
+        event_routes :free_responses, to: 'answer_events#create_free_response'
         event_routes :gradings
-        event_routes :tasks
       end
     end
 
@@ -77,9 +75,11 @@ Exchange::Application.routes.draw do
   # Resources
 
   resources :terms, only: [:index, :show] do
-    collection do
-      get 'pose'
-      post 'agree'
+    scope controller: 'signatures' do
+      collection do
+        get 'pose', action: :new
+        post 'agree', action: :create
+      end
     end
   end
 
@@ -87,9 +87,8 @@ Exchange::Application.routes.draw do
   # Only for routes with unique names
 
   scope module: 'static_pages' do
-    get 'api'
-    get 'copyright'
     get 'about'
+    get 'copyright'
   end
 
 end
