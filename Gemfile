@@ -4,10 +4,7 @@
 source 'https://rubygems.org'
 
 # Rails framework
-gem 'rails', '4.2.0.beta2'
-
-# Remove this when Squeel is updated to support Arel 6.0.0
-gem 'arel', '6.0.0.beta2'
+gem 'rails', '4.2.0'
 
 # Bootstrap
 gem 'bootstrap-sass', '~> 3.2.0'
@@ -56,7 +53,7 @@ gem 'openstax_accounts', git: 'https://github.com/Dantemss/accounts-rails.git',
 gem 'responders', '~> 2.0'
 
 # Access control for API's
-gem 'doorkeeper'
+gem 'doorkeeper', '~> 1.4.1'
 
 # API versioning and documentation
 gem 'openstax_api'
@@ -64,12 +61,14 @@ gem 'apipie-rails'
 gem 'maruku'
 gem 'representable'
 gem 'roar-rails'
+gem 'roar', '~> 0.12.9'
 
 # Lev framework
 gem 'lev'
 
 # Ruby dsl for SQL queries
-gem 'squeel'
+gem 'squeel', git: 'https://github.com/danielrhodes/squeel.git',
+              ref: 'e7f016834eba7f31ed94cb59ed5d41ee80739dd2' # Rails 4.2 patch
 
 # Contract management
 gem 'fine_print'
