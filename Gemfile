@@ -3,38 +3,38 @@
 
 source 'https://rubygems.org'
 
-# Rails framework
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
 
 # Bootstrap
 gem 'bootstrap-sass', '~> 3.2.0'
 
-# SCSS stylesheets
-gem 'sass-rails', '~> 5.0.0'
+# Use SCSS for stylesheets
+gem 'sass-rails', '~> 5.0'
+
+# Use Uglifier as compressor for JavaScript assets
+gem 'uglifier', '>= 1.3.0'
+
+# Use CoffeeScript for .coffee assets and views
+gem 'coffee-rails', '~> 4.1.0'
+
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+gem 'therubyracer', platforms: :ruby
+
+# Use jquery as the JavaScript library
+gem 'jquery-rails'
+
+# jquery UI library
+gem 'jquery-ui-rails'
+
+# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
+gem 'turbolinks'
 
 # Automatically add browser-specific CSS prefixes
 gem 'autoprefixer-rails'
 
-# JavaScript asset compressor
-gem 'uglifier', '>= 1.3.0'
-
-# CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
-
-# JavaScript asset compiler
-gem 'therubyracer', platforms: :ruby
-
-# jQuery library
-gem 'jquery-rails'
-
-# jQuery UI library
-gem 'jquery-ui-rails'
-
-# Automatically ajaxify links
-gem 'turbolinks'
-
 # Rails 5 HTML sanitizer
-gem 'rails-html-sanitizer', '~> 1.0'
+gem 'rails-html-sanitizer'
 
 # Allow OpenURI to follow HTTP -> HTTPS redirections
 gem 'open_uri_redirections'
@@ -50,10 +50,10 @@ gem 'openstax_accounts', git: 'https://github.com/Dantemss/accounts-rails.git',
                          ref: '9665c8d37b83b83eeb9717c287754a8c3d556956'
 
 # Respond_with and respond_to methods
-gem 'responders', '~> 2.0'
+gem 'responders'
 
 # Access control for API's
-gem 'doorkeeper', '~> 1.4.1'
+gem 'doorkeeper', '~> 1.4.1' # Update to doorkeeper 2.0 requires openstax_api update
 
 # API versioning and documentation
 gem 'openstax_api'
@@ -61,7 +61,7 @@ gem 'apipie-rails'
 gem 'maruku'
 gem 'representable'
 gem 'roar-rails'
-gem 'roar', '~> 0.12.9'
+gem 'roar', '~> 0.12.9' # Update to roar 1.0 requires openstax_api update
 
 # Lev framework
 gem 'lev'
@@ -108,6 +108,12 @@ group :development, :test do
   # Call 'debugger' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
+
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+
   # Mute asset pipeline log messages
   gem 'quiet_assets'
 
@@ -119,12 +125,6 @@ group :development, :test do
 end
 
 group :development do
-  # Access an IRB console on exceptions page and /console in development
-  gem 'web-console', '~> 2.0.0.beta2'
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-
   # Automated security checks
   gem 'brakeman'
 
