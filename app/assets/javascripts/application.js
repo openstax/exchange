@@ -19,3 +19,4 @@
 //= require_tree ./utils
 //= require bootstrap
 //= require console
+//= require turbolinks
