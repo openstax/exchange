@@ -39,13 +39,11 @@ ActiveRecord::Schema.define(version: 20150105230553) do
     t.integer  "task_id",     null: false
     t.string   "answer_type", null: false
     t.string   "answer",      null: false
-    t.decimal  "correctness"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
 
   add_index "answer_events", ["task_id", "answer_type"], name: "index_answer_events_on_task_id_and_answer_type"
-  add_index "answer_events", ["task_id", "correctness"], name: "index_answer_events_on_task_id_and_correctness"
 
   create_table "event_subscribers", force: :cascade do |t|
     t.integer  "event_id",                      null: false
