@@ -2,6 +2,6 @@ class ProcessEvent
 
   include Lev::Delegator
 
-  delegate InputEvent, to: Activity::MergeEventIntoExerciseActivity
+  delegate AnswerEvent, to: Activity::MergeEventIntoExerciseActivity
 
 end

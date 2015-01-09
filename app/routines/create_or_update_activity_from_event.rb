@@ -6,12 +6,7 @@ class CreateOrUpdateActivityFromEvent
 
   def exec(activity_class, event, options={})
 
-    activity = activity_class.find_or_initialize_by(
-                 platform_id: event.platform_id,
-                 person_id: event.person_id,
-                 resource_id: event.resource_id,
-                 trial: event.trial
-               )
+    activity = activity_class.find_or_initialize_by(task: event.task)
 
     activity.first_event_at ||= Time.now
     activity.last_event_at = Time.now

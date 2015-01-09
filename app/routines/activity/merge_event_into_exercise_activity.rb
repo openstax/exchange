@@ -13,9 +13,16 @@ module Activity
     def exec(event, options={})
 
       run(:activity, ExerciseActivity, event) do |activity|
-        activity.answer = ''
-        activity.correctness = 0.0
-        activity.free_response = ''
+        case event
+        when AnswerEvent
+          if event.answer_type == 'free-response'
+            activity.free_response = event.answer
+          else
+            activity.answer = event.answer
+          end
+        when GradingEvent
+          activity.correctness = nil # TODO
+        end
       end
 
     end

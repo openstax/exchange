@@ -1,14 +1,15 @@
 class SimpleUrlConverter
 
-  attr_reader :url_base
-
-  def initialize(url_base)
-    @url_base = url_base
+  def initialize(host)
+    @host = host.to_s
   end
 
   def call(url, scheme)
     u = URI(url)
-    "#{scheme}://#{@url_base}/#{u.host || ''}#{u.path || ''}#{u.query || ''}"
+    u.path = "/#{u.host}"
+    u.host = @host
+    u.scheme = scheme.to_s
+    u.to_s
   end
 
 end

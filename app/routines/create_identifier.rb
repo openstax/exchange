@@ -6,8 +6,6 @@ class CreateIdentifier
 
   def exec(platform, options={}, &block)
 
-    # Assume new Person for now
-    # TODO: Find and reuse an existing Person somehow
     person = Person.new
 
     identifier = Identifier.new(

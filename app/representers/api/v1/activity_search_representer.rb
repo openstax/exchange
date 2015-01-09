@@ -8,7 +8,9 @@ module Api::V1
                             'query, can be more than the number returned'
              }
 
-    property :items, schema_info: {
+    property :items, readable: true,
+                     writeable: false,
+                     schema_info: {
                        description: 'The Activities matching the query ' + \
                                     'or a subset thereof when paginating'
                      } do
