@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe ProcessEvent do
 
-  let!(:multiple_choice) { FactoryGirl.create :answer_event,
-                                              answer_type: :multiple_choice }
+  let!(:grading) { FactoryGirl.create :grading_event }
 
   it 'delegates Events to other routines' do
-    activity = ProcessEvent.call(multiple_choice).outputs[:activity]
-    expect(activity.task).to eq multiple_choice.task
-    expect(activity.answer).to eq multiple_choice.answer
+    activity = ProcessEvent.call(grading).outputs[:activity]
+    expect(activity).to be_a(ExerciseActivity)
+    expect(activity.task).to eq grading.task
+    expect(activity.grade).to eq grading.grade
   end
 
 end

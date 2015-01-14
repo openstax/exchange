@@ -52,7 +52,7 @@ module Api::V1
              writeable: false,
              schema_info: {
                description: 'The date and time when this Event ' + \
-                            'received by Exchange'
+                            'was received by Exchange'
              }
 
   end

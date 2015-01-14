@@ -14,7 +14,7 @@ module Api::V1
              readable: true,
              writeable: true,
              schema_info: {
-               description: 'The grade assigned to the given Resource'
+               description: 'The grade assigned to this Task'
              }
 
     property :feedback,
