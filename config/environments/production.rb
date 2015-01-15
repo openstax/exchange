@@ -84,7 +84,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { :host => 'exchange.openstax.org' }
 
   # Send email to developers when users encounter exceptions
-  config.middleware.use ExceptionNotifier,
+  config.middleware.use ExceptionNotification::Rack,
     :email => {
       :email_prefix => "[Exchange] ",
       :sender_address => %{"OpenStax Exchange" <noreply@openstax.org>},
