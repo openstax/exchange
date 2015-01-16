@@ -5,8 +5,17 @@ module Api::V1
              type: String,
              readable: true,
              writeable: true,
+             getter: lambda { |args|
+               next grader unless args[:activity]
+
+               # If an identifier is submitted as a grader,
+               # convert it to a research_label for researchers
+               Doorkeeper::AccessToken.find_by(token: grader)
+                                      .try(:resource_owner)
+                                      .try(:research_label) || grader
+             },
              schema_info: {
-               description: 'Who graded this Task'
+               description: 'The person grading this Task'
              }
 
     property :grade,
@@ -14,7 +23,7 @@ module Api::V1
              readable: true,
              writeable: true,
              schema_info: {
-               description: 'The grade assigned to this Task'
+               description: 'The assigned grade'
              }
 
     property :feedback,

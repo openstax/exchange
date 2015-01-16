@@ -3,7 +3,7 @@ require 'open_uri_redirections'
 
 class FindOrCreateResourceFromUrl
 
-  TRUSTED_HOSTS = ['exercises.openstax.org']
+  TRUSTED_HOSTS = ['quadbase.org', 'exercises.openstax.org']
   INCLUDED_RELS = ['alternate', 'canonical']
 
   lev_routine

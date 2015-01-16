@@ -22,11 +22,13 @@ class CreateEvent
     event_options = options.except(*TASK_OPTIONS)
     task_options = options.slice(*TASK_OPTIONS)
     run(:create, event_class, event_options) do |event|
-      event.task = task_options.empty? ? \
-                     Task.new : Task.find_or_initialize_by(task_options)
+      event.task = Task.new(task_options)
+
       block.call(event) unless block.nil?
-      transfer_errors_from(event.task, {type: :verbatim}, true) \
-        unless event.task.valid?
+
+      # Look for a duplicate Task in the database before saving
+      event.task = event.task.find_or_create
+      transfer_errors_from(event.task, {type: :verbatim}, true)
     end
 
     run(:process, outputs[:event])

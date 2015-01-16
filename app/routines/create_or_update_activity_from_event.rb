@@ -2,7 +2,8 @@ class CreateOrUpdateActivityFromEvent
 
   lev_routine
 
-  uses_routine PublishActivity, as: :publish
+  uses_routine PublishActivity, as: :publish,
+                                ignored_errors: [:aws_credentials_blank]
 
   protected
 

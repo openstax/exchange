@@ -15,6 +15,7 @@ module Activity
       run(:activity, ExerciseActivity, event) do |activity|
         case event
         when GradingEvent
+          # TODO: Compute assignment grade if 2+ grading events
           activity.grade = event.grade
         end
       end

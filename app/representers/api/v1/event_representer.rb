@@ -7,6 +7,7 @@ module Api::V1
              type: String,
              readable: true,
              writeable: true,
+             if: lambda { |args| !args[:activity] },
              getter: lambda { |args|
                task.identifier.access_token.try(:token)
              },
@@ -22,6 +23,7 @@ module Api::V1
              type: String,
              readable: true,
              writeable: true,
+             if: lambda { |args| !args[:activity] },
              getter: lambda { |args| task.try(:resource).try(:url) },
              setter: lambda { |value, args|
                task.resource = FindOrCreateResourceFromUrl.call(value)
@@ -36,6 +38,7 @@ module Api::V1
              type: String,
              readable: true,
              writeable: true,
+             if: lambda { |args| !args[:activity] },
              getter: lambda { |args| task.try(:trial) },
              setter: lambda { |value, args|
                task.trial = value

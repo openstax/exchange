@@ -40,7 +40,6 @@ module Event
         consume!(event, options)
         identifier = doorkeeper_token.try(:resource_owner)
         event.task.identifier = identifier unless identifier.nil?
-        event.task = Task.find_or_initialize_by(event.task.attributes)
 
         yield event if block_given?
 

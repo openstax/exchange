@@ -4,11 +4,23 @@ module Api::V1
     collection :answer_events,
                as: :answers,
                class: AnswerEvent,
-               decorator: ActivityAnswerEventRepresenter,
+               decorator: AnswerEventRepresenter,
                readable: true,
                writeable: false,
+               activity: true,
                schema_info: {
                  description: 'The given answers'
+               }
+
+    collection :grading_events,
+               as: :gradings,
+               class: AnswerEvent,
+               decorator: GradingEventRepresenter,
+               readable: true,
+               writeable: false,
+               activity: true,
+               schema_info: {
+                 description: 'The grades assigned by each grader'
                }
 
     property :grade,
@@ -16,7 +28,7 @@ module Api::V1
              readable: true,
              writeable: false,
              schema_info: {
-               description: 'The assigned grade'
+               description: 'The final grade for the Task'
              }
 
   end
