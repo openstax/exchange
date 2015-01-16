@@ -1,4 +1,9 @@
+aws_secrets = Rails.application.secrets['aws']
+
 Aws.config = {
-  credentials: Rails.application.secrets['aws'],
-  region: 'us-east-1'
+  credentials: Aws::Credentials.new(
+    aws_secrets['credentials']['access_key_id'],
+    aws_secrets['credentials']['secret_access_key']
+  ),
+  region: aws_secrets['region']
 }
