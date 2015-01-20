@@ -15,7 +15,7 @@ module Api::V1
                                       .try(:research_label) || grader
              },
              schema_info: {
-               description: 'The person grading this Task'
+               description: 'The person, system or algorithm grading this Task'
              }
 
     property :grade,
