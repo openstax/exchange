@@ -98,6 +98,10 @@ gem 'yaml_db'
 # Admin console
 gem 'rails_admin'
 
+# AWS SDK
+gem 'aws-sdk'
+gem 'aws-sdk-core'
+
 group :development, :test do
   # Thin webserver
   gem 'thin'

@@ -2,6 +2,9 @@ class CreateOrUpdateActivityFromEvent
 
   lev_routine
 
+  uses_routine PublishActivity, as: :publish,
+                                ignored_errors: [:aws_credentials_blank]
+
   protected
 
   def exec(activity_class, event, options={})
@@ -20,6 +23,8 @@ class CreateOrUpdateActivityFromEvent
 
     outputs[:activity] = activity
     transfer_errors_from activity, type: :verbatim
+
+    run(:publish, activity)
 
   end
 end

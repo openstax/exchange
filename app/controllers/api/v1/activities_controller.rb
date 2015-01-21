@@ -26,7 +26,8 @@ class Api::V1::ActivitiesController < OpenStax::Api::V1::ApiController
 
     The schema for the returned JSON result is shown below.
 
-    #{json_schema(Api::V1::ActivitySearchRepresenter, include: :readable)}
+    #{json_schema(Api::V1::ActivitySearchRepresenter, include: :readable,
+                                                      activity: true)}
   EOS
   example "#{api_example(
     url_base: 'https://accounts.openstax.org/api/activities',
@@ -95,7 +96,8 @@ class Api::V1::ActivitiesController < OpenStax::Api::V1::ApiController
     )
 
     outputs = SearchActivities.call(params).outputs
-    respond_with outputs, represent_with: Api::V1::ActivitySearchRepresenter
+    respond_with outputs, represent_with: Api::V1::ActivitySearchRepresenter,
+                          activity: true
   end
 
 end

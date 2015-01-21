@@ -25,7 +25,7 @@ module Api::V1
 
       collection :exercise_activities,
                  class: ExerciseActivity,
-                 decorator: ActivityRepresenter,
+                 decorator: ExerciseActivityRepresenter,
                  readable: true,
                  writeable: false,
                  schema_info: {

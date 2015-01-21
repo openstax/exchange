@@ -12,13 +12,13 @@ module Api::V1
                description: 'The id given to this Activity'
              }
 
-    property :platform,
-             type: String,
+    property :platform_id,
+             type: Integer,
              readable: true,
              writeable: false,
-             getter: lambda { |args| task.identifier.platform },
+             getter: lambda { |args| task.identifier.platform_id },
              schema_info: {
-               description: 'The Platform associated with this Activity'
+               description: 'The ID of the Platform associated with this Activity'
              }
 
     property :research_label,

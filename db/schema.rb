@@ -61,10 +61,7 @@ ActiveRecord::Schema.define(version: 20150105230553) do
     t.integer  "seconds_active", null: false
     t.datetime "first_event_at", null: false
     t.datetime "last_event_at",  null: false
-    t.string   "answer_type"
-    t.string   "answer"
-    t.decimal  "correctness"
-    t.text     "free_response"
+    t.string   "grade"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end
