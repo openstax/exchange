@@ -9,7 +9,7 @@ class ApplicationEventAccessPolicy
 
     # The only action for these Events is create
     action == :create && \
-    requestor.platform == application_event.task.identifier.platform
+    requestor.platform == application_event.task.identifier.try(:platform)
   end
 
 end

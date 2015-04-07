@@ -3,7 +3,7 @@ require 'open_uri_redirections'
 
 class FindOrCreateResourceFromUrl
 
-  TRUSTED_HOSTS = ['quadbase.org', 'exercises.openstax.org']
+  TRUSTED_HOSTS = [/\A[a-zA-Z0-9-]+\.openstax\.org\z/]
   INCLUDED_RELS = ['alternate', 'canonical']
 
   lev_routine
@@ -22,6 +22,17 @@ class FindOrCreateResourceFromUrl
     u.to_s
   end
 
+  def is_trusted?(host)
+    TRUSTED_HOSTS.any? do |trusted_host|
+      case trusted_host
+      when Regexp
+        host =~ trusted_host
+      else
+        host == trusted_host
+      end
+    end
+  end
+
   def exec(url, options={})
 
     fatal_error(code: :relative_url,
@@ -30,8 +41,8 @@ class FindOrCreateResourceFromUrl
 
     fatal_error(code: :untrusted_host,
                 message: 'The given URL belongs to an untrusted host',
-                offending_inputs: [:url]) \
-      unless TRUSTED_HOSTS.include?(URI(url).host)
+                offending_inputs: [:url]) unless is_trusted?(URI(url).host)
+
 
     current_link = Link.find_by(href: url)
     resource = current_link.try :resource
