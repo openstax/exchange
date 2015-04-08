@@ -17,6 +17,7 @@
 
 # Ignore files containing keys and passwords
 config/*settings.yml
+config/secrets.yml
 
 # Ignore compiled assets
 public/assets/**/*
