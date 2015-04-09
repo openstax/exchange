@@ -9,7 +9,8 @@ ActionController::Base.class_exec do
 
   rescue_from Exception, :with => :rescue_from_exception
 
-  helper_method :current_account
+  helper_method :current_account, :current_administrator,
+                :current_agent, :current_researcher
 
   protected
 
