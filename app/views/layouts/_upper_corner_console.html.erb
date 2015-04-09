@@ -1,6 +1,6 @@
 <div id="upper-corner-console" data-no-turbolink>
 
-  <% if !Rails.env.production? || current_administrator %>
+  <% if current_administrator || !Rails.env.production? %>
     Current user: <%= current_account.username %><br/>
     <%= link_to 'Admin Console', rails_admin.dashboard_path %><br/>
   <% end %>
