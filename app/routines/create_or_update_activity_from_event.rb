@@ -24,7 +24,6 @@ class CreateOrUpdateActivityFromEvent
     outputs[:activity] = activity
     transfer_errors_from activity, type: :verbatim
 
-    run(:publish, activity)
-
+    run(:publish, activity, channels: [:sns])
   end
 end
