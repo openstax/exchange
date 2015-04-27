@@ -30,7 +30,7 @@
     </div>
 
     <% @contracts.each do |c| %>
-      <%= hidden_field_tag 'agreement[term_ids][]', c.id %>
+      <%= hidden_field_tag 'agreement[terms][]', c.id %>
     <% end %>
 
     <%= f.submit (signed_before ? "I Agree" : "Register"), id: "agreement_submit" %>

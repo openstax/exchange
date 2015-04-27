@@ -12,9 +12,15 @@ class CreateIdentifier
       person: person,
       platform: platform
     )
-    identifier.access_token = Doorkeeper::AccessToken.new(
+    identifier.read_access_token = Doorkeeper::AccessToken.new(
       application: platform.try(:application),
-      resource_owner: identifier
+      resource_owner: identifier,
+      scopes: :read
+    )
+    identifier.write_access_token = Doorkeeper::AccessToken.new(
+      application: platform.try(:application),
+      resource_owner: identifier,
+      scopes: :write
     )
 
     block.call(identifier) unless block.nil?

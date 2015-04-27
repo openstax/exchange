@@ -6,9 +6,9 @@ RSpec.describe Person, :type => :model do
 
   it 'lists research labels for its Identifiers' do
     person.identifiers.each do |i|
-      expect(person.research_labels).to include(i.research_label)
-      expect(person.truncated_research_labels).to(
-        include(i.truncated_research_label)
+      expect(person.analysis_uids).to include(i.analysis_uid)
+      expect(person.truncated_analysis_uids).to(
+        include(i.truncated_analysis_uid)
       )
     end
   end

@@ -1,7 +1,7 @@
 module Api::V1
   class ActivityRepresenter < Roar::Decorator
 
-    include Roar::Representer::JSON
+    include Roar::JSON
 
     property :id,
              type: Integer,
@@ -21,13 +21,13 @@ module Api::V1
                description: 'The ID of the Platform associated with this Activity'
              }
 
-    property :research_label,
+    property :analysis_uid,
              type: String,
              readable: true,
              writeable: false,
-             getter: lambda { |args| task.identifier.research_label },
+             getter: lambda { |args| task.identifier.analysis_uid },
              schema_info: {
-               description: 'The research label for the Person associated with this Activity'
+               description: 'The analysis uid for the Person associated with this Activity'
              }
 
     property :resource,

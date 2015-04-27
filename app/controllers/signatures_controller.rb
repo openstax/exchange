@@ -1,12 +1,11 @@
 class SignaturesController < ApplicationController
 
-  acts_as_interceptor
-  fine_print_skip :general_terms_of_use, :privacy_policy
+  fine_print_skip
+  before_filter :can_sign
 
   layout "layouts/application_body_only"
 
   def new
-    instance_exec(current_account, &FinePrint.can_sign_proc)
     @contracts = params[:terms].collect{|t| FinePrint.get_contract(t)}
   end
 
@@ -14,6 +13,12 @@ class SignaturesController < ApplicationController
     handle_with(TermsAgree,
                 caller: current_account,
                 complete: lambda { fine_print_return })
+  end
+
+  protected
+
+  def can_sign
+    instance_exec current_account, &FinePrint.config.authenticate_user_proc
   end
 
 end

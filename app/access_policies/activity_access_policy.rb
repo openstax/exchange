@@ -1,6 +1,5 @@
 class ActivityAccessPolicy
-  # Contains all the rules for which requestors can do what with which
-  # Activity objects.
+  # Contains all the rules for which requestors can do what with which Activity objects.
 
   def self.action_allowed?(action, requestor, activity)
     # The only action on Activity is search

@@ -1,7 +1,7 @@
 module Api::V1
   class EventRepresenter < Roar::Decorator
 
-    include Roar::Representer::JSON
+    include Roar::JSON
 
     property :identifier,
              type: String,
@@ -9,14 +9,14 @@ module Api::V1
              writeable: true,
              if: lambda { |args| !args[:activity] },
              getter: lambda { |args|
-               task.identifier.access_token.try(:token)
+               task.identifier.write_access_token.try(:token)
              },
              setter: lambda { |value, args|
                task.identifier = Doorkeeper::AccessToken.find_by(token: value)
                                                         .try(:resource_owner)
              },
              schema_info: {
-               description: 'The Identifier for the Person associated with this Event'
+               description: 'The write Identifier for the Person associated with this Event'
              }
 
     property :resource,

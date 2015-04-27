@@ -128,15 +128,15 @@ ActiveRecord::Schema.define(version: 20150105230553) do
   add_index "heartbeat_events", ["task_id"], name: "index_heartbeat_events_on_task_id"
 
   create_table "identifiers", force: :cascade do |t|
-    t.integer  "platform_id",    null: false
-    t.integer  "person_id",      null: false
-    t.string   "research_label", null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.integer  "platform_id",  null: false
+    t.integer  "person_id",    null: false
+    t.string   "analysis_uid", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
+  add_index "identifiers", ["analysis_uid"], name: "index_identifiers_on_analysis_uid", unique: true
   add_index "identifiers", ["person_id", "platform_id"], name: "index_identifiers_on_person_id_and_platform_id"
-  add_index "identifiers", ["research_label"], name: "index_identifiers_on_research_label", unique: true
 
   create_table "interactive_activities", force: :cascade do |t|
     t.integer  "task_id",        null: false

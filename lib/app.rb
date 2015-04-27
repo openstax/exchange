@@ -39,8 +39,7 @@ module App
     module Routing
       module Mapper
         def application_routes(klass)
-          resources klass, only: [:index, :show, :create, :update, :destroy],
-                           shallow: true do
+          resources klass, only: [:index, :show, :create, :update, :destroy], shallow: true do
             user_routes :agents
           end
         end

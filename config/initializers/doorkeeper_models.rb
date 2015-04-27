@@ -8,6 +8,5 @@ Doorkeeper::Application.class_exec do
 end
 
 Doorkeeper::AccessToken.class_exec do
-  belongs_to :resource_owner, class_name: 'Identifier',
-                              inverse_of: :access_token
+  belongs_to :resource_owner, class_name: 'Identifier'
 end

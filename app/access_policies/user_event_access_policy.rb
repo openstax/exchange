@@ -3,7 +3,7 @@ class UserEventAccessPolicy
   # for events meant to be created by users.
 
   def self.action_allowed?(action, requestor, user_event)
-    # Implicit flow
+    # (Implicit) Authorization flow
     return false unless requestor.is_a? Identifier
 
     # The only action on these Events is create

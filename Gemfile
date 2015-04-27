@@ -46,14 +46,13 @@ gem 'openstax_utilities'
 gem 'whenever'
 
 # OpenStax Accounts integration
-gem 'openstax_accounts', git: 'https://github.com/Dantemss/accounts-rails.git',
-                         ref: '9665c8d37b83b83eeb9717c287754a8c3d556956'
+gem 'openstax_accounts'
 
 # Respond_with and respond_to methods
 gem 'responders'
 
 # Access control for API's
-gem 'doorkeeper', '~> 1.4.1' # Update to doorkeeper 2.0 requires openstax_api update
+gem 'doorkeeper'
 
 # API versioning and documentation
 gem 'openstax_api'
@@ -61,14 +60,13 @@ gem 'apipie-rails'
 gem 'maruku'
 gem 'representable'
 gem 'roar-rails'
-gem 'roar', '~> 0.12.9' # Update to roar 1.0 requires openstax_api update
+gem 'roar'
 
 # Lev framework
 gem 'lev'
 
 # Ruby dsl for SQL queries
-gem 'squeel', git: 'https://github.com/danielrhodes/squeel.git',
-              ref: 'e7f016834eba7f31ed94cb59ed5d41ee80739dd2' # Rails 4.2 patch
+gem 'squeel'
 
 # Contract management
 gem 'fine_print'
