@@ -217,8 +217,8 @@ ActiveRecord::Schema.define(version: 20150105230553) do
     t.string   "secret",                    null: false
     t.text     "redirect_uri",              null: false
     t.string   "scopes",       default: "", null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true
