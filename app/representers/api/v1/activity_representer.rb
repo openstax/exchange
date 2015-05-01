@@ -21,13 +21,13 @@ module Api::V1
                description: 'The ID of the Platform associated with this Activity'
              }
 
-    property :analysis_uid,
+    property :identifier,
              type: String,
              readable: true,
              writeable: false,
-             getter: lambda { |args| task.identifier.analysis_uid },
+             getter: lambda { |args| task.identifier.read_access_token.token },
              schema_info: {
-               description: 'The analysis uid for the Person associated with this Activity'
+               description: 'The read-only identifier for the Person associated with this Activity'
              }
 
     property :resource,
