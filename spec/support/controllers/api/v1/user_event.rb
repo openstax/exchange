@@ -20,13 +20,11 @@ def user_event_controller_spec(event_type, create_method = :create)
     let!(:valid_json) { representer_class.new(event).to_json }
 
     context 'success' do
-      it 'should be creatable by a user with an identifier if it has all required fields' do
-        c = event_class.count
-        api_post create_method, identifier.access_token,
-                                raw_post_data: valid_json
-        expect(response.status).to eq(201)
+      it 'should be creatable by a user with a write token if it has all required fields' do
+        expect{api_post create_method, identifier.write_access_token,
+                        raw_post_data: valid_json}.to change{event_class.count}.by(1)
+        expect(response).to have_http_status(:created)
 
-        expect(event_class.count).to eq(c + 1)
         new_event = event_class.last
         expected_response = representer_class.new(new_event).to_json
         expect(response.body).to eq(expected_response)
@@ -38,12 +36,11 @@ def user_event_controller_spec(event_type, create_method = :create)
       it 'does not allow the identifier to be set' do
         identifier_2 = FactoryGirl.create(:identifier)
         event.task.identifier = identifier_2
-        c = event_class.count
-        api_post create_method, identifier.access_token,
-                 raw_post_data: representer_class.new(event).to_json
-        expect(response.status).to eq(201)
+        expect{api_post create_method, identifier.write_access_token,
+                        raw_post_data: representer_class.new(event).to_json}
+          .to change{event_class.count}.by(1)
+        expect(response).to have_http_status(:created)
 
-        expect(event_class.count).to eq(c + 1)
         new_event = event_class.last
         expected_response = representer_class.new(new_event).to_json
         expect(response.body).to eq(expected_response)
@@ -53,62 +50,62 @@ def user_event_controller_spec(event_type, create_method = :create)
     end
 
     context 'authorization error' do
-      it 'should not be creatable by a platform app without an identifier' do
-        c = event_class.count
-        expect{api_post create_method, platform_access_token, raw_post_data: valid_json}.to(
-          raise_error(SecurityTransgression))
-        expect(event_class.count).to eq(c)
+      it 'should not be creatable by a platform app without a write token' do
+        expect{api_post create_method, platform_access_token, raw_post_data: valid_json}
+          .not_to change{event_class.count}
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'should not be creatable by a non-platform app' do
-        c = event_class.count
-        expect{api_post create_method, access_token, raw_post_data: valid_json}.to(
-          raise_error(SecurityTransgression))
-        expect(event_class.count).to eq(c)
+        expect{api_post create_method, access_token, raw_post_data: valid_json}
+          .not_to change{event_class.count}
+        expect(response).to have_http_status(:forbidden)
       end
 
-      it 'should not be creatable with an invalid access token' do
-        identifier.access_token.token = '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF'
-        c = event_class.count
-        expect{api_post create_method, identifier.access_token,
-                                       raw_post_data: valid_json}.to(
-          raise_error(SecurityTransgression))
-        expect(event_class.count).to eq(c)
+      it 'should not be creatable with a read token' do
+        expect{api_post create_method, identifier.read_access_token, raw_post_data: valid_json}
+          .not_to change{event_class.count}
+        expect(response).to have_http_status(:forbidden)
       end
 
-      it 'should not be creatable without an access token' do
-        c = event_class.count
-        expect{api_post create_method, nil, raw_post_data: valid_json}.to(
-          raise_error(SecurityTransgression))
-        expect(event_class.count).to eq(c)
+      it 'should not be creatable with an invalid token' do
+        identifier.write_access_token.token = '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF'
+        expect{api_post create_method, identifier.write_access_token, raw_post_data: valid_json}
+          .not_to change{event_class.count}
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'should not be creatable without a write token' do
+        expect{api_post create_method, nil, raw_post_data: valid_json}
+          .not_to change{event_class.count}
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
     context 'validation error' do
       it 'should not be creatable without a resource' do
         event.task.resource = nil
-        c = event_class.count
-        api_post create_method, identifier.access_token,
-                 raw_post_data: representer_class.new(event).to_json
-        expect(response.status).to eq(422)
+        expect{api_post create_method, identifier.write_access_token,
+                        raw_post_data: representer_class.new(event).to_json}
+          .not_to change{event_class.count}
+        expect(response).to have_http_status(:unprocessable_entity)
 
         errors = JSON.parse(response.body)
         expect(errors.first['offending_inputs']).to eq('resource')
         expect(errors.first['code']).to eq('blank')
-        expect(event_class.count).to eq(c)
       end
 
       it 'should not be creatable without a trial' do
         event.task.trial = nil
         c = event_class.count
-        api_post create_method, identifier.access_token,
-                 raw_post_data: representer_class.new(event).to_json
-        expect(response.status).to eq(422)
+        expect{api_post create_method, identifier.write_access_token,
+                        raw_post_data: representer_class.new(event).to_json}
+          .not_to change{event_class.count}
+        expect(response).to have_http_status(:unprocessable_entity)
 
         errors = JSON.parse(response.body)
         expect(errors.first['offending_inputs']).to eq('trial')
         expect(errors.first['code']).to eq('blank')
-        expect(event_class.count).to eq(c)
       end
     end
 

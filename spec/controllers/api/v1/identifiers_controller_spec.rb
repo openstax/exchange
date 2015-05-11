@@ -14,10 +14,11 @@ RSpec.describe Api::V1::IdentifiersController, :type => :controller,
 
     it 'should be creatable by a platform app with an access token' do
       api_post :create, platform_access_token
-      expect(response.status).to eq(201)
+      expect(response).to have_http_status(:created)
 
       expected_response = {
-        :identifier => Doorkeeper::AccessToken.last.token
+        read: Doorkeeper::AccessToken.order(created_at: :desc).second.token,
+        write: Doorkeeper::AccessToken.order(created_at: :desc).first.token
       }.to_json
       expect(response.body).to eq(expected_response)
     end
@@ -27,21 +28,20 @@ RSpec.describe Api::V1::IdentifiersController, :type => :controller,
   context 'authorization error' do
 
     it 'should not be creatable by a non-platform app' do
-      c = Doorkeeper::AccessToken.count
-      expect{api_post :create, access_token}.to raise_error(SecurityTransgression)
-      expect(Doorkeeper::AccessToken.count).to eq(c)
+      expect{api_post :create, access_token}.not_to change{Doorkeeper::AccessToken.count}
+      expect(response).to have_http_status(:forbidden)
     end
 
     it 'should not be creatable by a user with an access token' do
-      c = Doorkeeper::AccessToken.count
-      expect{api_post :create, identifier.access_token}.to raise_error(SecurityTransgression)
-      expect(Doorkeeper::AccessToken.count).to eq(c)
+      expect{api_post :create, identifier.write_access_token}.not_to(
+        change{Doorkeeper::AccessToken.count}
+      )
+      expect(response).to have_http_status(:forbidden)
     end
 
     it 'should not be creatable without an access token' do
-      c = Doorkeeper::AccessToken.count
-      expect{api_post :create, nil}.to raise_error(SecurityTransgression)
-      expect(Doorkeeper::AccessToken.count).to eq(c)
+      expect{api_post :create, nil}.not_to change{Doorkeeper::AccessToken.count}
+      expect(response).to have_http_status(:unauthorized)
     end
 
   end

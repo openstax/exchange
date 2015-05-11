@@ -1,5 +1,8 @@
 class Api::V1::IdentifiersController < OpenStax::Api::V1::ApiController
 
+  skip_before_action :doorkeeper_authorize!
+  before_action { doorkeeper_authorize! :write }
+
   resource_description do
     api_versions "v1"
     short_description 'Represents an anonymous student/grader/TA/instructor'
@@ -22,18 +25,15 @@ class Api::V1::IdentifiersController < OpenStax::Api::V1::ApiController
     #{json_schema(Api::V1::IdentifierRepresenter, include: :readable)}
   EOS
   def create
-    @result = CreateIdentifier.call(
-      current_application.try(:platform)
-    ) do |identifier|
-      OSU::AccessPolicy.require_action_allowed!(
-        :create, current_api_user, identifier
-      )
+    @result = CreateIdentifier.call(current_application.try(:platform)) do |identifier|
+      OSU::AccessPolicy.require_action_allowed!(:create, current_api_user, identifier)
     end
 
     if @result.errors.empty?
       respond_with @result.outputs[:identifier],
                    represent_with: Api::V1::IdentifierRepresenter,
-                   status: :created
+                   status: :created,
+                   location: nil
     else
       render json: @result.errors, status: :unprocessable_entity
     end

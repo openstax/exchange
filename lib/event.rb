@@ -33,6 +33,11 @@ module Event
 
   module ApiController
 
+    def self.included(base)
+      base.skip_before_action :doorkeeper_authorize!
+      base.before_action { doorkeeper_authorize! :write }
+    end
+
     protected
 
     def create_event(event_class, options = {})
@@ -43,13 +48,11 @@ module Event
 
         yield event if block_given?
 
-        OSU::AccessPolicy.require_action_allowed!(
-          :create, current_api_user, event
-        )
+        OSU::AccessPolicy.require_action_allowed!(:create, current_api_user, event)
       end
 
       if routine.errors.empty?
-        respond_with routine.outputs[:event], options.merge(status: :created)
+        respond_with routine.outputs[:event], options.merge(status: :created, location: nil)
       else
         render json: routine.errors, status: :unprocessable_entity
       end
@@ -59,5 +62,4 @@ module Event
 end
 
 ActiveRecord::Base.send :include, Event::ActiveRecord::Base
-ActionDispatch::Routing::Mapper.send(
-  :include, Event::ActionDispatch::Routing::Mapper)
+ActionDispatch::Routing::Mapper.send :include, Event::ActionDispatch::Routing::Mapper

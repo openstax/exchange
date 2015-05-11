@@ -102,23 +102,23 @@ RSpec.describe Api::V1::ActivitiesController, :type => :controller,
 
     it 'should not allow activities to be searched by non-researcher users' do
       controller.sign_in account
-      expect{api_get :index, nil, parameters: {q: ''}}
-        .to(raise_error(SecurityTransgression))
+      api_get :index, nil, parameters: {q: ''}
+      expect(response).to have_http_status(:forbidden)
     end
 
     it 'should not allow activities to be searched by non-subscriber apps' do
-      expect{api_get :index, platform_token, parameters: {q: ''}}
-        .to(raise_error(SecurityTransgression))
+      api_get :index, platform_token, parameters: {q: ''}
+      expect(response).to have_http_status(:forbidden)
     end
 
     it 'should not allow activities to be searched with identifiers' do
-      expect{api_get :index, identifier_1.access_token, parameters: {q: ''}}
-        .to(raise_error(SecurityTransgression))
+      api_get :index, identifier_1.read_access_token, parameters: {q: ''}
+      expect(response).to have_http_status(:forbidden)
     end
 
     it 'should not allow activities to be searched by anonymous' do
-      expect{api_get :index, nil, parameters: {q: ''}}
-        .to(raise_error(SecurityTransgression))
+      api_get :index, nil, parameters: {q: ''}
+      expect(response).to have_http_status(:forbidden)
     end
 
   end
@@ -126,8 +126,8 @@ RSpec.describe Api::V1::ActivitiesController, :type => :controller,
   context 'validation error' do
 
     it 'requires the q param' do
-      expect{api_get :index, identifier_1.access_token}
-        .to(raise_error(Apipie::ParamMissing))
+      api_get :index, subscriber_token
+      expect(response).to have_http_status(:unprocessable_entity)
     end
 
   end

@@ -16,9 +16,9 @@ class SearchActivities
     'trial' => Task.arel_table[:trial]
   }
 
-  INCLUDES_HASH = {task: [{identifier: :access_token}, {resource: :links}]}
+  INCLUDES_HASH = {task: [{identifier: :read_access_token}, {resource: :links}]}
   JOINS_HASH = {task: [:identifier, {resource: :links}]}
-  REFERENCES_HASH = {task: {identifier: :access_token}} 
+  REFERENCES_HASH = {task: {identifier: :read_access_token}} 
 
   lev_routine transaction: :no_transaction
 
@@ -68,7 +68,7 @@ class SearchActivities
         sidentifiers = to_integer_array(identifiers)
         next @items = @items.none if sidentifiers.empty?
         @items = Hash[@items.collect{|k,v| [k, v.where{
-          task.identifier.access_token.token.send(method, sidentifiers)}]}]
+          task.identifier.read_access_token.token.send(method, sidentifiers)}]}]
       end
 
       with.keyword :platform do |platforms, positive|

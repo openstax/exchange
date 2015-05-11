@@ -9,8 +9,7 @@ ActionController::Base.class_exec do
 
   rescue_from Exception, :with => :rescue_from_exception
 
-  helper_method :current_account, :current_administrator,
-                :current_agent, :current_researcher
+  helper_method :current_account, :current_administrator, :current_agent, :current_researcher
 
   protected
 
@@ -64,7 +63,7 @@ ActionController::Base.class_exec do
       Rails.logger.error("An exception occurred: #{exception.message}\n\n#{exception.backtrace.join("\n")}")
     end
 
-    raise exception if Rails.application.config.consider_all_requests_local
+    raise exception if notify && Rails.application.config.consider_all_requests_local
     head error
   end
 end

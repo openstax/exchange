@@ -12,8 +12,7 @@ module Activity
           class_exec do
             belongs_to :task, inverse_of: relation_sym
 
-            validates_presence_of :task, :seconds_active,
-                                  :first_event_at, :last_event_at
+            validates_presence_of :task, :seconds_active, :first_event_at, :last_event_at
           end
         end
       end
@@ -52,5 +51,6 @@ end
 
 ActiveRecord::Base.send :include, Activity::ActiveRecord::Base
 ActiveRecord::ConnectionAdapters::TableDefinition.send(
-  :include, Activity::ActiveRecord::ConnectionAdapters::TableDefinition)
+  :include, Activity::ActiveRecord::ConnectionAdapters::TableDefinition
+)
 ActiveRecord::Migration.send :include, Activity::ActiveRecord::Migration

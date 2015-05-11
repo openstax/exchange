@@ -4,8 +4,8 @@ class TermsAgree
 
   paramify :agreement do
     attribute :i_agree, type: boolean
-    attribute :term_ids
-    validates :term_ids, presence: true
+    attribute :terms
+    validates :terms, presence: true
   end
 
   protected
@@ -20,7 +20,7 @@ class TermsAgree
                 offending_inputs: [:agreement, :i_agree]) \
       unless agreement_params.i_agree
 
-    agreement_params.term_ids.each do |term_id|
+    agreement_params.terms.each do |term_id|
       FinePrint.sign_contract(caller, term_id)
     end
   end

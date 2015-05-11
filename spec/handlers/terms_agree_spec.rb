@@ -11,9 +11,7 @@ RSpec.describe TermsAgree do
     expect(FinePrint.signed_contract?(user, contract_2)).to eq false
     errors = TermsAgree.handle(
       caller: user,
-      params: { agreement: { i_agree: true,
-                             term_ids: [ contract_1.id,
-                                         contract_2.id ] } }
+      params: { agreement: { i_agree: true, terms: [ contract_1.id, contract_2.id ] } }
     ).errors
     expect(errors).to be_empty
     expect(FinePrint.signed_contract?(user, contract_1.reload)).to eq true
@@ -25,8 +23,7 @@ RSpec.describe TermsAgree do
     expect(FinePrint.signed_contract?(user, contract_2)).to eq false
     errors = TermsAgree.handle(
       caller: user,
-      params: { agreement: { term_ids: [ contract_1.id,
-                                         contract_2.id ] } }
+      params: { agreement: { terms: [ contract_1.id, contract_2.id ] } }
     ).errors
     expect(errors.first.code).to eq(:did_not_agree)
     expect(errors.first.offending_inputs).to eq([:agreement, :i_agree])

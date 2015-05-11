@@ -9,10 +9,10 @@ module Api::V1
                next grader unless args[:activity]
 
                # If an identifier is submitted as a grader,
-               # convert it to a research_label for researchers
+               # convert it to an analysis_uid for researchers
                Doorkeeper::AccessToken.find_by(token: grader)
                                       .try(:resource_owner)
-                                      .try(:research_label) || grader
+                                      .try(:analysis_uid) || grader
              },
              schema_info: {
                description: 'The person, system or algorithm grading this Task'
