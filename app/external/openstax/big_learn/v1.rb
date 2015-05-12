@@ -9,7 +9,7 @@ module OpenStax
       def self.send_response(exercise_activity:)
         learner_id = exercise_activity.task.identifier.read_access_token.token
         question_id = exercise_activity.task.resource.url
-        score = (Float(exercise_activity.grade) rescue 0) >= 1 ? 1 : 0
+        score = exercise_activity.grade
         activity_id = exercise_activity.id.to_s
         timestamp = DateTimeUtilities.to_api_s(exercise_activity.updated_at)
 

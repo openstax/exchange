@@ -2,7 +2,7 @@ class CreateExerciseActivities < ActiveRecord::Migration
   def change
     create_table :exercise_activities do |t|
       t.activity
-      t.string :grade
+      t.float :grade
 
       t.timestamps null: false
     end

@@ -3,7 +3,7 @@ class CreateGradingEvents < ActiveRecord::Migration
     create_table :grading_events do |t|
       t.references :task, null: false
       t.string :grader, null: false
-      t.string :grade, null: false
+      t.float :grade, null: false
       t.text :feedback
 
       t.timestamps null: false
