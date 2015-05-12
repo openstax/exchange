@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe CreateOrUpdateActivityFromEvent do
 
-  let!(:grading) { FactoryGirl.create :grading_event, grade: 'A+' }
+  let!(:grading) { FactoryGirl.create :grading_event, grade: 1.0 }
 
   it 'creates an activity from an event' do
     ac = ExerciseActivity.count
@@ -18,8 +18,7 @@ RSpec.describe CreateOrUpdateActivityFromEvent do
   end
 
   it 'updates an existing activity with new event info' do
-    activity = FactoryGirl.create :exercise_activity,
-                                  task: grading.task
+    activity = FactoryGirl.create :exercise_activity, task: grading.task
     ac = ExerciseActivity.count
     activity_2 = CreateOrUpdateActivityFromEvent.call(
       ExerciseActivity, grading
