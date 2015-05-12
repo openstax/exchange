@@ -50,7 +50,7 @@ end
 
 ActiveRecord::Base.send :include, App::ActiveRecord::Base
 ActiveRecord::ConnectionAdapters::TableDefinition.send(
-  :include, App::ActiveRecord::ConnectionAdapters::TableDefinition)
+  :include, App::ActiveRecord::ConnectionAdapters::TableDefinition
+)
 ActiveRecord::Migration.send :include, App::ActiveRecord::Migration
-ActionDispatch::Routing::Mapper.send :include,
-                                     App::ActionDispatch::Routing::Mapper
+ActionDispatch::Routing::Mapper.send :include, App::ActionDispatch::Routing::Mapper

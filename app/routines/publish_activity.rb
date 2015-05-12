@@ -26,8 +26,7 @@ class PublishActivity
                        rescue Api::V1::ActivityRepresenter
     message = represent_with.new(activity).to_json(activity: true)
     client_options = options.slice(*CLIENT_OPTIONS)
-    options = options.except(*CLIENT_OPTIONS)
-                     .merge({ message: message, topic_arn: topic_arn })
+    options = options.except(*CLIENT_OPTIONS).merge({ message: message, topic_arn: topic_arn })
 
     outputs[:result] = Aws::SNS::Client.new(client_options).publish options
 

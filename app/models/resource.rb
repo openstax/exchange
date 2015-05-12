@@ -6,7 +6,6 @@ class Resource < ActiveRecord::Base
   has_many :tasks, dependent: :destroy, inverse_of: :resource
 
   def url
-    links.where(rel: 'canonical').first.try(:href) || \
-      links.first.try(:href)
+    links.where(rel: 'canonical').first.try(:href) || links.first.try(:href)
   end
 end

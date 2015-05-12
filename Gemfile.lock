@@ -41,6 +41,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.3.8)
     apipie-rails (0.3.4)
       json
     arel (6.0.0)
@@ -156,6 +157,8 @@ GEM
     jquery-ui-rails (5.0.3)
       railties (>= 3.2.16)
     json (1.8.2)
+    json-schema (2.5.1)
+      addressable (~> 2.3.7)
     jwt (1.4.1)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
@@ -421,6 +424,7 @@ DEPENDENCIES
   byebug
   carrierwave
   cheat
+  chronic
   codeclimate-test-reporter
   coffee-rails (~> 4.1.0)
   coffee-rails-source-maps
@@ -434,6 +438,7 @@ DEPENDENCIES
   fine_print
   jquery-rails
   jquery-ui-rails
+  json-schema
   keyword_search
   lev
   maruku
