@@ -133,6 +133,12 @@ group :development, :test do
 
   # Lorem Ipsum
   gem 'faker'
+
+  # Stubs HTTP requests
+  gem 'webmock'
+
+  # Records HTTP requests
+  gem 'vcr'
 end
 
 group :development do

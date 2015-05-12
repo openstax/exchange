@@ -1,6 +1,10 @@
+require 'openstax/big_learn/v1/configuration'
+require 'openstax/big_learn/v1/fake_client'
+require 'openstax/big_learn/v1/real_client'
+
 module OpenStax
   module BigLearn
-    class V1
+    module V1
 
       #
       # API Wrappers
