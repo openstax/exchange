@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20150105230553) do
     t.integer  "seconds_active", null: false
     t.datetime "first_event_at", null: false
     t.datetime "last_event_at",  null: false
-    t.string   "grade"
+    t.float    "grade"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end
@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(version: 20150105230553) do
   create_table "grading_events", force: :cascade do |t|
     t.integer  "task_id",    null: false
     t.string   "grader",     null: false
-    t.string   "grade",      null: false
+    t.float    "grade",      null: false
     t.text     "feedback"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

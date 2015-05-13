@@ -2,8 +2,7 @@ class CreateOrUpdateActivityFromEvent
 
   lev_routine
 
-  uses_routine PublishActivity, as: :publish,
-                                ignored_errors: [:aws_credentials_blank]
+  uses_routine PublishActivity, as: :publish, ignored_errors: [:aws_credentials_blank]
 
   protected
 
@@ -14,8 +13,7 @@ class CreateOrUpdateActivityFromEvent
     activity.first_event_at ||= Time.now
     activity.last_event_at = Time.now
     activity.seconds_active ||= 0
-    activity.seconds_active += HeartbeatEvent::INTERVAL \
-      if event.is_a? HeartbeatEvent
+    activity.seconds_active += HeartbeatEvent::INTERVAL if event.is_a? HeartbeatEvent
 
     yield activity if block_given?
 
@@ -24,7 +22,10 @@ class CreateOrUpdateActivityFromEvent
     outputs[:activity] = activity
     transfer_errors_from activity, type: :verbatim
 
-    run(:publish, activity)
+    #run(:publish, activity) # Skipped until Amazon SQS integration is ready
+    # Direct calling - hack to be used until we have Amazon SQS integration
+    OpenStax::BigLearn::V1.send_response(exercise_activity: activity) \
+      if event.is_a?(GradingEvent)
 
   end
 end

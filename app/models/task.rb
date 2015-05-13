@@ -18,15 +18,12 @@ class Task < ActiveRecord::Base
 
   validates :identifier, presence: true
   validates :resource, presence: true
-  validates :trial, presence: true,
-                    uniqueness: { scope: [:identifier_id, :resource_id] }
+  validates :trial, presence: true, uniqueness: { scope: [:identifier_id, :resource_id] }
 
   # Look for a duplicate record in the DB. If not found, save and return self.
   def find_or_create
     # Try to find duplicates in the DB
-    duplicate_task = Task.find_by(identifier: identifier,
-                                  resource: resource,
-                                  trial: trial)
+    duplicate_task = Task.find_by(identifier: identifier, resource: resource, trial: trial)
 
     # Return pre-existing task if found
     return duplicate_task unless duplicate_task.nil?

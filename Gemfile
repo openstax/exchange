@@ -42,6 +42,9 @@ gem 'open_uri_redirections'
 # Utilities for OpenStax websites
 gem 'openstax_utilities'
 
+# Datetime parsing
+gem 'chronic'
+
 # Cron job scheduling
 gem 'whenever'
 
@@ -93,6 +96,9 @@ gem 'newrelic_rpm'
 # YAML database backups
 gem 'yaml_db'
 
+# JSON schema validation
+gem 'json-schema'
+
 # Admin console
 gem 'rails_admin'
 
@@ -127,6 +133,12 @@ group :development, :test do
 
   # Lorem Ipsum
   gem 'faker'
+
+  # Stubs HTTP requests
+  gem 'webmock'
+
+  # Records HTTP requests
+  gem 'vcr'
 end
 
 group :development do

@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :grading_event do
     task
     grader { SecureRandom.hex(32).to_s }
-    grade "A+"
+    grade 1.0
     feedback "This is my feedback."
   end
 end

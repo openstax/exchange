@@ -19,11 +19,13 @@ module Api::V1
              }
 
     property :grade,
-             type: String,
              readable: true,
              writeable: true,
              schema_info: {
-               description: 'The assigned grade'
+               description: 'The assigned grade, a decimal number between 0 and 1',
+               type: 'number',
+               minimum: 0,
+               maximum: 1
              }
 
     property :feedback,
