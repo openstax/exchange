@@ -9,15 +9,7 @@ namespace :client_apps do
                { name: "OpenStax Tutor", prefix: "tutor" },
              ]
 
-  desc "Manage applications for exercises, exchange, tutor and biglearn"
-
-  # This task creates applications based on the given parameters.
-  # This task creates an user with the username `ost_app_admin` with
-  # the given password if one is not found already.  It also creates
-  # a group `ost_app_admin_group` and assigns the newly created user
-  # to that group.  Once the user and the group are setup, it
-  # creates each of the applications declared above.
-
+  desc "Populate known client applications"
   task :create, [:app_domain_suffix, :admin_password] => :environment do |t, args|
     suffix = args[:app_domain_suffix] || ''
     password = args[:admin_password]
@@ -60,6 +52,8 @@ namespace :client_apps do
   # This task gets information about all the authorized oauth
   # applications.  For each application found, it returns the
   # application id and secret as a JSON object list.
+
+  desc "List information about known client applications"
   task :list => :environment do
     apps = Doorkeeper::Application.where(name: app_data.collect { |app| app[:name] })
     apps = apps.collect do |app|
