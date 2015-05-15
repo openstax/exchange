@@ -15,36 +15,31 @@ namespace :client_apps do
     password = args[:admin_password]
 
     ActiveRecord::Base.transaction do
-      begin
-        app_data.each do |app|
-          # Determine the redirect_uri; If the suffix parameter starts
-          # with `http` assume that the entire hostname is given with a
-          # placeholder for the app name (`<app>`).  Otherwise use the
-          # default url pattern to construct the redirect url.
+      app_data.each do |app|
+        # Determine the redirect_uri; If the suffix parameter starts
+        # with `http` assume that the entire hostname is given with a
+        # placeholder for the app name (`<app>`).  Otherwise use the
+        # default url pattern to construct the redirect url.
 
-          cb_path = app[:cb_path] || "does_not_exist"
+        cb_path = app[:cb_path] || "does_not_exist"
 
-          redirect_uri = suffix.start_with?('http') ?
-                         "#{suffix.gsub('<app>', app[:prefix])}/#{cb_path}" :
-                         "https://#{app[:prefix]}#{suffix}.openstax.org/#{cb_path}"
+        redirect_uri = suffix.start_with?('http') ?
+                       "#{suffix.gsub('<app>', app[:prefix])}/#{cb_path}" :
+                       "https://#{app[:prefix]}#{suffix}.openstax.org/#{cb_path}"
 
-          # Create a doorkeeper application
+        # Create a doorkeeper application
 
-          application = Doorkeeper::Application.find_or_create_by(name: app[:name]) do |application|
-            application.redirect_uri = redirect_uri
-          end
-
-          application.save! if application.changed?
-
-          # Create a platform for the app, and connect it to the application
-
-          Platform.create!(application: application)
-
-          puts "Saved #{app[:name]} application with return url @ #{redirect_uri} and created an associated Platform"
+        application = Doorkeeper::Application.find_or_create_by(name: app[:name]) do |application|
+          application.redirect_uri = redirect_uri
         end
-      rescue Exception => e
-        puts e
-        raise ActiveRecord::Rollback
+
+        application.save! if application.changed?
+
+        # Create a platform for the app, and connect it to the application
+
+        Platform.find_or_create_by!(application: application)
+
+        puts "The '#{app[:name]}'' application has redirect url @ #{redirect_uri} and an associated Platform"
       end
     end
   end
