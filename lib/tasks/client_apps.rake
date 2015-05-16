@@ -48,13 +48,16 @@ namespace :client_apps do
   # applications.  For each application found, it returns the
   # application id and secret as a JSON object list.
 
-  desc "List information about known client applications"
-  task :list => :environment do
+  desc "Save information about known client applications"
+  task :save_json => :environment do
     apps = Doorkeeper::Application.where(name: app_data.collect { |app| app[:name] })
     apps = apps.collect do |app|
       { name: app.name, id: app.uid, secret: app.secret, url:  app.redirect_uri }
     end
-    puts JSON.pretty_generate(apps)
+    File.open("client_apps.json", "w") do |f|
+      f.write(JSON.pretty_generate(apps))
+      puts "Generated the client application json file @ #{File.expand_path(f.path)}"
+    end
   end
 
 end
