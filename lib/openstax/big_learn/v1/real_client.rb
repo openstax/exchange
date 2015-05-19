@@ -6,9 +6,9 @@ module OpenStax
       class RealClient
 
         def initialize(config)
-          @server_url = config.server_url || "http://api1.biglearn.openstax.org/"
-          @client_id = nil
-          @secret = nil
+          @server_url = config.server_url
+          @client_id = config.client_id
+          @secret = config.secret
 
           @oauth_client = OAuth2::Client.new(@client_id, @secret, site: @server_url)
 

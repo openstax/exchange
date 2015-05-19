@@ -66,7 +66,7 @@ module OpenStax
 
       def self.client
         begin
-          @client ||= fake_client
+          @client ||= real_client
         rescue StandardError => error
           raise ClientError.new(message: "initialization failure", exception: error)
         end

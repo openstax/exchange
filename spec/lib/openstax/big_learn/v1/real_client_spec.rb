@@ -6,7 +6,12 @@ module OpenStax
     module V1
       RSpec.describe RealClient, type: :external, vcr: VCR_OPTS do
 
-        let(:configuration) { OpenStax::BigLearn::V1::Configuration.new }
+        let(:configuration) {
+          c = OpenStax::BigLearn::V1::Configuration.new
+          c.server_url = 'https://biglearn-dev1.openstax.org/'
+          c
+        }
+
         subject             { described_class.new configuration }
 
         it_behaves_like "big_learn client api v1"
