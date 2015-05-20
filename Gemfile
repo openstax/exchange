@@ -106,12 +106,12 @@ gem 'rails_admin'
 gem 'aws-sdk'
 gem 'aws-sdk-core'
 
+# PostgreSQL database
+gem 'pg'
+
 group :development, :test do
   # Thin webserver
   gem 'thin'
-
-  # SQLite3 database
-  gem 'sqlite3'
 
   # Call 'debugger' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
@@ -173,9 +173,6 @@ end
 group :production do
   # Unicorn production server
   gem 'unicorn'
-
-  # PostgreSQL production database
-  gem 'pg'
 
   # Notify developers of Exceptions in production
   gem 'exception_notification'
