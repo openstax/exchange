@@ -10,6 +10,22 @@ module OpenStax
       # API Wrappers
       #
 
+      def self.send_learner(identifier:)
+        platform_learner_id = identifier.read_access_token.token
+        analysis_id = identifier.analysis_uid
+
+        begin
+          client.send_learner(platform_learner_id: platform_learner_id, analysis_id: analysis_id)
+        rescue ArgumentError => error
+          raise error
+        rescue StandardError => error
+          error_json = JSON.parse(error.message[3..-1]) rescue {}
+          raise ArgumentError, error_json['errors'].join(', ') \
+            if error_json['message'] == 'invalid input'
+          raise ClientError.new(message: "send_learner failure", exception: error)
+        end
+      end
+
       def self.send_response(exercise_activity:)
         learner_id = exercise_activity.task.identifier.read_access_token.token
         question_id = exercise_activity.task.resource.url

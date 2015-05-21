@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: post
-    uri: https://biglearn-dev.openstax.org/facts/responses
+    uri: https://biglearn-dev.openstax.org/facts/learners
     body:
       encoding: UTF-8
-      string: '{"learner_id":"5da93947365682e63b2ca23b903044e6feefac16a13eb1e16541ec86e6d41954","question_id":"https://www.google.com/?q=60368fc6f3170f9cc4d4019fa2cc9e19546fe51ecb98187d4936ae55bcc97d06","score":0.0,"activity_id":"1","timestamp":"2015-05-19T04:15:30.732Z"}'
+      string: '{"learners":[{"platform_learner_id":"b9f02767f0e9fb40e21ef8761096853629a5e8cd81d7cb052a39a62f3907f9cd","analysis_id":"ecd7e8ec20bdfde9a29169295e4514b9cb7948ce1bb5e5e7bde2fea00fed1d04"}]}'
     headers:
       User-Agent:
       - Faraday v0.9.1
@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - nginx/1.4.6 (Ubuntu)
       Date:
-      - Tue, 19 May 2015 04:15:32 GMT
+      - Thu, 21 May 2015 16:19:24 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -36,8 +36,8 @@ http_interactions:
       encoding: UTF-8
       string: |-
         {
-          "message": "Response saved."
+          "message": "Learners saved."
         }
     http_version: 
-  recorded_at: Tue, 19 May 2015 04:15:31 GMT
+  recorded_at: Thu, 21 May 2015 16:19:18 GMT
 recorded_with: VCR 2.9.3
