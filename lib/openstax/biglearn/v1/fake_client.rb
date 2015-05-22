@@ -1,7 +1,7 @@
 require 'json-schema'
 
 module OpenStax
-  module BigLearn
+  module Biglearn
     module V1
       class FakeClient
 

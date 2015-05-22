@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module OpenStax
-  module BigLearn
+  module Biglearn
     module V1
       RSpec.describe FakeClient, type: :external do
 

@@ -1,5 +1,5 @@
 module OpenStax
-  module BigLearn
+  module Biglearn
     class ClientError < StandardError
       def initialize(message: nil, exception: nil)
         message ||= exception.blank? ? $! : exception.to_s

@@ -2,12 +2,12 @@ require 'rails_helper'
 require 'vcr_helper'
 
 module OpenStax
-  module BigLearn
+  module Biglearn
     module V1
       RSpec.describe RealClient, type: :external, vcr: VCR_OPTS do
 
         let(:configuration) {
-          c = OpenStax::BigLearn::V1::Configuration.new
+          c = OpenStax::Biglearn::V1::Configuration.new
           c.server_url = 'https://biglearn-dev1.openstax.org/'
           c
         }

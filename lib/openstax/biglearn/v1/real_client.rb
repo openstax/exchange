@@ -1,7 +1,7 @@
 require 'oauth2'
 
 module OpenStax
-  module BigLearn
+  module Biglearn
     module V1
       class RealClient
 
