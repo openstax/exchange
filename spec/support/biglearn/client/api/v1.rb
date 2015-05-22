@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.shared_examples "big_learn client api v1" do
+RSpec.shared_examples "biglearn client api v1" do
 
     let!(:exercise_activity) { FactoryGirl.create :exercise_activity }
 

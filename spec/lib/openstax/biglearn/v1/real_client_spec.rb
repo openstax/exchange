@@ -14,7 +14,7 @@ module OpenStax
 
         subject             { described_class.new configuration }
 
-        it_behaves_like "big_learn client api v1"
+        it_behaves_like "biglearn client api v1"
 
       end
     end

@@ -1,4 +1,4 @@
-secrets = Rails.application.secrets['openstax']['big_learn']
+secrets = Rails.application.secrets['openstax']['biglearn']
 
 OpenStax::BigLearn::V1.configure do |config|
   config.server_url = secrets['url']

@@ -1,6 +1,6 @@
-require 'openstax/big_learn/v1/configuration'
-require 'openstax/big_learn/v1/fake_client'
-require 'openstax/big_learn/v1/real_client'
+require 'openstax/biglearn/v1/configuration'
+require 'openstax/biglearn/v1/fake_client'
+require 'openstax/biglearn/v1/real_client'
 
 module OpenStax
   module BigLearn
