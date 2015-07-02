@@ -15,7 +15,7 @@ module Api::V1
              readable: true,
              writeable: true,
              schema_info: {
-               description: 'The answer content'
+               description: 'The answer choice id (for multiple-choice answers) or the answer content (for other types of answers)'
              }
 
   end
