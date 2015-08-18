@@ -28,7 +28,10 @@ module OpenStax
 
       def self.send_response(exercise_activity:)
         learner_id = exercise_activity.task.identifier.read_access_token.token
-        question_id = exercise_activity.task.resource.url
+        exercise_url = Addressable::URI.parse(exercise_activity.task.resource.url)
+        exercise_url.scheme = nil
+        exercise_url.path = exercise_url.path.split('@').first
+        question_id = exercise_url.to_s
         score = exercise_activity.grade
         activity_id = exercise_activity.id.to_s
         timestamp = DateTimeUtilities.to_api_s(exercise_activity.updated_at)
