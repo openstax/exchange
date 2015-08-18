@@ -19,6 +19,21 @@ module OpenStax
         # API methods
         #
 
+        def send_learner(platform_learner_id:, analysis_id:)
+          request_body = {
+            learners: [
+              platform_learner_id: platform_learner_id,
+              analysis_id: analysis_id
+            ]
+          }.to_json
+
+          uri = URI(@server_url)
+          uri.path = "/facts/learners"
+
+          response = request(:post, uri, body: request_body)
+          JSON.parse(response.body)
+        end
+
         def send_response(learner_id:, question_id:, score:, activity_id:, timestamp:)
           request_body = {
             learner_id: learner_id,

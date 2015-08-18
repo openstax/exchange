@@ -13,8 +13,7 @@ class PublishActivity
 
   def exec(activity, options = {})
 
-    return fatal_error(code: :aws_credentials_blank,
-                       message: 'AWS Credentials not set') \
+    return fatal_error(code: :aws_credentials_blank, message: 'AWS Credentials not set') \
       unless Aws.config[:credentials].set?
 
     class_name = activity.class.name

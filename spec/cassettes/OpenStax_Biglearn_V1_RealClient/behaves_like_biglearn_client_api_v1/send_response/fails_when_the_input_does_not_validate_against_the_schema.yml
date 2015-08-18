@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://biglearn-dev1.openstax.org/facts/responses
+    uri: https://biglearn-dev.openstax.org/facts/responses
     body:
       encoding: UTF-8
       string: '{"learner_id":"ef8593451ba081150c96d92a363cbbcca9a0170df89c677d637443e3bfa4fa9c","question_id":"https://www.google.com/?q=74a3e37ad4304ff0c2c3d4e648b3b80e8465253aa823e5e4aa50b73ae2e1cef9","score":-1,"activity_id":"1","timestamp":"2015-05-19T04:15:32.005Z"}'

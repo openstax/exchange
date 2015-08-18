@@ -11,6 +11,22 @@ module OpenStax
         # API methods
         #
 
+        def send_learner(platform_learner_id:, analysis_id:)
+          request_body = {
+            learners: [
+              platform_learner_id: platform_learner_id,
+              analysis_id: analysis_id
+            ]
+          }
+
+          errors = JSON::Validator.fully_validate(
+            learners_schema, request_body, insert_defaults: true
+          )
+          raise ArgumentError, errors.join(', ') unless errors.empty?
+
+          { "message" => "Learners saved." }
+        end
+
         def send_response(learner_id:, question_id:, score:, activity_id:, timestamp:)
           request_body = {
             learner_id: learner_id,
@@ -20,7 +36,9 @@ module OpenStax
             timestamp: timestamp
           }
 
-          errors = JSON::Validator.fully_validate(schema, request_body, insert_defaults: true)
+          errors = JSON::Validator.fully_validate(
+            response_schema, request_body, insert_defaults: true
+          )
           raise ArgumentError, errors.join(', ') unless errors.empty?
 
           { "message" => "Response saved." }
@@ -28,7 +46,48 @@ module OpenStax
 
         protected
 
-        def schema
+        def learners_schema
+          <<-EOS
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "title": "create-learners-input",
+        "description": "Schema of post data for the create learners API",
+        "type": "object",
+        "properties": {
+          "learners": {
+            "type": "array",
+            "description": "List of learners to be created",
+            "items": {
+              "type": "object",
+              "properties": {
+                "platform_learner_id": {
+                  "type": "string",
+                  "maxLength": 255,
+                  "description": "The identifier for a learner that will be used by a platform when querying biglearn."
+                },
+                "analysis_id": {
+                  "type": "string",
+                  "maxLength": 255,
+                  "description": "The analysis id of the learner that may map to multiple learner platform ids."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "platform_learner_id",
+                "analysis_id"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "learners"
+        ]
+      }
+          EOS
+        end
+
+        def response_schema
           <<-EOS
       {
         "$schema": "http://json-schema.org/draft-04/schema#",
