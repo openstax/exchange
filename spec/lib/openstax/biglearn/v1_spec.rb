@@ -32,7 +32,11 @@ module OpenStax
         let!(:analysis_id) { identifier.analysis_uid }
 
         let!(:learner_id)  { identifier.read_access_token.token }
-        let!(:question_id) { exercise_activity.task.resource.url }
+        let!(:question_id) {
+          uri = URI.parse(exercise_activity.task.resource.url)
+          uri.scheme = nil
+          uri.to_s
+        }
         let!(:score)       { exercise_activity.grade }
         let!(:activity_id) { exercise_activity.id.to_s }
         let!(:timestamp)   { DateTimeUtilities.to_api_s(exercise_activity.updated_at) }
