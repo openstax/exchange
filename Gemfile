@@ -176,4 +176,7 @@ group :production do
 
   # Notify developers of Exceptions in production
   gem 'exception_notification'
+
+  # Consistent logging
+  gem 'lograge'
 end
