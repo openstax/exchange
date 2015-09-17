@@ -99,5 +99,7 @@ Rails.application.configure do
     end
     { "params" => params }
   end
-  config.lograge.ignore_actions = ["static_pages#status"]
+  config.lograge.ignore_custom = lambda do |event|
+    event.path == "/status"
+  end
 end
