@@ -90,4 +90,16 @@ Rails.application.configure do
       :sender_address => %{"OpenStax Exchange" <noreply@openstax.org>},
       :exception_recipients => %w{exchange-dev@openstax.org}
     }
+
+  config.lograge.enabled = true
+  config.log_tags = [ :remote_ip ]
+  config.lograge.custom_options = lambda do |event|
+    params = event.payload[:params].reject do |k|
+      ['controller', 'action', 'format'].include? k
+    end
+    { "params" => params }
+  end
+  config.lograge.ignore_custom = lambda do |event|
+    event.path == "/status"
+  end
 end

@@ -6,7 +6,7 @@ Exchange::Application.routes.draw do
 
   # Status
 
-  get :status, to: lambda { head :ok }
+  get :status, to: lambda { |_| [200, {}, []] }
 
   # Gems
 
