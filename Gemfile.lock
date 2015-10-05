@@ -443,7 +443,6 @@ DEPENDENCIES
   doorkeeper
   eco
   ejs
-  exception_notification
   factory_girl_rails
   faker
   fine_print
