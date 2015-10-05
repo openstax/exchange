@@ -100,6 +100,6 @@ Rails.application.configure do
     { "params" => params }
   end
   config.lograge.ignore_custom = lambda do |event|
-    event.path == "/status"
+    event.payload[:path] == "/status"
   end
 end
