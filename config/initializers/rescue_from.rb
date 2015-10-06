@@ -1,8 +1,7 @@
 require 'openstax_rescue_from'
 
 OpenStax::RescueFrom.configure do |config|
-  config.raise_exceptions = Rails.application.secrets['exceptions']['raise'] ||
-                              Rails.application.config.consider_all_requests_local
+  config.raise_exceptions = Rails.application.config.consider_all_requests_local
 
   config.app_name = 'Exchange'
   config.app_env = ENV['APP_ENV']
@@ -15,6 +14,5 @@ OpenStax::RescueFrom.configure do |config|
 
   # config.email_prefix = "[#{app_name}] (#{app_env}) "
   config.sender_address = Rails.application.secrets['exceptions']['sender']
-  config.exception_recipients = Rails.application
-                                     .secrets['exceptions']['recipients']
+  config.exception_recipients = Rails.application.secrets['exceptions']['recipients']
 end
