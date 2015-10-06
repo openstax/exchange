@@ -5,7 +5,7 @@ OpenStax::RescueFrom.configure do |config|
                               Rails.application.config.consider_all_requests_local
 
   config.app_name = 'Exchange'
-  config.app_env = 'LOCAL DEV'
+  config.app_env = ENV['APP_ENV']
   config.contact_name = Rails.application.secrets['exceptions']['contact_name']
 
   # config.notifier = ExceptionNotifier
