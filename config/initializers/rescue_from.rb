@@ -1,12 +1,12 @@
 require 'openstax_rescue_from'
 
 OpenStax::RescueFrom.configure do |config|
-  config.raise_exceptions = ![false, 'false'].include?(ENV['RAISE_EXCEPTIONS']) ||
+  config.raise_exceptions = Rails.application.secrets['rescue_from']['raise_exceptions'] ||
                               Rails.application.config.consider_all_requests_local
 
-  config.app_name = 'Exchange'
-  # config.app_env = ENV['APP_ENV']
-  # config.contact_name = ENV['EXCEPTION_CONTACT_NAME']
+  config.app_name = Rails.application.secrets['rescue_from']['app_name']
+  config.app_env = Rails.application.secrets['rescue_from']['app_env']
+  config.contact_name = Rails.application.secrets['rescue_from']['contact_name']
 
   # config.notifier = ExceptionNotifier
 
@@ -14,14 +14,7 @@ OpenStax::RescueFrom.configure do |config|
   # config.html_error_template_layout_name = 'application'
 
   # config.email_prefix = "[#{app_name}] (#{app_env}) "
-  # config.sender_address = ENV['EXCEPTION_SENDER']
-  # config.exception_recipients = ENV['EXCEPTION_RECIPIENTS']
+  config.sender_address = Rails.application.secrets['rescue_from']['sender_address']
+  config.exception_recipients = Rails.application
+                                     .secrets['rescue_from']['exception_recipients']
 end
-
-OpenStax::RescueFrom.translate_status_codes({
-  forbidden: "You are not allowed to access this.",
-  :not_found => 'Sorry, we could not find that resource.',
-  bad_request: 'The request was unrecognized.',
-  forbidden: 'You are not allowed to do that.',
-  unprocessable_entity: 'The entity could not be processed.'
-})
