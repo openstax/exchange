@@ -1,4 +1,4 @@
-# Copyright 2011-2014 Rice University. Licensed under the Affero General Public 
+# Copyright 2011-2014 Rice University. Licensed under the Affero General Public
 # License version 3 or later.  See the COPYRIGHT file for details.
 
 source 'https://rubygems.org'
@@ -109,6 +109,8 @@ gem 'aws-sdk-core'
 # PostgreSQL database
 gem 'pg'
 
+gem 'openstax_rescue_from', '~> 1.3.0'
+
 group :development, :test do
   # Thin webserver
   gem 'thin'
@@ -173,9 +175,6 @@ end
 group :production do
   # Unicorn production server
   gem 'unicorn'
-
-  # Notify developers of Exceptions in production
-  gem 'exception_notification'
 
   # Consistent logging
   gem 'lograge'

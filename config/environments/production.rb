@@ -83,14 +83,6 @@ Rails.application.configure do
   # Production site URL for emails
   config.action_mailer.default_url_options = { :host => 'exchange.openstax.org' }
 
-  # Send email to developers when users encounter exceptions
-  config.middleware.use ExceptionNotification::Rack,
-    :email => {
-      :email_prefix => "[Exchange] ",
-      :sender_address => %{"OpenStax Exchange" <noreply@openstax.org>},
-      :exception_recipients => %w{exchange-dev@openstax.org}
-    }
-
   config.lograge.enabled = true
   config.log_tags = [ :remote_ip ]
   config.lograge.custom_options = lambda do |event|
