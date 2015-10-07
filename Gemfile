@@ -178,4 +178,6 @@ group :production do
 
   # Consistent logging
   gem 'lograge'
+
+  gem 'aws-ses', '~> 0.6.0', :require => 'aws/ses'
 end
