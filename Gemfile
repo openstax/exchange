@@ -109,7 +109,7 @@ gem 'aws-sdk-core'
 # PostgreSQL database
 gem 'pg'
 
-gem 'openstax_rescue_from', '~> 1.3.0'
+gem 'openstax_rescue_from', '~> 1.5.0'
 
 group :development, :test do
   # Thin webserver
