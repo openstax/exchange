@@ -83,6 +83,9 @@ Rails.application.configure do
   # Production site URL for emails
   config.action_mailer.default_url_options = { :host => 'exchange.openstax.org' }
 
+  # Use SES in production
+  config.action_mailer.delivery_method = :ses
+
   config.lograge.enabled = true
   config.log_tags = [ :remote_ip ]
   config.lograge.custom_options = lambda do |event|
