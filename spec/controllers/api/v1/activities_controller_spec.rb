@@ -9,19 +9,15 @@ RSpec.describe Api::V1::ActivitiesController, :type => :controller,
   let!(:identifier_1) { FactoryGirl.create(:identifier, platform: platform) }
   let!(:identifier_2) { FactoryGirl.create(:identifier, platform: platform) }
 
-  let!(:platform_token)   { FactoryGirl.create :access_token, 
+  let!(:platform_token)   { FactoryGirl.create :access_token,
                               application: platform.application }
-  let!(:subscriber_token) { FactoryGirl.create :access_token, 
+  let!(:subscriber_token) { FactoryGirl.create :access_token,
                               application: subscriber.application }
   let!(:account)            { FactoryGirl.create :openstax_accounts_account }
   let!(:researcher_account) { FactoryGirl.create(:researcher).account }
 
   let!(:resource_1) { FactoryGirl.create :resource }
   let!(:resource_2) { FactoryGirl.create :resource, url: 'dummy://42' }
-
-  let!(:task) { FactoryGirl.create :task, identifier: identifier_1,
-                                          resource: resource_1,
-                                          trial: 'some_trial' }
 
   let!(:my_task_1) { FactoryGirl.create :task, resource: resource_2 }
   let!(:my_task_2) { FactoryGirl.create :task, trial: 'another_trial' }
@@ -34,11 +30,13 @@ RSpec.describe Api::V1::ActivitiesController, :type => :controller,
                               .to_json(subscriber: subscriber) }
 
   before(:each) do
-    [:exercise, :feedback, :interactive,
-     :peer_grading, :reading].each do |activity_symbol|
-      factory_symbol = "#{activity_symbol.to_s}_activity".to_sym
-      [identifier_1, identifier_2].each do |identifier|
-        (1..5).to_a.each do |i|
+    [identifier_1, identifier_2].each do |identifier|
+      (1..5).to_a.each do |i|
+        task = FactoryGirl.create :task, identifier: identifier,
+                                         resource: resource_1,
+                                         trial: "Trial #{i}"
+        [:exercise, :feedback, :interactive, :peer_grading, :reading].each do |activity_symbol|
+          factory_symbol = "#{activity_symbol.to_s}_activity".to_sym
           FactoryGirl.create factory_symbol, task: task
         end
       end

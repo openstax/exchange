@@ -11,10 +11,6 @@ RSpec.describe SearchActivities do
   let!(:resource_1) { FactoryGirl.create :resource }
   let!(:resource_2) { FactoryGirl.create :resource, url: 'dummy://42' }
 
-  let!(:task) { FactoryGirl.create :task, identifier: identifier_1,
-                                          resource: resource_1,
-                                          trial: 'some_trial' }
-
   let!(:my_task_1) { FactoryGirl.create :task, resource: resource_2 }
   let!(:my_task_2) { FactoryGirl.create :task, trial: 'another_trial' }
 
@@ -24,10 +20,13 @@ RSpec.describe SearchActivities do
                                             task: my_task_2 }
 
   before(:each) do
-    [:reading, :exercise, :peer_grading, :feedback].each do |activity_symbol|
-      factory_symbol = "#{activity_symbol.to_s}_activity".to_sym
-      [identifier_1, identifier_2].each do |identifier|
-        (1..5).to_a.each do |i|
+    [identifier_1, identifier_2].each do |identifier|
+      (1..5).to_a.each do |i|
+        task = FactoryGirl.create :task, identifier: identifier,
+                                         resource: resource_1,
+                                         trial: "Trial #{i}"
+        [:reading, :exercise, :peer_grading, :feedback].each do |activity_symbol|
+          factory_symbol = "#{activity_symbol.to_s}_activity".to_sym
           FactoryGirl.create factory_symbol, task: task
         end
       end
