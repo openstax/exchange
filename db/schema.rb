@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150105230553) do
+ActiveRecord::Schema.define(version: 20160108215613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 20150105230553) do
 
   add_index "exercise_activities", ["first_event_at"], name: "index_exercise_activities_on_first_event_at", using: :btree
   add_index "exercise_activities", ["last_event_at", "first_event_at"], name: "index_exercise_activities_on_l_e_at_and_f_e_at", using: :btree
-  add_index "exercise_activities", ["task_id"], name: "index_exercise_activities_on_task_id", using: :btree
+  add_index "exercise_activities", ["task_id"], name: "index_exercise_activities_on_task_id", unique: true, using: :btree
 
   create_table "feedback_activities", force: :cascade do |t|
     t.integer  "task_id",        null: false
@@ -85,7 +85,7 @@ ActiveRecord::Schema.define(version: 20150105230553) do
 
   add_index "feedback_activities", ["first_event_at"], name: "index_feedback_activities_on_first_event_at", using: :btree
   add_index "feedback_activities", ["last_event_at", "first_event_at"], name: "index_feedback_activities_on_l_e_at_and_f_e_at", using: :btree
-  add_index "feedback_activities", ["task_id"], name: "index_feedback_activities_on_task_id", using: :btree
+  add_index "feedback_activities", ["task_id"], name: "index_feedback_activities_on_task_id", unique: true, using: :btree
 
   create_table "fine_print_contracts", force: :cascade do |t|
     t.string   "name",       null: false
@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(version: 20150105230553) do
 
   add_index "interactive_activities", ["first_event_at"], name: "index_interactive_activities_on_first_event_at", using: :btree
   add_index "interactive_activities", ["last_event_at", "first_event_at"], name: "index_interactive_activities_on_l_e_at_and_f_e_at", using: :btree
-  add_index "interactive_activities", ["task_id"], name: "index_interactive_activities_on_task_id", using: :btree
+  add_index "interactive_activities", ["task_id"], name: "index_interactive_activities_on_task_id", unique: true, using: :btree
 
   create_table "link_events", force: :cascade do |t|
     t.integer  "task_id",    null: false
@@ -302,7 +302,7 @@ ActiveRecord::Schema.define(version: 20150105230553) do
   add_index "peer_grading_activities", ["first_event_at"], name: "index_peer_grading_activities_on_first_event_at", using: :btree
   add_index "peer_grading_activities", ["grader_id"], name: "index_peer_grading_activities_on_grader_id", using: :btree
   add_index "peer_grading_activities", ["last_event_at", "first_event_at"], name: "index_peer_grading_activities_on_l_e_at_and_f_e_at", using: :btree
-  add_index "peer_grading_activities", ["task_id"], name: "index_peer_grading_activities_on_task_id", using: :btree
+  add_index "peer_grading_activities", ["task_id"], name: "index_peer_grading_activities_on_task_id", unique: true, using: :btree
 
   create_table "people", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -328,7 +328,7 @@ ActiveRecord::Schema.define(version: 20150105230553) do
 
   add_index "reading_activities", ["first_event_at"], name: "index_reading_activities_on_first_event_at", using: :btree
   add_index "reading_activities", ["last_event_at", "first_event_at"], name: "index_reading_activities_on_l_e_at_and_f_e_at", using: :btree
-  add_index "reading_activities", ["task_id"], name: "index_reading_activities_on_task_id", using: :btree
+  add_index "reading_activities", ["task_id"], name: "index_reading_activities_on_task_id", unique: true, using: :btree
 
   create_table "researchers", force: :cascade do |t|
     t.integer  "account_id",  null: false

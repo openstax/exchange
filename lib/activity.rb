@@ -31,7 +31,7 @@ module Activity
 
     module Migration
       def add_activity_indices(table_name)
-        add_index table_name, :task_id
+        add_index table_name, :task_id, unique: true
         add_index table_name, [:last_event_at, :first_event_at],
                   name: "index_#{table_name}_on_l_e_at_and_f_e_at"
         add_index table_name, :first_event_at
