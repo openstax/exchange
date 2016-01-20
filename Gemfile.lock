@@ -146,7 +146,7 @@ GEM
       squeel
     font-awesome-rails (4.3.0.0)
       railties (>= 3.2, < 5.0)
-    globalid (0.3.5)
+    globalid (0.3.6)
       activesupport (>= 4.1.0)
     haml (4.0.6)
       tilt
@@ -172,7 +172,7 @@ GEM
       activesupport (>= 3.0.0)
     keyword_search (1.5.0)
     kgio (2.9.3)
-    lev (7.0.1)
+    lev (7.0.2)
       actionpack (>= 4.2)
       active_attr
       activejob
