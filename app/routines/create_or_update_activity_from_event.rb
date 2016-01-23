@@ -24,8 +24,8 @@ class CreateOrUpdateActivityFromEvent
 
     #run(:publish, activity) # Skipped until Amazon SQS integration is ready
     # Direct calling - hack to be used until we have Amazon SQS integration
-    OpenStax::Biglearn::V1.send_response(exercise_activity: activity) \
-      if event.is_a?(GradingEvent)
+    OpenStax::Biglearn::V1.send_response(exercise_activity: activity) if event.is_a?(GradingEvent)
 
   end
+
 end

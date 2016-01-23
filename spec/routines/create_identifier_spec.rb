@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CreateIdentifier do
+RSpec.describe CreateIdentifier, type: :routine do
 
   let!(:platform) { FactoryGirl.create :platform }
 

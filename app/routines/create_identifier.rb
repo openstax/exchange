@@ -4,7 +4,7 @@ class CreateIdentifier
 
   protected
 
-  def exec(platform, options={}, &block)
+  def exec(platform, options = {}, &block)
 
     person = Person.new
 
@@ -34,4 +34,5 @@ class CreateIdentifier
     OpenStax::Biglearn::V1.send_learner(identifier: identifier)
 
   end
+
 end

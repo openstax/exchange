@@ -33,7 +33,7 @@ class FindOrCreateResourceFromUrl
     end
   end
 
-  def exec(url, options={})
+  def exec(url, options = {})
 
     fatal_error(code: :relative_url,
                 message: 'Please provide absolute URLs',
@@ -86,4 +86,5 @@ class FindOrCreateResourceFromUrl
     outputs[:resource] = resource
 
   end
+
 end

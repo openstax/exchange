@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe StandardCreate do
+RSpec.describe StandardCreate, type: :routine do
 
   let!(:heartbeat_event) { FactoryGirl.build :heartbeat_event }
 

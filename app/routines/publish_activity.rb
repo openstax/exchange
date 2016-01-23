@@ -1,8 +1,7 @@
 class PublishActivity
 
   ACTIVITY_TOPICS = {
-    'ExerciseActivity' => \
-      'arn:aws:sns:us-east-1:665116198742:exercise-activities'
+    'ExerciseActivity' => 'arn:aws:sns:us-east-1:665116198742:exercise-activities'
   }
 
   CLIENT_OPTIONS = [:stub_responses]
@@ -30,4 +29,5 @@ class PublishActivity
     outputs[:result] = Aws::SNS::Client.new(client_options).publish options
 
   end
+
 end
