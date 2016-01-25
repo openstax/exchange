@@ -4,7 +4,7 @@ class StandardCreate
 
   protected
 
-  def exec(klass, options={}, &block)
+  def exec(klass, options = {}, &block)
 
     outputs[:object] = klass.new(options)
 
@@ -14,4 +14,5 @@ class StandardCreate
     transfer_errors_from(outputs[:object], {type: :verbatim})
 
   end
+
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CreateEvent do
+RSpec.describe CreateEvent, type: :routine do
 
   let!(:identifier) { FactoryGirl.build :identifier }
   let!(:resource)   { FactoryGirl.build(:resource) }

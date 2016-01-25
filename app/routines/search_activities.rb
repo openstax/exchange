@@ -5,8 +5,7 @@
 
 class SearchActivities
 
-  ACTIVITY_CLASSES = [ ReadingActivity, ExerciseActivity,
-                       PeerGradingActivity, FeedbackActivity ]
+  ACTIVITY_CLASSES = [ ReadingActivity, ExerciseActivity, PeerGradingActivity, FeedbackActivity ]
 
   SORTABLE_FIELDS = {
     'created_at' => :created_at,
@@ -18,7 +17,7 @@ class SearchActivities
 
   INCLUDES_HASH = {task: [{identifier: :read_access_token}, {resource: :links}]}
   JOINS_HASH = {task: [:identifier, {resource: :links}]}
-  REFERENCES_HASH = {task: {identifier: :read_access_token}} 
+  REFERENCES_HASH = {task: {identifier: :read_access_token}}
 
   lev_routine transaction: :no_transaction
 
@@ -104,8 +103,7 @@ class SearchActivities
     outputs[:items] = Hash[activities.collect do |k,v|
       [k, run(:order, relation: v,
                       sortable_fields: SORTABLE_FIELDS,
-                      order_by: params[:order_by] || params[:ob])
-            .outputs[:items]]
+                      order_by: params[:order_by] || params[:ob]).outputs[:items]]
     end]
 
     # Pagination

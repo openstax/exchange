@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe FindOrCreateResourceFromUrl do
+RSpec.describe FindOrCreateResourceFromUrl, type: :routine do
 
   let!(:link) { FactoryGirl.build :link }
 

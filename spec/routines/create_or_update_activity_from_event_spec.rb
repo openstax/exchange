@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CreateOrUpdateActivityFromEvent do
+RSpec.describe CreateOrUpdateActivityFromEvent, type: :routine do
 
   let!(:grading) { FactoryGirl.create :grading_event, grade: 1.0 }
 

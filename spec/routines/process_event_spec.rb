@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ProcessEvent do
+RSpec.describe ProcessEvent, type: :routine do
 
   let!(:grading) { FactoryGirl.create :grading_event }
 

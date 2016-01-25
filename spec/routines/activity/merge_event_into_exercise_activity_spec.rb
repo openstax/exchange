@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module Activity
-  RSpec.describe MergeEventIntoExerciseActivity do
+  RSpec.describe MergeEventIntoExerciseActivity, type: :routine do
 
     let!(:multiple_choice) { FactoryGirl.create :answer_event,
                                                 answer_type: 'multiple-choice' }

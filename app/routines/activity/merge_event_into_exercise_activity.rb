@@ -10,7 +10,7 @@ module Activity
 
     protected
 
-    def exec(event, options={})
+    def exec(event, options = {})
 
       run(:activity, ExerciseActivity, event) do |activity|
         case event
@@ -21,5 +21,6 @@ module Activity
       end
 
     end
+
   end
 end

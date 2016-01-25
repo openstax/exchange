@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SearchActivities do
+RSpec.describe SearchActivities, type: :routine do
 
   let!(:platform)   { FactoryGirl.create :platform }
   let!(:subscriber) { FactoryGirl.create :subscriber }

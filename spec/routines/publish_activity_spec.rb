@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PublishActivity do
+RSpec.describe PublishActivity, type: :routine do
 
   let!(:exercise_activity) { FactoryGirl.create :exercise_activity }
 
