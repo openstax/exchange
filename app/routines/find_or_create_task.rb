@@ -9,9 +9,9 @@ class FindOrCreateTask
   def exec(task)
 
     # Try to find duplicates in the DB
-    duplicate_task = Task.find_by(identifier: task.identifier,
-                                  resource: task.resource,
-                                  trial: task.trial)
+    duplicate_task = Task.lock.find_by(identifier: task.identifier,
+                                       resource: task.resource,
+                                       trial: task.trial)
 
     # Return pre-existing task if found or save if not
     if duplicate_task.nil?
