@@ -26,8 +26,7 @@ module Api::V1
              if: lambda { |args| !args[:activity] },
              getter: lambda { |args| task.try(:resource).try(:url) },
              setter: lambda { |value, args|
-               task.resource = FindOrCreateResourceFromUrl.call(value)
-                                 .outputs[:resource]
+               task.resource = FindOrCreateResourceFromUrl.call(value).outputs[:resource]
              },
              schema_info: {
                required: true,
