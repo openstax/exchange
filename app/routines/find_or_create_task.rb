@@ -1,6 +1,6 @@
 class FindOrCreateTask
 
-  lev_routine transaction: :serializable
+  lev_routine
 
   protected
 
@@ -8,9 +8,9 @@ class FindOrCreateTask
   # otherwise saves and returns the task
   def exec(task)
 
-    outputs[:task] = Task.lock.find_by(identifier: task.identifier,
-                                       resource: task.resource,
-                                       trial: task.trial) || task
+    outputs[:task] = Task.find_by(identifier: task.identifier,
+                                  resource: task.resource,
+                                  trial: task.trial) || task
     outputs[:task].save unless outputs[:task].persisted?
     transfer_errors_from(outputs[:task], {type: :verbatim}, true)
 
