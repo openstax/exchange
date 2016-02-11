@@ -8,19 +8,11 @@ class FindOrCreateTask
   # otherwise saves and returns the task
   def exec(task)
 
-    # Try to find duplicates in the DB
-    duplicate_task = Task.find_by(identifier: task.identifier,
-                                  resource: task.resource,
-                                  trial: task.trial)
-
-    # Return pre-existing task if found or save if not
-    if duplicate_task.nil?
-      task.save
-      transfer_errors_from(task, {type: :verbatim}, true)
-      outputs[:task] = task
-    else
-      outputs[:task] = duplicate_task
-    end
+    outputs[:task] = Task.lock.find_by(identifier: task.identifier,
+                                       resource: task.resource,
+                                       trial: task.trial) || task
+    outputs[:task].save unless outputs[:task].persisted?
+    transfer_errors_from(outputs[:task], {type: :verbatim}, true)
 
   end
 
