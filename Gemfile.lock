@@ -424,6 +424,9 @@ GEM
       crack (>= 0.3.2)
     whenever (0.9.4)
       chronic (>= 0.6.3)
+    with_advisory_lock (3.0.0)
+      activerecord (>= 3.2)
+      thread_safe
     xml-simple (1.1.5)
     yaml_db (0.3.0)
       rails (>= 3.0, < 4.3)
@@ -495,7 +498,5 @@ DEPENDENCIES
   web-console (~> 2.0)
   webmock
   whenever
+  with_advisory_lock
   yaml_db
-
-BUNDLED WITH
-   1.10.6

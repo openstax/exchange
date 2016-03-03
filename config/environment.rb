@@ -4,6 +4,7 @@ require File.expand_path('../application', __FILE__)
 SITE_NAME = 'OpenStax Exchange'
 COPYRIGHT_HOLDER = 'Rice University'
 COPYRIGHT_START_YEAR = 2013
+DEFAULT_LOCK_TIMEOUT_SECS = 20
 
 require 'user'
 require 'app'

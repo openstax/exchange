@@ -111,6 +111,8 @@ gem 'pg'
 
 gem 'openstax_rescue_from', '~> 1.5.0'
 
+gem 'with_advisory_lock'
+
 group :development, :test do
   # Thin webserver
   gem 'thin'
