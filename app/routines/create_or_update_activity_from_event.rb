@@ -8,23 +8,33 @@ class CreateOrUpdateActivityFromEvent
 
   def exec(activity_class, event, options={})
 
-    activity = activity_class.find_or_initialize_by(task: event.task)
+    # Make the lock specific to the Activity class and task ID
+    lock_name = "#{activity_class.name}:task-#{event.task.id}"
 
-    activity.first_event_at ||= Time.now
-    activity.last_event_at = Time.now
-    activity.seconds_active ||= 0
-    activity.seconds_active += HeartbeatEvent::INTERVAL if event.is_a? HeartbeatEvent
+    lock_result = activity_class.with_advisory_lock_result(lock_name, DEFAULT_LOCK_TIMEOUT_SECS) do
+      activity = activity_class.find_or_initialize_by(task: event.task)
 
-    yield activity if block_given?
+      activity.first_event_at ||= Time.now
+      activity.last_event_at = Time.now
+      activity.seconds_active ||= 0
+      activity.seconds_active += HeartbeatEvent::INTERVAL if event.is_a? HeartbeatEvent
 
-    activity.save
+      yield activity if block_given?
 
-    outputs[:activity] = activity
-    transfer_errors_from activity, type: :verbatim
+      activity.save
+
+      outputs[:activity] = activity
+    end
+
+    if !lock_result.lock_was_acquired?
+      fatal_error(code: :lock_not_acquired, message: "Lock not acquired for #{lock_name}")
+    end
+
+    transfer_errors_from outputs[:activity], type: :verbatim
 
     #run(:publish, activity) # Skipped until Amazon SQS integration is ready
     # Direct calling - hack to be used until we have Amazon SQS integration
-    OpenStax::Biglearn::V1.send_response(exercise_activity: activity) if event.is_a?(GradingEvent)
+    OpenStax::Biglearn::V1.send_response(exercise_activity: outputs[:activity]) if event.is_a?(GradingEvent)
 
   end
 

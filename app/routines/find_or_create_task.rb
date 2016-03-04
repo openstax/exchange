@@ -12,6 +12,7 @@ class FindOrCreateTask
                                   resource: task.resource,
                                   trial: task.trial) || task
     outputs[:task].save unless outputs[:task].persisted?
+
     transfer_errors_from(outputs[:task], {type: :verbatim}, true)
 
   end
