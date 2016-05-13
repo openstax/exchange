@@ -111,7 +111,7 @@ gem 'pg'
 
 gem 'openstax_rescue_from', '~> 1.5.0'
 
-gem 'with_advisory_lock'
+gem 'with_advisory_lock', git: 'https://github.com/procore/with_advisory_lock.git', ref: 'aba1583c'
 
 group :development, :test do
   # Thin webserver
