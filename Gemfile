@@ -36,9 +36,6 @@ gem 'autoprefixer-rails'
 # Rails 5 HTML sanitizer
 gem 'rails-html-sanitizer'
 
-# Allow OpenURI to follow HTTP -> HTTPS redirections
-gem 'open_uri_redirections'
-
 # Utilities for OpenStax websites
 gem 'openstax_utilities'
 
@@ -109,8 +106,10 @@ gem 'aws-sdk-core'
 # PostgreSQL database
 gem 'pg'
 
+# Rescue from exceptions
 gem 'openstax_rescue_from', '~> 1.5.0'
 
+# Advisory locks
 gem 'with_advisory_lock', git: 'https://github.com/procore/with_advisory_lock.git', ref: 'aba1583c'
 
 group :development, :test do

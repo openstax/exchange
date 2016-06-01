@@ -1,9 +1,10 @@
 class Link < ActiveRecord::Base
   belongs_to :resource, inverse_of: :links
 
-  validates :rel, presence: true
-  validates :href, presence: true, uniqueness: { scope: :rel }
-  validate :same_resource
+  enum source: [ :unknown, :other, :location_header, :link_tag, :link_header ]
+
+  validates :resource, presence: true
+  validates :href, presence: true, uniqueness: true
 
   def to_http
     UrlProtocolConverter.convert(href, to: :http)
@@ -11,13 +12,5 @@ class Link < ActiveRecord::Base
 
   def to_https
     UrlProtocolConverter.convert(href, to: :https)
-  end
-
-  protected
-
-  def same_resource
-    return if Link.where(href: href).all?{ |link| link.resource == resource }
-    errors.add(:href, 'must be unique for each resource')
-    false
   end
 end

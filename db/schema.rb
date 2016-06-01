@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108215613) do
+ActiveRecord::Schema.define(version: 20160601203820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -166,14 +166,14 @@ ActiveRecord::Schema.define(version: 20160108215613) do
   add_index "link_events", ["task_id"], name: "index_link_events_on_task_id", using: :btree
 
   create_table "links", force: :cascade do |t|
-    t.integer  "resource_id", null: false
-    t.string   "href",        null: false
-    t.string   "rel",         null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "resource_id",             null: false
+    t.string   "href",                    null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "source",      default: 0, null: false
   end
 
-  add_index "links", ["href", "rel"], name: "index_links_on_href_and_rel", unique: true, using: :btree
+  add_index "links", ["href"], name: "index_links_on_href", unique: true, using: :btree
   add_index "links", ["resource_id"], name: "index_links_on_resource_id", using: :btree
 
   create_table "load_events", force: :cascade do |t|

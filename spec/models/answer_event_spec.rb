@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AnswerEvent, :type => :model do
+RSpec.describe AnswerEvent, type: :model do
 
   let!(:answer_event) { FactoryGirl.create(:answer_event) }
 

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GradingEvent, :type => :model do
+RSpec.describe GradingEvent, type: :model do
 
   let!(:grading_event) { FactoryGirl.create(:grading_event) }
 

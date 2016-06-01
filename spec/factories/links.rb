@@ -4,10 +4,10 @@ FactoryGirl.define do
   factory :link do
     resource
     href { "https://www.google.com/?q=#{SecureRandom.hex(32)}" }
-    rel "alternate"
+    source :other
 
     after(:build) do |link, evaluator|
-      FindOrCreateResourceFromUrl::TRUSTED_HOSTS << URI(evaluator.href).host
+      FindOrCreateResourceFromUrl::TRUSTED_HOSTS << Addressable::URI.parse(evaluator.href).host
     end
   end
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Researcher, :type => :model do
+RSpec.describe Researcher, type: :model do
 
   let!(:researcher_1) { FactoryGirl.create(:researcher) }
   let!(:researcher_2) { FactoryGirl.create(:researcher) }
