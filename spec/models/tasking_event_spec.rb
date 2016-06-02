@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe TaskingEvent, :type => :model do
+RSpec.describe TaskingEvent, type: :model do
 
   let!(:tasking_event) { FactoryGirl.create(:tasking_event) }
 

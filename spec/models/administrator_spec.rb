@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Administrator, :type => :model do
+RSpec.describe Administrator, type: :model do
 
   let!(:administrator_1) { FactoryGirl.create(:administrator) }
   let!(:administrator_2) { FactoryGirl.create(:administrator) }

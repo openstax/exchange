@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Agent, :type => :model do
+RSpec.describe Agent, type: :model do
 
   let!(:agent_1) { FactoryGirl.create(:agent) }
   let!(:agent_2) { FactoryGirl.create(:agent, application: agent_1.application) }

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Identifier, :type => :model do
+RSpec.describe Identifier, type: :model do
 
   let!(:identifier_1) { FactoryGirl.create(:identifier) }
   let!(:identifier_2) { FactoryGirl.create(:identifier) }

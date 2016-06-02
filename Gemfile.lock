@@ -225,7 +225,6 @@ GEM
     omniauth-oauth2 (1.3.0)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
-    open_uri_redirections (0.2.1)
     openstax_accounts (5.1.1)
       action_interceptor (>= 1.0)
       keyword_search (>= 1.0.0)
@@ -473,7 +472,6 @@ DEPENDENCIES
   mini_magick
   newrelic_rpm
   nifty-generators
-  open_uri_redirections
   openstax_accounts
   openstax_api
   openstax_rescue_from (~> 1.5.0)
@@ -506,3 +504,6 @@ DEPENDENCIES
   whenever
   with_advisory_lock!
   yaml_db
+
+BUNDLED WITH
+   1.10.6
