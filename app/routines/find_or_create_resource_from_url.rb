@@ -68,8 +68,25 @@ class FindOrCreateResourceFromUrl
     end
 
     new_links = {}
-    new_links[response['Link']] = :link_header unless response['Link'].blank?
-    new_links[response['Location']] ||= :location_header \
+
+    link_args = (response['Link'] || '').split(',').map do |link|
+      args = link.split(';').map(&:strip)
+      href = args[0]
+      split_args = args[1..-1].map{ |arg| arg.split('=') }
+      rel = (split_args.find{ |arg| arg.first == 'rel' }.try(:second) || '').downcase
+      [href, rel]
+    end
+
+    selected_links = link_args.select do |href, rel|
+      rel.blank? || rel.include?('canonical') || rel.include?('alternate')
+    end
+
+    selected_links.each do |href, rel|
+      is_canonical = rel.include? 'canonical'
+      new_links[href] = [:link_header, is_canonical]
+    end
+
+    new_links[response['Location']] ||= [:location_header, false] \
       if response.code == '301' && response['Location'].present?
 
     # Search DB for more matches
@@ -80,14 +97,15 @@ class FindOrCreateResourceFromUrl
     outputs[:resource] = merge_resources(found_resources) || Resource.create!
 
     # Add the given URL to list of links to store in the DB
-    new_links[uri.to_s] ||= :other
+    new_links[uri.to_s] ||= [:other, false]
 
     # Store found links in the DB
     # Force all found links to point to the same resource
-    new_links.each do |href, source|
+    new_links.each do |href, (source, is_canonical)|
       link = Link.find_or_initialize_by(href: href)
       link.resource = outputs[:resource]
       link.source = source
+      link.is_canonical = is_canonical
       link.save!
     end
 

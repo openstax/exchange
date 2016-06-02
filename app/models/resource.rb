@@ -5,6 +5,10 @@ class Resource < ActiveRecord::Base
   has_many :tasks, dependent: :destroy, inverse_of: :resource
 
   def url
-    links.order(source: :desc).first.try :href
+    links_array = links.to_a
+    canonical_links = links_array.select(&:is_canonical)
+    links_array = canonical_links unless canonical_links.empty?
+
+    links_array.sort_by{ |link| [-Link.sources[link.source], link.created_at] }.first.try :href
   end
 end
