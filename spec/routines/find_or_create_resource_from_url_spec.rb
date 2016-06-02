@@ -14,6 +14,7 @@ RSpec.describe FindOrCreateResourceFromUrl, type: :routine, vcr: VCR_OPTS do
     links = @resource.links.index_by(&:href)
     expect(links[new_link.href]).not_to be_nil
     expect(links[new_link.href].is_canonical).to eq false
+    expect(@resource.url).to eq new_link.href
 
     expect do
       expect(described_class.call(new_link.href).outputs[:resource]).to eq @resource
@@ -54,6 +55,7 @@ RSpec.describe FindOrCreateResourceFromUrl, type: :routine, vcr: VCR_OPTS do
     expect(links['http://my.site'].is_canonical).to eq false
     expect(links['https://my.site'].is_canonical).to eq true
     expect(links['https://same.site'].is_canonical).to eq false
+    expect(@resource.url).to eq 'https://my.site'
   end
 
   it 'reuses existing resources if possible' do
@@ -80,6 +82,7 @@ RSpec.describe FindOrCreateResourceFromUrl, type: :routine, vcr: VCR_OPTS do
     expect(links['http://my.site'].is_canonical).to eq false
     expect(links['https://my.site'].is_canonical).to eq true
     expect(links['https://same.site'].is_canonical).to eq false
+    expect(@resource.url).to eq 'https://my.site'
   end
 
   it 'merges resources with the same Links' do
@@ -110,6 +113,7 @@ RSpec.describe FindOrCreateResourceFromUrl, type: :routine, vcr: VCR_OPTS do
     expect(links['http://my.site'].is_canonical).to eq false
     expect(links['https://my.site'].is_canonical).to eq true
     expect(links['https://same.site'].is_canonical).to eq false
+    expect(@resource.url).to eq 'https://my.site'
   end
 
 end
