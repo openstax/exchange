@@ -5,8 +5,7 @@ module Activity
 
     uses_routine CreateOrUpdateActivityFromEvent,
                  as: :activity,
-                 translations: { inputs: { scope: :activity },
-                                 outputs: { type: :verbatim }}
+                 translations: { inputs: { scope: :activity }, outputs: { type: :verbatim } }
 
     protected
 
