@@ -14,8 +14,6 @@ require 'url_scheme_converter'
 require 'simple_url_converter'
 require 'date_time_utilities'
 require 'lev/delegator'
-require 'openstax/biglearn/client_error'
-require 'openstax/biglearn/v1'
 
 # Initialize the rails application
 Exchange::Application.initialize!

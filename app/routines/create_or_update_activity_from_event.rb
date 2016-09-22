@@ -33,8 +33,6 @@ class CreateOrUpdateActivityFromEvent
     transfer_errors_from outputs[:activity], type: :verbatim
 
     #run(:publish, activity) # Skipped until Amazon SQS integration is ready
-    # Direct calling - hack to be used until we have Amazon SQS integration
-    OpenStax::Biglearn::V1.send_response(exercise_activity: outputs[:activity]) if event.is_a?(GradingEvent)
 
   end
 

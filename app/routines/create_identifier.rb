@@ -30,9 +30,6 @@ class CreateIdentifier
     outputs[:identifier] = identifier
     transfer_errors_from identifier, { type: :verbatim }
 
-    # Send the learner information to BigLearn
-    OpenStax::Biglearn::V1.send_learner(identifier: identifier)
-
   end
 
 end
