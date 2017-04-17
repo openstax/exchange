@@ -6,7 +6,7 @@ ENV["RAILS_ENV"] ||= 'test'
 # Generates the secrets.yml file if not present
 unless File.exists?('config/secrets.yml')
   require 'rails/generators'
-  Rails::Generators.invoke('secrets') 
+  Rails::Generators.invoke('secrets')
 end
 
 require 'spec_helper'
@@ -35,6 +35,8 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
+
+  config.include WithoutException
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
