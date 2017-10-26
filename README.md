@@ -3,7 +3,7 @@ OpenStax Exchange
 
 [![Build Status](https://travis-ci.org/openstax/exchange.svg?branch=master)](https://travis-ci.org/openstax/exchange)
 [![Code Climate](https://codeclimate.com/github/openstax/exchange.png)](https://codeclimate.com/github/openstax/exchange)
-[![Coverage Status](https://img.shields.io/coveralls/openstax/exchange.svg)](https://coveralls.io/r/openstax/exchange)
+[![Coverage Status](https://img.shields.io/codecov/c/github/openstax/exchange.svg)](https://codecov.io/gh/openstax/exchange)
 
 OpenStax Exchange stores and provides learner interaction "big data".
 

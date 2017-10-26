@@ -1,12 +1,15 @@
-require 'coveralls'
-Coveralls.wear!('rails')
+require 'simplecov'
+require 'codecov'
+
+SimpleCov.formatter = SimpleCov::Formatter::Codecov
+SimpleCov.start 'rails'
 
 ENV["RAILS_ENV"] ||= 'test'
 
 # Generates the secrets.yml file if not present
 unless File.exists?('config/secrets.yml')
   require 'rails/generators'
-  Rails::Generators.invoke('secrets') 
+  Rails::Generators.invoke('secrets')
 end
 
 require 'spec_helper'
